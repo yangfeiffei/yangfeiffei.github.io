@@ -4,3 +4,6 @@
 # See: https://jekyllrb.com/docs/themes/#overriding-theme-defaults
 layout: home
 ---
+
+# hello world.
+## 立志  勤学  改过   责善

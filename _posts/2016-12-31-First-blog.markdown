@@ -10,6 +10,15 @@ To add new posts, simply add a file in the `_posts` directory that follows the c
 
 Jekyll also offers powerful support for code snippets:
 
+{% highlight python %}
+import os
+import numpy
+import matplotlib.plot as plt
+
+def test():   #测试函数
+    print "hello world."
+{% endhighlight %}
+
 ```
 import os
 import numpy

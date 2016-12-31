@@ -30,3 +30,6 @@ gems:
 exclude:
   - Gemfile
   - Gemfile.lock
+
+timezone: Asia/Shang_Hai
+

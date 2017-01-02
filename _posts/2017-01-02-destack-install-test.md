@@ -1,7 +1,7 @@
 ---
 
 layout: post
-title: devstack安装
+title: 使用虚拟机部署devstack
 date: 2017-01-02 21:02:42 +0800
 categories: openstack
 tags: devstack ubuntu1404
@@ -11,6 +11,13 @@ author: felo
 
 * content
 {:toc}
+
+
+摘要：
+记录两个节点的devstack安装和部署过程。
+
+
+
 
 
 
@@ -25,11 +32,11 @@ author: felo
 
 
 - devstack-controller：
-    - eth0：
+    - eth0：10.10.1.161/24
     - eth1：
     - eth2：
 - devstack-compute
-    - eth0：
+    - eth0：10.10.1.162/24
     - eth1：
 - 备注：
     - eth0：管理网络+API网络  （需要能上网，下载安装包）
@@ -49,8 +56,8 @@ author: felo
     - intel vt-x
 
 # 2.部署虚拟机
-这里使用的是ubunti1404
-可以手动部署两台虚拟机，也可以使用链接克隆两台虚拟机，注意网卡的MAC地址修改下。
+这里使用的是ubuntu1404。可以手动部署两台虚拟机，也可以使用链接克隆两台虚拟机，
+注意网卡的MAC地址修改下。注意安装的时候选择Openssh Server和Virtual Machine两个软件包。
 
 
 ## 2.1 首先部署controller
@@ -147,7 +154,7 @@ python get-pip.py
 ### 3.1.2 下载devstack
 
 ```
-apt-get install git  #没有git的安装一下
+apt-get install git -y  #没有git的安装一下
 git clone https://git.openstack.org/openstack-dev/devstack -b stable/newton
 下载好慢，用下面这个试试：
 git clone https://github.com/openstack-dev/devstack.git -b stable/newton
@@ -237,7 +244,7 @@ SPICE_REPO=http://git.trystack.cn/git/spice/spice-html5.git
 ```
 
 说明
-过程很长很长，而且很容易失败
+过程很长很长，而且很容易失败,
 失败就再运行一次部署脚本，直到成功。
 
 
@@ -253,3 +260,9 @@ SPICE_REPO=http://git.trystack.cn/git/spice/spice-html5.git
 解决：
 root@devstack-controller:~# pip install -U os-testr
 ```
+
+## 4.2 安装的时候总有python包错误
+
+解决办法：
+- 不使用豆瓣网的pip源；
+- 不使用国内的TryStack镜像

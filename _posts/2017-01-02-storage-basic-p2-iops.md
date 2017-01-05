@@ -1,7 +1,7 @@
 ---
 
 layout: post
-title: Storage Basics – Part II: IOPS
+title: Storage Basics – Part II IOPS
 date:  2017-1-5 17:21:13
 categories: storage
 tags: storage

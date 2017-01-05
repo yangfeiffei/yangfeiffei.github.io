@@ -1,7 +1,7 @@
 ---
 
 layout: post
-title: Storage Basics – Part I: An Introduction
+title: Storage Basics – Part I An Introduction
 date: 2017-1-5 17:18:29
 categories: storage
 tags: storage

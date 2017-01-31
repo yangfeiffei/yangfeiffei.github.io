@@ -527,26 +527,315 @@ a    7.0
 b   -5.0
 c    4.0
 d    3.4
-e    0.0
+e    0.0  #缺失值填充
 dtype: float64
 
 
 ```
+reindex的插值method选项：
+
+
+参数|说明
+-|-
+ffill或pad | 前向填充值
+bfill或backfill | 后向填充值
 
 
 
+```python
+In [106]: obj3 = Series(['blue','purple','yellow'],index=[0,2,4])
+
+# 前向填充
+In [107]: obj3.reindex(range(6),method='ffill')
+Out[107]:
+0      blue
+1      blue
+2    purple
+3    purple
+4    yellow
+5    yellow
+dtype: object
+
+# 后向填充
+In [109]: obj3.reindex(range(6),method='bfill')
+Out[109]:
+0      blue
+1    purple
+2    purple
+3    yellow
+4    yellow
+5       NaN
+dtype: object
+```
+针对DataFrame，可以修改行、列或两个都进行重新索引。
+```python
+In [111]: frame = DataFrame(np.arange(9).reshape(3,3), index=['a','b','c'],colmns=['Ohio','Texas','California'])
+
+In [112]: frame
+Out[112]:
+   Ohio  Texas  California
+a     0      1           2
+b     3      4           5
+c     6      7           8
+
+In [113]: frame2 = frame.reindex(['a','b','c','d'])  # 默认行索引
+
+In [115]: frame2
+Out[115]:
+   Ohio  Texas  California
+a   0.0    1.0         2.0
+b   3.0    4.0         5.0
+c   6.0    7.0         8.0
+d   NaN    NaN         NaN
+
+In [116]: states = ['Texas','Utah','California']
+
+In [117]: frame.reindex(columns=states)  #指定列索引
+Out[117]:
+   Texas  Utah  California
+a      1   NaN           2
+b      4   NaN           5
+c      7   NaN           8
+
+# 对行、列都进行重新索引，
+# 并且进行插值，但是只能在0轴进行，即按行应用。
+In [118]: frame.reindex(index=['a','b','c','d'],method='ffill',columns=states)
+Out[118]:
+   Texas  Utah  California
+a      1   NaN           2
+b      4   NaN           5
+c      7   NaN           8
+d      7   NaN           8
+
+# 用ix更简洁。
+In [119]: frame.ix[['a','b','c','d'],states]
+Out[119]:
+   Texas  Utah  California
+a    1.0   NaN         2.0
+b    4.0   NaN         5.0
+c    7.0   NaN         8.0
+d    NaN   NaN         NaN
+```
+
+reindex函数的参数
+
+![](../_data/images/python数据分析/reindex_func.PNG)
 
 
+## 2.2 丢弃指定轴上的项
+
+丢弃项，只要一个索引或列表即可。drop方法会返回一个删除了指定值的新对象。
+```python
+In [120]: obj = Series(np.arange(5.),index=['a','b','c','d','e'])
+
+In [121]: new_obj = obj.drop('c')
+
+In [122]: new_obj
+Out[122]:
+a    0.0
+b    1.0
+d    3.0
+e    4.0
+dtype: float64
+
+In [124]: obj.drop(['d','c'])
+Out[124]:
+a    0.0
+b    1.0
+e    4.0
+dtype: float64
+
+```
+针对DataFrame,可以删除任意轴上的索引值。
+```python
+In [125]: data = DataFrame(np.arange(16).reshape(4,4),index=['Ohio','Colorado',
+     ...: 'Utah','New York'],columns=['one','two','three','four'])
+
+In [126]: data
+Out[126]:
+          one  two  three  four
+Ohio        0    1      2     3
+Colorado    4    5      6     7
+Utah        8    9     10    11
+New York   12   13     14    15
+
+In [127]: data.drop(['Colorado','Ohio'])
+Out[127]:
+          one  two  three  four
+Utah        8    9     10    11
+New York   12   13     14    15
+
+In [128]: data.drop(['two',],axis=1)
+Out[128]:
+          one  three  four
+Ohio        0      2     3
+Colorado    4      6     7
+Utah        8     10    11
+New York   12     14    15
+```
+
+## 2.3 索引、选取和过滤
 
 
+```python
+In [129]: obj = Series(np.arange(4.),index=['a','b','c','d'])
+
+In [130]: obj['a']  #使用index索引
+Out[130]: 0.0
+
+In [131]: obj[0]    #使用序号来索引
+Out[131]: 0.0
+
+In [132]: obj[1]
+Out[132]: 1.0
+
+In [133]: obj
+Out[133]:
+a    0.0
+b    1.0
+c    2.0
+d    3.0
+dtype: float64
+
+In [134]: obj[1:2]  # 使用序号切片
+Out[134]:
+b    1.0
+dtype: float64
+
+In [135]: obj[1:3]
+Out[135]:
+b    1.0
+c    2.0
+dtype: float64
+
+In [136]: obj[obj<2]  # 使用值判断
+Out[136]:
+a    0.0
+b    1.0
+dtype: float64
+
+In [137]: obj['b':'c']  # 使用索引切片，注意是两端包含的。
+Out[137]:
+b    1.0
+c    2.0
+dtype: float64
+
+In [138]: obj['b':'c'] = 100  # 赋值
+
+In [139]: obj
+Out[139]:
+a      0.0
+b    100.0
+c    100.0
+d      3.0
+dtype: float64
+
+```
+针对DataFrame,索引就是获取一个或多个列。
+**使用列名：获取列
+使用序号或bool值：获取行**
+```python
+In [140]: data
+Out[140]:
+          one  two  three  four
+Ohio        0    1      2     3
+Colorado    4    5      6     7
+Utah        8    9     10    11
+New York   12   13     14    15
+
+In [141]:
+
+In [141]: data['two']  # 获取第2列
+Out[141]:
+Ohio         1
+Colorado     5
+Utah         9
+New York    13
+Name: two, dtype: int32
+
+In [142]: data[['two','one']]  # 按要求获取列
+Out[142]:
+          two  one
+Ohio        1    0
+Colorado    5    4
+Utah        9    8
+New York   13   12
+
+In [143]: data[:2]  # 获取前面两行，使用数字序号获取的是行
+Out[143]:
+          one  two  three  four
+Ohio        0    1      2     3
+Colorado    4    5      6     7
+
+In [144]: data[data['three']>5]  # 获取第三列大于5的行
+Out[144]:
+          one  two  three  four
+Colorado    4    5      6     7
+Utah        8    9     10    11
+New York   12   13     14    15
+```
+DataFrame在语法上与ndarray是比较相似的。
+```python
+In [146]: data < 5
+Out[146]:
+            one    two  three   four
+Ohio       True   True   True   True
+Colorado   True  False  False  False
+Utah      False  False  False  False
+New York  False  False  False  False
+
+In [147]: data[data<5] = 0
+
+In [148]: data
+Out[148]:
+          one  two  three  four
+Ohio        0    0      0     0
+Colorado    0    5      6     7
+Utah        8    9     10    11
+New York   12   13     14    15
+
+```
+**索引字段ix：
+可以通过Numpy的标记法以及轴标签从DataFrame中选取行和列的子集。
+此外，ix得表述方式很简单**
+
+```python
+In [150]: data.ix['Colorado',['two','three']]
+Out[150]:
+two      5
+three    6
+Name: Colorado, dtype: int32
+
+In [151]: data.ix[['Colorado','Utah'],[3,0,1]]
+Out[151]:
+          four  one  two
+Colorado     7    0    5
+Utah        11    8    9
+
+In [152]: data.ix[2]
+Out[152]:
+one       8
+two       9
+three    10
+four     11
+Name: Utah, dtype: int32
+
+In [153]: data.ix[:'Utah','two']
+Out[153]:
+Ohio        0
+Colorado    5
+Utah        9
+Name: two, dtype: int32
+```
+DataFrame的索引选项
+
+![](../_data/images/python数据分析/dataframe_index_opt.PNG)
 
 
+![](../_data/images/python数据分析/dataframe_index_opt2.PNG)
 
 
-
-
-
-
+## 2.4 算术运算和数据对齐
 
 
 

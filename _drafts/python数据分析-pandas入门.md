@@ -837,6 +837,348 @@ DataFrame的索引选项
 
 ## 2.4 算术运算和数据对齐
 
+算术运算结果就是不同索引之间的并集，不存在的值之间运算结果用NaN表示。
+```python
+In [4]: s1 = Series([-2,-3,5,-1],index=list('abcd'))
+
+In [5]: s2 = Series([9,2,5,1,5],index=list('badef'))
+
+In [6]: s1 + s2
+Out[6]:
+a    0.0
+b    6.0
+c    NaN
+d    4.0
+e    NaN
+f    NaN
+dtype: float64
+
+```
+DataFrame也是一样，会同时发生在行和列上。
+
+
+### 在算术方法中填充值
+
+```python
+In [7]: df1 = DataFrame(np.arange(12.).reshape(3,4),columns=list('abcd'))
+
+In [8]: df2 = DataFrame(np.arange(20.).reshape(4,5),columns=list('abcde'))
+
+In [9]: df1
+Out[9]:
+     a    b     c     d
+0  0.0  1.0   2.0   3.0
+1  4.0  5.0   6.0   7.0
+2  8.0  9.0  10.0  11.0
+
+In [10]: df2
+Out[10]:
+      a     b     c     d     e
+0   0.0   1.0   2.0   3.0   4.0
+1   5.0   6.0   7.0   8.0   9.0
+2  10.0  11.0  12.0  13.0  14.0
+3  15.0  16.0  17.0  18.0  19.0
+
+In [11]: df1 + df2  # 不填充值
+Out[11]:
+      a     b     c     d   e
+0   0.0   2.0   4.0   6.0 NaN
+1   9.0  11.0  13.0  15.0 NaN
+2  18.0  20.0  22.0  24.0 NaN
+3   NaN   NaN   NaN   NaN NaN
+
+In [12]: df1.add(df2, fill_value=0)  # 填充0
+Out[12]:
+      a     b     c     d     e
+0   0.0   2.0   4.0   6.0   4.0
+1   9.0  11.0  13.0  15.0   9.0
+2  18.0  20.0  22.0  24.0  14.0
+3  15.0  16.0  17.0  18.0  19.0
+
+In [13]: df1.reindex(columns=df2.columns, method='ffill')
+Out[13]:
+     a    b     c     d   e
+0  0.0  1.0   2.0   3.0 NaN
+1  4.0  5.0   6.0   7.0 NaN
+2  8.0  9.0  10.0  11.0 NaN
+
+In [14]: df1.reindex(columns=df2.columns, fill_value=0)  # 重新索引的时候也可以填充。
+Out[14]:
+     a    b     c     d  e
+0  0.0  1.0   2.0   3.0  0
+1  4.0  5.0   6.0   7.0  0
+2  8.0  9.0  10.0  11.0  0
+
+```
+
+可用的算术算法有：
+- add：加法，
+- sub：减法，
+- div：除法
+- mul：乘法
+
+### DataFrame和Series之间的运算
+
+采用广播的方式，就是会按照一定的规律作用到整个DataFrame之中。
+```python
+In [15]: frame = DataFrame(np.arange(12.).reshape(4,3),columns=list('bde'),index
+    ...: =['Utah','Ohio','Texas','Oregon'])
+
+In [16]: series = frame.ix[0]  # 获取第一行
+
+In [17]: frame
+Out[17]:
+          b     d     e
+Utah    0.0   1.0   2.0
+Ohio    3.0   4.0   5.0
+Texas   6.0   7.0   8.0
+Oregon  9.0  10.0  11.0
+
+In [18]: series
+Out[18]:
+b    0.0
+d    1.0
+e    2.0
+Name: Utah, dtype: float64
+
+In [19]: frame - series   # 自动广播到其他行
+Out[19]:
+          b    d    e
+Utah    0.0  0.0  0.0
+Ohio    3.0  3.0  3.0
+Texas   6.0  6.0  6.0
+Oregon  9.0  9.0  9.0
+
+In [20]: series2 = Series(np.arange(3),index=list('bef'))
+
+In [21]: series2
+Out[21]:
+b    0
+e    1
+f    2
+dtype: int64
+
+In [22]: frame + series2  # 没有的列使用NaN
+Out[22]:
+          b   d     e   f
+Utah    0.0 NaN   3.0 NaN
+Ohio    3.0 NaN   6.0 NaN
+Texas   6.0 NaN   9.0 NaN
+Oregon  9.0 NaN  12.0 NaN
+
+In [23]: series3 = frame['d']   # 获取列
+
+In [24]: frame.sub(series3, axis=0) #列相减，指定axis
+Out[24]:
+          b    d    e
+Utah   -1.0  0.0  1.0
+Ohio   -1.0  0.0  1.0
+Texas  -1.0  0.0  1.0
+Oregon -1.0  0.0  1.0
+
+```
+
+## 2.5 函数应用和映射
+
+Numpy中的通用函数（ufunc）也可以作用于pandas的Series和DataFrame对象。
+```python
+In [31]: np.abs(frame)
+Out[31]:
+          b     d     e
+Utah    0.0   1.0   2.0
+Ohio    3.0   4.0   5.0
+Texas   6.0   7.0   8.0
+Oregon  9.0  10.0  11.0
+
+In [32]: np.max(frame)
+Out[32]:
+b     9.0
+d    10.0
+e    11.0
+dtype: float64
+
+```
+DataFrame有一个apply方法，可以接受自定义函数。
+```python
+In [33]: f = lambda x: np.max(x) - np.min(x)
+
+In [34]: frame.apply(f)
+Out[34]:
+b    9.0
+d    9.0
+e    9.0
+dtype: float64
+
+In [35]: frame
+Out[35]:
+          b     d     e
+Utah    0.0   1.0   2.0
+Ohio    3.0   4.0   5.0
+Texas   6.0   7.0   8.0
+Oregon  9.0  10.0  11.0
+
+In [36]: f = lambda x : np.exp2(x)
+
+In [37]: frame.apply(f)
+Out[37]:
+            b       d       e
+Utah      1.0     2.0     4.0
+Ohio      8.0    16.0    32.0
+Texas    64.0   128.0   256.0
+Oregon  512.0  1024.0  2048.0
+
+```
+许多常用的方法，DataFrame已经实现，不需要使用apply方法自定义。
+```python
+In [38]: f = lambda x: Series([np.max(x),np.min(x)],index=['max','min'])
+
+In [39]: frame.apply(f)
+Out[39]:
+       b     d     e
+max  9.0  10.0  11.0
+min  0.0   1.0   2.0
+
+# 如果f函数是一个元素级别的函数，就使用applymap
+In [40]: f = lambda x : '%.2f' % x
+
+In [41]: frame.applymap(f)
+Out[41]:
+           b      d      e
+Utah    0.00   1.00   2.00
+Ohio    3.00   4.00   5.00
+Texas   6.00   7.00   8.00
+Oregon  9.00  10.00  11.00
+
+# 同样对于Series就使用map，与DataFrame的applymap是对应的。
+In [43]: series
+Out[43]:
+b    0.0
+d    1.0
+e    2.0
+Name: Utah, dtype: float64
+
+In [44]: series.map(f)
+Out[44]:
+b    0.00
+d    1.00
+e    2.00
+Name: Utah, dtype: object
+
+
+```
+
+## 2.6 排序与排名
+
+### 排序
+
+排序可以使用：
+- sort_index方法：按索引排序，
+- sort_value方法（order方法）：按值排序，使用by参数
+
+```python
+In [45]: obj = Series(range(4),index=list('dbca'))
+
+In [46]: obj
+Out[46]:
+d    0
+b    1
+c    2
+a    3
+dtype: int64
+
+In [47]: obj.sort_index()
+Out[47]:
+a    3
+b    1
+c    2
+d    0
+dtype: int64
+
+In [50]: frame
+Out[50]:
+          b     d     e
+Utah    0.0   1.0   2.0
+Ohio    3.0   4.0   5.0
+Texas   6.0   7.0   8.0
+Oregon  9.0  10.0  11.0
+
+In [51]: frame.sort_index()
+Out[51]:
+          b     d     e
+Ohio    3.0   4.0   5.0
+Oregon  9.0  10.0  11.0
+Texas   6.0   7.0   8.0
+Utah    0.0   1.0   2.0
+
+In [52]: frame.sort_index(axis=0)
+Out[52]:
+          b     d     e
+Ohio    3.0   4.0   5.0
+Oregon  9.0  10.0  11.0
+Texas   6.0   7.0   8.0
+Utah    0.0   1.0   2.0
+
+In [53]: frame.sort_index(axis=1)
+Out[53]:
+          b     d     e
+Utah    0.0   1.0   2.0
+Ohio    3.0   4.0   5.0
+Texas   6.0   7.0   8.0
+Oregon  9.0  10.0  11.0
+
+In [54]: frame.sort_index(axis=1, ascending=False) # 倒序
+Out[54]:
+           e     d    b
+Utah     2.0   1.0  0.0
+Ohio     5.0   4.0  3.0
+Texas    8.0   7.0  6.0
+Oregon  11.0  10.0  9.0
+
+```
+按值排序：
+```python
+In [55]: s1 = Series([3,-2,-7,4])
+
+In [56]: s1.order()
+/Users/yangfeilong/anaconda/bin/ipython:1: FutureWarning: order is deprecated, use sort_values(...)
+  #!/bin/bash /Users/yangfeilong/anaconda/bin/python.app
+Out[56]:
+2   -7
+1   -2
+0    3
+3    4
+dtype: int64
+
+
+In [58]: frame.sort_index(by='b')
+/Users/yangfeilong/anaconda/bin/ipython:1: FutureWarning: by argument to sort_index is deprecated, pls use .sort_values(by=...)
+  #!/bin/bash /Users/yangfeilong/anaconda/bin/python.app
+Out[58]:
+          b     d     e
+Utah    0.0   1.0   2.0
+Ohio    3.0   4.0   5.0
+Texas   6.0   7.0   8.0
+Oregon  9.0  10.0  11.0
+
+In [59]: frame.sort_values(by='b')
+Out[59]:
+          b     d     e
+Utah    0.0   1.0   2.0
+Ohio    3.0   4.0   5.0
+Texas   6.0   7.0   8.0
+Oregon  9.0  10.0  11.0
+
+
+```
+
+### 排名
+
+rank方法
+
+
+
+
+
 
 
 

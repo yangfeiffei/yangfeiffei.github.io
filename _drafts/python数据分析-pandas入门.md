@@ -1173,14 +1173,97 @@ Oregon  9.0  10.0  11.0
 
 ### 排名
 
-rank方法
+rank方法，默认情况下为“相同的值分配一个平均排名”：
+```python
+In [60]: s1 = Series([7,-5,7,4,2,0,4])
+
+In [61]: s1.rank()  # 可见0和2索引对应的值都是7，排名分别为6，7；因此取平均值6.5
+Out[61]:
+0    6.5
+1    1.0
+2    6.5
+3    4.5
+4    3.0
+5    2.0
+6    4.5
+dtype: float64
+
+```
+当然，有很多方法可以“打破”这种平级关系。
 
 
+![](../_data/images/python数据分析/data_rank1.png)
 
 
+```python
+In [62]: s1.rank(method='first')  # 按原始数据出现顺序排序
+Out[62]:
+0    6.0
+1    1.0
+2    7.0
+3    4.0
+4    3.0
+5    2.0
+6    5.0
+dtype: float64
+
+In [63]: s1.rank(ascending=False, method='max')  # 倒序，平级处理使用最大排名
+Out[63]:
+0    2.0
+1    7.0
+2    2.0
+3    4.0
+4    5.0
+5    6.0
+6    4.0
+dtype: float64
+
+```
+DataFrame排名可以使用axis按行或按列进行排名。
 
 
+## 2.7 带有重复值的轴索引
 
+目前所有的例子中索引都是唯一的，而且如pandas中的许多函数（reindex）就要求索引唯一。
+但是也不是强制的。
+```python
+In [64]: obj  = Series(range(5),index=list('aabbc'))
+
+In [65]: obj
+Out[65]:
+a    0
+a    1
+b    2
+b    3
+c    4
+dtype: int64
+
+In [67]: obj.index.is_unique
+Out[67]: False
+
+In [68]: obj['a']
+Out[68]:
+a    0
+a    1
+dtype: int64
+
+In [69]: obj['c']
+Out[69]: 4
+```
+对于DataFrame，也是如此。
+```python
+In [70]: df =DataFrame(np.random.randn(4,3),index=list('aabb'))
+
+In [79]: df.ix['a']
+Out[79]:
+          0         1         2
+a  1.099692 -0.491098  0.625690
+a -0.816857  1.025018  0.558494
+
+In [80]: df.reindex(['b','a'])  # 不能重新索引有重复索引的DataFrame
+...
+ValueError: cannot reindex from a duplicate axis
+```
 
 
 # 3 汇总和计算描述统计

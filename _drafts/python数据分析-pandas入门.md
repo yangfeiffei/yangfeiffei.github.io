@@ -1268,9 +1268,566 @@ ValueError: cannot reindex from a duplicate axis
 
 # 3 汇总和计算描述统计
 
+pandas有一组用于常用的数学和统计方法。他们一般都是基于没有缺失数据而构建的。
+下面是一些简约方法的选项：
+
+![](../_data/images/python数据分析/pandas_sample_func_opt.png)
+
+
+```python
+In [81]: df = DataFrame([[1.4,np.nan],[7.1,-4.5],[np.nan,np.nan],[0.73,-1.3]],index=list('abcd'),columns=['one','two'])
+
+In [82]: df
+Out[82]:
+    one  two
+a  1.40  NaN
+b  7.10 -4.5
+c   NaN  NaN
+d  0.73 -1.3
+
+In [83]: df.sum()
+Out[83]:
+one    9.23
+two   -5.80
+dtype: float64
+
+In [84]: df.mean()
+Out[84]:
+one    3.076667
+two   -2.900000
+dtype: float64
+
+In [85]: df.mean(axis=1)  # 指定方向
+Out[85]:
+a    1.400
+b    1.300
+c      NaN
+d   -0.285
+dtype: float64
+
+In [86]: df.mean(axis=1, skipna=False) # 排除nan
+Out[86]:
+a      NaN
+b    1.300
+c      NaN
+d   -0.285
+dtype: float64
+```
+下面是描述和汇总统计相关的方法：
+
+
+![](../_data/images/python数据分析/描述和汇总统计1.png)
+
+![](../_data/images/python数据分析/描述和汇总统计2.png)
+
+```python
+In [88]: df.describe()
+/Users/yangfeilong/anaconda/lib/python2.7/site-packages/numpy/lib/function_base.py:3834: RuntimeWarning: Invalid value encountered in percentile
+  RuntimeWarning)
+Out[88]:
+            one       two
+count  3.000000  2.000000
+mean   3.076667 -2.900000
+std    3.500376  2.262742
+min    0.730000 -4.500000
+25%         NaN       NaN
+50%         NaN       NaN
+75%         NaN       NaN
+max    7.100000 -1.300000
+
+In [89]: df.max()
+Out[89]:
+one    7.1
+two   -1.3
+dtype: float64
+
+In [90]: df.min(axis=1)
+Out[90]:
+a    1.4
+b   -4.5
+c    NaN
+d   -1.3
+dtype: float64
+
+In [91]: df.quantile()
+Out[91]:
+one   NaN
+two   NaN
+dtype: float64
+
+In [92]: s1 = Series(np.arange(100))
+
+In [93]: s1.quantile()
+Out[93]: 49.5
+
+In [94]:
+
+In [95]: s1.quantile(0.2)
+Out[95]: 19.800000000000001
+
+In [96]: s1.quantile(0.24)
+Out[96]: 23.759999999999998
+
+In [97]: s1.quantile(0.25)
+Out[97]: 24.75
+
+In [98]: s1.quantile(0.5)
+Out[98]: 49.5
+
+In [99]: s1.quantile()
+Out[99]: 49.5
+
+In [100]: s1.median()
+Out[100]: 49.5
+
+In [101]: s1.mad()
+Out[101]: 25.0
+
+In [102]: df = DataFrame(np.arange(100).reshape(10,10),columns=list('abcdefghij'))
+
+In [103]: df
+Out[103]:
+    a   b   c   d   e   f   g   h   i   j
+0   0   1   2   3   4   5   6   7   8   9
+1  10  11  12  13  14  15  16  17  18  19
+2  20  21  22  23  24  25  26  27  28  29
+3  30  31  32  33  34  35  36  37  38  39
+4  40  41  42  43  44  45  46  47  48  49
+5  50  51  52  53  54  55  56  57  58  59
+6  60  61  62  63  64  65  66  67  68  69
+7  70  71  72  73  74  75  76  77  78  79
+8  80  81  82  83  84  85  86  87  88  89
+9  90  91  92  93  94  95  96  97  98  99
+
+In [104]: df.mad()
+Out[104]:
+a    25.0
+b    25.0
+c    25.0
+d    25.0
+e    25.0
+f    25.0
+g    25.0
+h    25.0
+i    25.0
+j    25.0
+dtype: float64
+
+In [105]: df.mad(axis=1)
+Out[105]:
+0    2.5
+1    2.5
+2    2.5
+3    2.5
+4    2.5
+5    2.5
+6    2.5
+7    2.5
+8    2.5
+9    2.5
+dtype: float64
+
+In [106]: df.var(axis=1)
+Out[106]:
+0    9.166667
+1    9.166667
+2    9.166667
+3    9.166667
+4    9.166667
+5    9.166667
+6    9.166667
+7    9.166667
+8    9.166667
+9    9.166667
+dtype: float64
+
+In [107]: df.var(axis=0)
+Out[107]:
+a    916.666667
+b    916.666667
+c    916.666667
+d    916.666667
+e    916.666667
+f    916.666667
+g    916.666667
+h    916.666667
+i    916.666667
+j    916.666667
+dtype: float64
+
+In [108]: df.cummax()
+Out[108]:
+    a   b   c   d   e   f   g   h   i   j
+0   0   1   2   3   4   5   6   7   8   9
+1  10  11  12  13  14  15  16  17  18  19
+2  20  21  22  23  24  25  26  27  28  29
+3  30  31  32  33  34  35  36  37  38  39
+4  40  41  42  43  44  45  46  47  48  49
+5  50  51  52  53  54  55  56  57  58  59
+6  60  61  62  63  64  65  66  67  68  69
+7  70  71  72  73  74  75  76  77  78  79
+8  80  81  82  83  84  85  86  87  88  89
+9  90  91  92  93  94  95  96  97  98  99
+
+In [109]: df
+Out[109]:
+    a   b   c   d   e   f   g   h   i   j
+0   0   1   2   3   4   5   6   7   8   9
+1  10  11  12  13  14  15  16  17  18  19
+2  20  21  22  23  24  25  26  27  28  29
+3  30  31  32  33  34  35  36  37  38  39
+4  40  41  42  43  44  45  46  47  48  49
+5  50  51  52  53  54  55  56  57  58  59
+6  60  61  62  63  64  65  66  67  68  69
+7  70  71  72  73  74  75  76  77  78  79
+8  80  81  82  83  84  85  86  87  88  89
+9  90  91  92  93  94  95  96  97  98  99
+
+In [112]: df.diff()
+Out[112]:
+      a     b     c     d     e     f     g     h     i     j
+0   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN   NaN
+1  10.0  10.0  10.0  10.0  10.0  10.0  10.0  10.0  10.0  10.0
+2  10.0  10.0  10.0  10.0  10.0  10.0  10.0  10.0  10.0  10.0
+3  10.0  10.0  10.0  10.0  10.0  10.0  10.0  10.0  10.0  10.0
+4  10.0  10.0  10.0  10.0  10.0  10.0  10.0  10.0  10.0  10.0
+5  10.0  10.0  10.0  10.0  10.0  10.0  10.0  10.0  10.0  10.0
+6  10.0  10.0  10.0  10.0  10.0  10.0  10.0  10.0  10.0  10.0
+7  10.0  10.0  10.0  10.0  10.0  10.0  10.0  10.0  10.0  10.0
+8  10.0  10.0  10.0  10.0  10.0  10.0  10.0  10.0  10.0  10.0
+9  10.0  10.0  10.0  10.0  10.0  10.0  10.0  10.0  10.0  10.0
+
+```
+
+## 3.1 相关系数和协方差
+
+相关概念：
+- 相关系数：反映两变量间线性相关关系的统计指标称为相关系数
+- 协方差：在概率论和统计学中，协方差用于衡量两个变量的总体误差。而方差是协方差的一种特殊情况，即当两个变量是相同的情况。
+
+```python
+In [92]: s1 = Series(np.arange(100))
+
+In [117]: s1.corr(s2)
+Out[117]: 0.99999999999999989
+
+In [118]: s2 = Series(np.arange(2,202,2))
+
+In [119]: s1.corr(s2)
+Out[119]: 0.99999999999999989
+
+In [120]: s1.cov(s2)
+Out[120]: 1683.3333333333335
+
+In [102]: df = DataFrame(np.arange(100).reshape(10,10),columns=list('abcdefghij'))
+
+In [122]: df.corr()
+Out[122]:
+     a    b    c    d    e    f    g    h    i    j
+a  1.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0
+b  1.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0
+c  1.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0
+d  1.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0
+e  1.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0
+f  1.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0
+g  1.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0
+h  1.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0
+i  1.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0
+j  1.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0
+
+```
+
+## 3.2 唯一值、值计数以及成员资格
+
+unique:去重
+```python
+In [124]: s1 = Series(list('ccbbabcddacbd'))
+
+In [125]: s1.unique()
+Out[125]: array(['c', 'b', 'a', 'd'], dtype=object)
+```
+value_counts:值计数
+```python
+In [129]: s1.value_counts()  # 默认降序排列
+Out[129]:
+b    4
+c    4
+d    3
+a    2
+dtype: int64
+
+In [130]: pd.value_counts(s1,sort=False)  # pd也可以直接调用
+Out[130]:
+a    2
+c    4
+b    4
+d    3
+dtype: int64
+
+```
+isin:判断矢量化的集合成员
+
+```python
+In [134]: obj = Series(list('abcbcdcddcba'))
+
+In [135]: mask = obj.isin(['b','c'])
+
+In [136]: mask
+Out[136]:
+0     False
+1      True
+2      True
+3      True
+4      True
+5     False
+6      True
+7     False
+8     False
+9      True
+10     True
+11    False
+dtype: bool
+
+In [137]: obj[mask]
+Out[137]:
+1     b
+2     c
+3     b
+4     c
+6     c
+9     c
+10    b
+dtype: object
+
+```
+
+如下表：
+
+![](../_data/images/python数据分析/pandas_unique_valuecounts_isin.png)
+
+
+形成一个相关列的柱状图
+```python
+In [138]: data = DataFrame({'Qu1':[1,3,4,3,4],'Qu2':[2,3,1,2,3],'Qu3':[1,5,2,4,4]})
+
+In [139]: data
+Out[139]:
+   Qu1  Qu2  Qu3
+0    1    2    1
+1    3    3    5
+2    4    1    2
+3    3    2    4
+4    4    3    4
+
+In [143]: data.apply(pd.value_counts).fillna(0)
+Out[143]:
+   Qu1  Qu2  Qu3
+1  1.0  1.0  1.0
+2  0.0  2.0  1.0
+3  2.0  2.0  0.0
+4  2.0  0.0  2.0
+5  0.0  0.0  1.0
+```
 
 
 # 4 处理缺失数据
+pandas使用非浮点数（NaN）来表示缺失数据，它只是表示缺少数据的一种标识。
+```python
+In [144]: string_data = Series(['hello',np.nan,'world'])
+
+In [145]: string_data
+Out[145]:
+0    hello
+1      NaN
+2    world
+dtype: object
+
+In [146]: string_data.isnull()
+Out[146]:
+0    False
+1     True
+2    False
+dtype: bool
+
+```
+**注意**：python中的None值也会被当成Nan处理。
+
+![](../_data/images/python数据分析/NA_process.png)
+
+
+## 4.1 滤除缺失数据
+
+纯手工处理永远是最好的，但是很麻烦，使用dropna来处理简单一些。
+```python
+In [146]: string_data.isnull()
+Out[146]:
+0    False
+1     True
+2    False
+dtype: bool
+
+In [147]: data = Series([1,np.nan,3,np.nan])
+
+In [148]: data
+Out[148]:
+0    1.0
+1    NaN
+2    3.0
+3    NaN
+dtype: float64
+
+In [149]: data.dropna()
+Out[149]:
+0    1.0
+2    3.0
+dtype: float64
+
+```
+当然也可以使用bool索引来处理。
+
+```python
+In [150]: data[data.notnull()]
+Out[150]:
+0    1.0
+2    3.0
+dtype: float64
+
+```
+DataFrame而言比较麻烦。
+```python
+In [152]: df = DataFrame([[1,2,3],[np.nan,np.nan,np.nan],[3,4,np.nan],[2,3,4]])
+
+In [153]: df
+Out[153]:
+     0    1    2
+0  1.0  2.0  3.0
+1  NaN  NaN  NaN
+2  3.0  4.0  NaN
+3  2.0  3.0  4.0
+
+In [154]: df.dropna()
+Out[154]:
+     0    1    2
+0  1.0  2.0  3.0
+3  2.0  3.0  4.0
+
+In [155]: df.dropna(how='all')  # 只丢弃全部都是nan的行。
+Out[155]:
+     0    1    2
+0  1.0  2.0  3.0
+2  3.0  4.0  NaN
+3  2.0  3.0  4.0
+
+In [164]: df[4] = np.nan
+
+In [165]: df
+Out[165]:
+     0    1    2   4
+0  1.0  2.0  3.0 NaN
+1  NaN  NaN  NaN NaN
+2  3.0  4.0  NaN NaN
+3  2.0  3.0  4.0 NaN
+
+In [166]: df.dropna(axis=1,how='all')
+Out[166]:
+     0    1    2
+0  1.0  2.0  3.0
+1  NaN  NaN  NaN
+2  3.0  4.0  NaN
+3  2.0  3.0  4.0
+
+
+```
+## 4.2 填充缺失数据
+生成数据：
+```python
+In [167]: df = DataFrame(np.random.randn(4,4),columns=list('abcd'))
+
+In [168]: df
+Out[168]:
+          a         b         c         d
+0 -0.010218 -0.256541 -0.507837  0.470124
+1  0.293587  0.517149 -1.813092 -0.791727
+2  0.434398  1.352332  0.012355 -1.687852
+3  0.573836 -0.701182 -0.548737  0.022037
+
+In [169]: df.ix[:2,2]
+Out[169]:
+0   -0.507837
+1   -1.813092
+2    0.012355
+Name: c, dtype: float64
+
+In [170]: df.ix[:2,2]= np.nan
+
+In [171]: df.ix[:1,3]= np.nan
+
+In [172]: df
+Out[172]:
+          a         b         c         d
+0 -0.010218 -0.256541       NaN       NaN
+1  0.293587  0.517149       NaN       NaN
+2  0.434398  1.352332       NaN -1.687852
+3  0.573836 -0.701182 -0.548737  0.022037
+```
+
+```python
+In [173]: df.fillna(0)  #全部填充0
+Out[173]:
+          a         b         c         d
+0 -0.010218 -0.256541  0.000000  0.000000
+1  0.293587  0.517149  0.000000  0.000000
+2  0.434398  1.352332  0.000000 -1.687852
+3  0.573836 -0.701182 -0.548737  0.022037
+
+
+In [176]: df.fillna({'c':0,'d':0.5}) #不同列填充不同的值
+Out[176]:
+          a         b         c         d
+0 -0.010218 -0.256541  0.000000  0.500000
+1  0.293587  0.517149  0.000000  0.500000
+2  0.434398  1.352332  0.000000 -1.687852
+3  0.573836 -0.701182 -0.548737  0.022037
+
+#默认总是会返回新的对象，也可以在源对象上修改；
+In [177]: _ = df.fillna({'c':0,'d':0.5},inplace=True)
+
+In [178]: df
+Out[178]:
+          a         b         c         d
+0 -0.010218 -0.256541  0.000000  0.500000
+1  0.293587  0.517149  0.000000  0.500000
+2  0.434398  1.352332  0.000000 -1.687852
+3  0.573836 -0.701182 -0.548737  0.022037
+
+```
+同样，也可以使用其他选项
+
+
+![](../_data/images/python数据分析/fillna_opt1.png)
+
+
+![](../_data/images/python数据分析/fillna_opt2.png)
+
+
+
+```python
+In [181]: df
+Out[181]:
+          a         b         c         d
+0 -0.010218 -0.256541       NaN       NaN
+1  0.293587  0.517149       NaN       NaN
+2  0.434398  1.352332       NaN -1.687852
+3  0.573836 -0.701182 -0.548737  0.022037
+
+In [184]: df.fillna(method='bfill',limit=2)
+Out[184]:
+          a         b         c         d
+0 -0.010218 -0.256541       NaN -1.687852
+1  0.293587  0.517149 -0.548737 -1.687852
+2  0.434398  1.352332 -0.548737 -1.687852
+3  0.573836 -0.701182 -0.548737  0.022037
+```
 
 
 # 5 层次化索引

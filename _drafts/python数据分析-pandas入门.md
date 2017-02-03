@@ -1832,5 +1832,433 @@ Out[184]:
 
 # 5 层次化索引
 
+层次化索引是pandas的重要功能。以低维度的形式处理高维度数据。
+```python
+In [185]: data = Series(np.random.randn(10),index=[list('aaabbbccdd'),[1,2,3,1,2,3,2,3,2,3]])
+
+In [186]: data
+Out[186]:
+a  1    0.458553
+   2    0.077532
+   3   -1.561180
+b  1    2.498391
+   2    0.243617
+   3   -0.818542
+c  2   -1.222213
+   3   -0.797079
+d  2    1.131352
+   3   -1.292136
+dtype: float64
+```
+获取索引。
+```python
+In [187]: data.index
+Out[187]:
+MultiIndex(levels=[[u'a', u'b', u'c', u'd'], [1, 2, 3]],
+           labels=[[0, 0, 0, 1, 1, 1, 2, 2, 3, 3], [0, 1, 2, 0, 1, 2, 1, 2, 1, 2]])
+
+In [188]: data['b']
+Out[188]:
+1    2.498391
+2    0.243617
+3   -0.818542
+dtype: float64
+
+In [189]: data['b':'c']
+Out[189]:
+b  1    2.498391
+   2    0.243617
+   3   -0.818542
+c  2   -1.222213
+   3   -0.797079
+dtype: float64
+
+In [190]: data[:,2]  # 获取内层索引
+Out[190]:
+a    0.077532
+b    0.243617
+c   -1.222213
+d    1.131352
+dtype: float64
+
+
+In [191]: data.unstack()  # unstack来重新安排到dataframe中。
+Out[191]:
+          1         2         3
+a  0.458553  0.077532 -1.561180
+b  2.498391  0.243617 -0.818542
+c       NaN -1.222213 -0.797079
+d       NaN  1.131352 -1.292136
+
+In [192]: data.unstack().stack()  # 逆运算--stack
+Out[192]:
+a  1    0.458553
+   2    0.077532
+   3   -1.561180
+b  1    2.498391
+   2    0.243617
+   3   -0.818542
+c  2   -1.222213
+   3   -0.797079
+d  2    1.131352
+   3   -1.292136
+dtype: float64
+
+```
+DataFrame每条轴都可以分层索引。
+
+## 5.1 重排分级顺序
+
+可以重排调整某条轴上的索引顺序，swaplevel可以互换两个索引值，并范围一个新的对象。
+```python
+In [193]: frame = DataFrame(np.random.randn(4,3),index=[list('aabb'),[1,2,1,2]],columns=[['Ohio','Ohio','Colorado'],['Green','Red','Green']])
+     ...:
+
+In [194]: frame
+Out[194]:
+         Ohio            Colorado
+        Green       Red     Green
+a 1  0.368997  0.670430  1.056365
+  2 -0.352259 -0.656101  0.018544
+b 1 -0.574535 -0.531988  0.295466
+  2 -0.973587  0.225511 -0.250887
+
+In [198]: frame.index.names = ['key1','key2']
+
+In [199]: frame.columns.names = ['state','color']
+
+In [200]: frame
+Out[200]:
+state          Ohio            Colorado
+color         Green       Red     Green
+key1 key2                              
+a    1     0.368997  0.670430  1.056365
+     2    -0.352259 -0.656101  0.018544
+b    1    -0.574535 -0.531988  0.295466
+     2    -0.973587  0.225511 -0.250887
+
+In [201]: frame.swaplevel('key1','key2')
+Out[201]:
+state          Ohio            Colorado
+color         Green       Red     Green
+key2 key1                              
+1    a     0.368997  0.670430  1.056365
+2    a    -0.352259 -0.656101  0.018544
+1    b    -0.574535 -0.531988  0.295466
+2    b    -0.973587  0.225511 -0.250887
+
+In [202]: frame.sortlevel(1)
+Out[202]:
+state          Ohio            Colorado
+color         Green       Red     Green
+key1 key2                              
+a    1     0.368997  0.670430  1.056365
+b    1    -0.574535 -0.531988  0.295466
+a    2    -0.352259 -0.656101  0.018544
+b    2    -0.973587  0.225511 -0.250887
+
+In [203]: frame.swaplevel(0,1)
+Out[203]:
+state          Ohio            Colorado
+color         Green       Red     Green
+key2 key1                              
+1    a     0.368997  0.670430  1.056365
+2    a    -0.352259 -0.656101  0.018544
+1    b    -0.574535 -0.531988  0.295466
+2    b    -0.973587  0.225511 -0.250887
+
+In [204]: frame.swaplevel(0,1).sortlevel(0)
+Out[204]:
+state          Ohio            Colorado
+color         Green       Red     Green
+key2 key1                              
+1    a     0.368997  0.670430  1.056365
+     b    -0.574535 -0.531988  0.295466
+2    a    -0.352259 -0.656101  0.018544
+     b    -0.973587  0.225511 -0.250887
+```
+
+## 5.2 根据级别汇总统计
+
+许多DataFrame和Series汇总和统计方法都有level选项，指定在某个轴。
+```python
+
+In [205]: frame
+Out[205]:
+state          Ohio            Colorado
+color         Green       Red     Green
+key1 key2                              
+a    1     0.368997  0.670430  1.056365
+     2    -0.352259 -0.656101  0.018544
+b    1    -0.574535 -0.531988  0.295466
+     2    -0.973587  0.225511 -0.250887
+
+
+In [207]: frame.sum(level='key2')
+Out[207]:
+state      Ohio            Colorado
+color     Green       Red     Green
+key2                               
+1     -0.205538  0.138443  1.351831
+2     -1.325846 -0.430590 -0.232343
+
+In [209]: frame.sum(level='color',axis=1)
+Out[209]:
+color         Green       Red
+key1 key2                    
+a    1     1.425362  0.670430
+     2    -0.333715 -0.656101
+b    1    -0.279069 -0.531988
+     2    -1.224474  0.225511
+```
+
+## 5.3 使用DataFrame的列
+
+经常需要用DataFrame的列作为索引，或者希望将索引变成DataFrame的列。
+```python
+In [210]: df = DataFrame({'a':range(7),'b':range(7,0,-1),'c':['one']*7,'d':[0,1,2,0,1,2,3]})
+
+In [211]: df
+Out[211]:
+   a  b    c  d
+0  0  7  one  0
+1  1  6  one  1
+2  2  5  one  2
+3  3  4  one  0
+4  4  3  one  1
+5  5  2  one  2
+6  6  1  one  3
+
+In [212]: df2 = df.set_index(['c','d']) #默认情况下，会将转换的这两列删除掉；
+
+In [213]: df2
+Out[213]:
+       a  b
+c   d      
+one 0  0  7
+    1  1  6
+    2  2  5
+    0  3  4
+    1  4  3
+    2  5  2
+    3  6  1
+
+    In [215]: df2 = df.set_index(['c','d'],drop=False) # 仍然保留这两列
+
+    In [216]: df2
+    Out[216]:
+           a  b    c  d
+    c   d              
+    one 0  0  7  one  0
+        1  1  6  one  1
+        2  2  5  one  2
+        0  3  4  one  0
+        1  4  3  one  1
+        2  5  2  one  2
+        3  6  1  one  3
+
+```
+用reset_index可以将索引合并到DataFrame中。
+```python
+In [217]: df2 = df.set_index(['c','d'])
+
+In [218]: df2
+Out[218]:
+       a  b
+c   d      
+one 0  0  7
+    1  1  6
+    2  2  5
+    0  3  4
+    1  4  3
+    2  5  2
+    3  6  1
+
+In [219]: df2.reset_index()
+Out[219]:
+     c  d  a  b
+0  one  0  0  7
+1  one  1  1  6
+2  one  2  2  5
+3  one  0  3  4
+4  one  1  4  3
+5  one  2  5  2
+6  one  3  6  1
+
+```
 
 # 6 其他
+
+## 6.1 整数索引
+
+先看一个例子：我们很难判断是要通过位置还是通过标签的索引来获取数据。
+```python
+In [220]: ser = Series(np.arange(3))
+
+In [221]: ser
+Out[221]:
+0    0
+1    1
+2    2
+dtype: int64
+
+In [222]: ser[-1]
+---------------------------------------------------------------------------
+KeyError                                  Traceback (most recent call last)
+...
+```
+这样对于使用字母索引的Series就不存在这个问题。
+
+如果需要可靠的、不考虑索引类型的、基于位置的索引，可以使用：
+- Series：iget_value
+- DataFrame：irow和icol
+
+新的版本有些变化：都是用iloc来通过位置准确获取。
+
+```python
+In [231]: ser3 = Series(np.arange(3),index=[-5,1,3])
+
+In [232]: ser3.iget_value(2)
+/Users/yangfeilong/anaconda/bin/ipython:1: FutureWarning: iget_value(i) is deprecated. Please use .iloc[i] or .iat[i]
+  #!/bin/bash /Users/yangfeilong/anaconda/bin/python.app
+Out[232]: 2
+
+In [236]: ser3.iloc[2]
+Out[236]: 2
+
+In [237]: ser3.iat[2]
+Out[237]: 2
+
+In [239]: frame = DataFrame(np.arange(6).reshape(3,2),index=[2,0,1])
+
+In [241]: frame
+Out[241]:
+   0  1
+2  0  1
+0  2  3
+1  4  5
+
+In [242]: frame.irow(1)
+/Users/yangfeilong/anaconda/bin/ipython:1: FutureWarning: irow(i) is deprecated. Please use .iloc[i]
+  #!/bin/bash /Users/yangfeilong/anaconda/bin/python.app
+Out[242]:
+0    2
+1    3
+Name: 0, dtype: int64
+
+In [243]: frame.icol(1)
+/Users/yangfeilong/anaconda/bin/ipython:1: FutureWarning: icol(i) is deprecated. Please use .iloc[:,i]
+  #!/bin/bash /Users/yangfeilong/anaconda/bin/python.app
+Out[243]:
+2    1
+0    3
+1    5
+Name: 1, dtype: int64
+
+In [245]: frame.iloc[1]  # 按行位置获取
+Out[245]:
+0    2
+1    3
+Name: 0, dtype: int64
+
+In [246]: frame.iloc[:,1]  #按列位置获取
+Out[246]:
+2    1
+0    3
+1    5
+Name: 1, dtype: int64
+
+```
+
+
+
+
+## 6.2 面板数据
+Panel数据结构，可以看成是一个三维的DataFrame数据结构。
+Panel中的每一项都是一个DataFrame。
+同样使用堆积式（层次化索引的）的DataFrame可以表示一个panel。
+```python
+In [247]: import pandas.io.data as web
+/Users/yangfeilong/anaconda/lib/python2.7/site-packages/pandas/io/data.py:35: FutureWarning:
+The pandas.io.data module is moved to a separate package (pandas-datareader) and will be removed from pandas in a future version.
+After installing the pandas-datareader package (https://github.com/pydata/pandas-datareader), you can change the import ``from pandas.io import data, wb`` to ``from pandas_datareader import data, wb``.
+  FutureWarning)
+
+In [248]: web
+Out[248]: <module 'pandas.io.data' from '/Users/yangfeilong/anaconda/lib/python2.7/site-packages/pandas/io/data.py'>
+
+In [249]: pdata = pd.Panel(dict((stk ,web.get_data_yahoo(stk,'1/1/2009','6/1/2012')) for stk in ['AAPL','GOOG','MSFT','DELL']))
+
+In [250]: pdata
+Out[250]:
+<class 'pandas.core.panel.Panel'>
+Dimensions: 4 (items) x 868 (major_axis) x 6 (minor_axis)
+Items axis: AAPL to MSFT
+Major_axis axis: 2009-01-02 00:00:00 to 2012-06-01 00:00:00
+Minor_axis axis: Open to Adj Close
+
+In [252]: pdata = pdata.swapaxes('items','minor')
+
+In [253]: pdata['Adj Close']
+Out[253]:
+                 AAPL      DELL        GOOG       MSFT
+Date                                                  
+2009-01-02  11.808505  10.39902  160.499779  16.501303
+...
+2012-05-30  75.362333  12.14992  293.821674  25.878448
+2012-05-31  75.174961  11.92743  290.140354  25.746145
+2012-06-01  72.996726  11.67592  285.205295  25.093451
+
+[868 rows x 4 columns]
+
+In [256]: pdata.ix[:,'6/1/2012',:]  # ix扩展为三维
+Out[256]:
+            Open        High         Low       Close       Volume   Adj Close
+AAPL  569.159996  572.650009  560.520012  560.989983  130246900.0   72.996726
+DELL   12.150000   12.300000   12.045000   12.070000   19397600.0   11.675920
+GOOG  571.790972  572.650996  568.350996  570.981000    6138700.0  285.205295
+MSFT   28.760000   28.959999   28.440001   28.450001   56634300.0   25.093451
+
+In [260]: pdata.ix[:,'5/30/2012':,:].to_frame()
+Out[260]:
+                        Open        High         Low       Close       Volume  \
+Date       minor                                                                
+2012-05-30 AAPL   569.199997  579.989990  566.559990  579.169998  132357400.0   
+           DELL    12.590000   12.700000   12.460000   12.560000   19787800.0   
+           GOOG   588.161028  591.901014  583.530999  588.230992    3827600.0   
+           MSFT    29.350000   29.480000   29.120001   29.340000   41585500.0   
+2012-05-31 AAPL   580.740021  581.499985  571.460022  577.730019  122918600.0   
+           DELL    12.530000   12.540000   12.330000   12.330000   19955600.0   
+           GOOG   588.720982  590.001032  579.001013  580.860990    5958800.0   
+           MSFT    29.299999   29.420000   28.940001   29.190001   39134000.0   
+2012-06-01 AAPL   569.159996  572.650009  560.520012  560.989983  130246900.0   
+           DELL    12.150000   12.300000   12.045000   12.070000   19397600.0   
+           GOOG   571.790972  572.650996  568.350996  570.981000    6138700.0   
+           MSFT    28.760000   28.959999   28.440001   28.450001   56634300.0   
+
+                   Adj Close  
+Date       minor              
+2012-05-30 AAPL    75.362333  
+           DELL    12.149920  
+           GOOG   293.821674  
+           MSFT    25.878448  
+2012-05-31 AAPL    75.174961  
+           DELL    11.927430  
+           GOOG   290.140354  
+           MSFT    25.746145  
+2012-06-01 AAPL    72.996726  
+           DELL    11.675920  
+           GOOG   285.205295  
+           MSFT    25.093451  
+
+# 可以转化为DataFrame
+In [261]: stacked = pdata.ix[:,'5/30/2012':,:].to_frame()
+
+In [262]: stacked.to_panel() # 转化为panel
+Out[262]:
+<class 'pandas.core.panel.Panel'>
+Dimensions: 6 (items) x 3 (major_axis) x 4 (minor_axis)
+Items axis: Open to Adj Close
+Major_axis axis: 2012-05-30 00:00:00 to 2012-06-01 00:00:00
+Minor_axis axis: AAPL to MSFT
+```

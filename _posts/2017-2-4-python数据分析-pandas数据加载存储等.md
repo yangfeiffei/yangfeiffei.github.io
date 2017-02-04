@@ -29,6 +29,8 @@ Pandas数据加载存储相关的学习笔记，记录了《利用python进行�
 - 不规整数据问题：
 
 类型推断（type inference）：不需要指定数据类型，可以自动识别。
+
+
 ```python
 In [286]: df = pd.read_csv('../source/ch06/ex1.csv')
 
@@ -46,6 +48,8 @@ Out[289]:
 1  5   6   7   8   world
 2  9  10  11  12     foo
 ```
+
+
 ```python
 In [290]: cat ../source/ch06/ex2.csv
 1,2,3,4,hello
@@ -72,6 +76,8 @@ foo      9  10  11  12
 
 read_csv时可以使用skiprows跳过文件的某些行。
 
+
+
 ```python
 In [294]: !cat ../source/ch06/ex4.csv
 # hey!
@@ -88,6 +94,8 @@ Out[295]:
 1  5   6   7   8   world
 2  9  10  11  12     foo
 ```
+
+
 
 ```python
 In [296]: !cat ../source/ch06/ex5.csv
@@ -122,6 +130,8 @@ read_csv/read_table选项：
 ## 1.1 逐块读取文本文件
 
 当文件太大时候，我们只想读取其中一部分。
+
+
 ```python
 In [303]: result = pd.read_csv('../source/ch06/ex6.csv',nrows=5)
 
@@ -140,7 +150,9 @@ In [306]: chunker
 Out[306]: <pandas.io.parsers.TextFileReader at 0x1147e5850>
 
 ```
+
 ## 1.2 将数据写到文本格式
+
 
 ```python
 In [323]: data = pd.read_csv('ex5.csv')
@@ -189,7 +201,11 @@ a,b,c
 9,10,11.0
 
 ```
+
+
 Series也有类似方法
+
+
 
 ```python
 In [333]: dates = pd.date_range('2/1/2017',periods=7)
@@ -212,6 +228,7 @@ CSV文件的形式有很多，只需要定义csv.Dialect的一个子类接口。
 
 ![](../images/python数据分析/csv语支选项.png)
 
+
 ```python
 In [340]: import csv
 
@@ -232,6 +249,7 @@ In [342]: with open("mydata.csv",'w') as f:
 JSON数据格式十分灵活
 - 键都是字符串类型
 - 使用python标准库json
+
 
 ```python
 In [344]: import json
@@ -258,6 +276,7 @@ lxml是python处理xml的库。
 # 2 二进制数据格式
 
 实现二进制数据存储最方便的方式就是使用python标准库pickle序列化。
+
 
 ```python
 In [356]: frame = pd.read_csv('ex1.csv')
@@ -297,6 +316,8 @@ python有两个库处理HDF5接口：
 - h5py
 
 pandas有一个HDFStore的类，它通过PyTables存储pandas对象。
+
+
 ```python
 In [359]: store = pd.HDFStore('myhdf.h5')
 
@@ -339,6 +360,7 @@ In [369]: table = xls.parse('Sheet1')
 # 3 使用html和web api
 
 使用request库可以很容易的处理web api，简单的get一个url：
+
 ```python
 In [373]: import requests
 
@@ -418,7 +440,9 @@ Out[407]:
  1  world   Beijing  2.00   3
  2    foo  shanghai  2.10  20
 ```
+
 同样DataFrame也可以：
+
 ```python
 In [423]: import pandas.io.sql as sql
 
@@ -429,6 +453,8 @@ Out[425]:
 1  world   Beijing  2.00   3
 2    foo  shanghai  2.10  20
 ```
+
+
 ## 4.2 存取mongodb数据
 
 待续。。。

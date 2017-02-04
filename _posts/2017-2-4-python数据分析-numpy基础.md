@@ -36,6 +36,7 @@ empty，empty_like | 全空数组，只分配内存空间，不填充任何值
 eye、identity | 创建一个n*n的单位矩阵（阵列）
 
 
+
 ```python
 In [1]: import numpy as np
 In [2]: np.arange(10)
@@ -71,6 +72,8 @@ array([[  0.00000000e+000,   0.00000000e+000,   2.12267575e-314,
 
 ## 1.2 ndarray数据类型
 ndarry数组相关的数据类型
+
+
 ```python
 In [1]: import numpy as np
 
@@ -99,6 +102,8 @@ dtype的表示形式有几种：
 
 
 也可以使用astype修改dtype。
+
+
 ```python
 In [11]: a
 Out[11]: array([1, 2, 4])
@@ -119,6 +124,7 @@ Out[14]: dtype('float64')
 ## 1.3 数组和标量之间的运算
 数组的优势在于“矢量化”的运算，运算会应用到数组中的元素。
 不需要编写循环进行运算，而且效率也比使用循环高。
+
 ```python
 In [17]: a
 Out[17]:
@@ -147,6 +153,7 @@ Numpy切片功能与python的列用法是相同的，但是在是否复制切片
 - **Numpy数组切片直接操作原数组**
 
 python 列表切片操作
+
 ```python
 #
 In [24]: list1 = list(range(10))
@@ -175,6 +182,7 @@ Out[32]: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 ```
 
 Numpy 数组切片操作
+
 ```python
 In [33]: arr = np.arange(10)
 
@@ -213,6 +221,7 @@ Out[41]: array([  0,   1, 100,   3,   4,   5,   6,   7,   8,   9])
 - 使用两个索引
 - 使用两个值表示的列表作为索引
 
+
 ```python
 In [43]: a
 Out[43]:
@@ -230,6 +239,7 @@ In [46]: a[0,1]
 Out[46]: 1
 ```
 如果是多维数组的话,可以使用标量值或者数组来赋值。
+
 ```python
 In [50]: b
 Out[50]:
@@ -269,6 +279,7 @@ array([[[100, 100, 100],
 ```
 ### 1.4.3 布尔型索引
 直接看例子,有一组7*4的数据data，每行分别属于names数组中的人所有。
+
 ```python
 names = np.array(["Bob","Joe","Will","Bob","Will","Joe","Joe"])
 data = np.random.randn(7,4)
@@ -290,6 +301,7 @@ array([[-0.3153179 ,  1.01375816, -0.34210821, -0.74311504],
 
 ```
 通过比较运算可以产生一个布尔型的数组,并把它作为索引
+
 ```python
 names == "Bob"
 Out[6]: array([ True, False, False,  True, False, False, False], dtype=bool)
@@ -306,6 +318,7 @@ array([[-0.3153179 ,  1.01375816],
 
 ```
 还能这么用：
+
 ```python
 data[names!="Bob"]
 Out[9]:
@@ -336,6 +349,7 @@ array([[-0.4196392 , -0.80468813,  0.65295259,  0.10492046],
 - `&`表示和，`|`表示或
 - python中的and和or在ndarray中不能使用
 
+
 ```python
 mask = (names == "Bob")|(names =="Will" )
 
@@ -350,6 +364,7 @@ array([[-0.3153179 ,  1.01375816, -0.34210821, -0.74311504],
        [-0.0088418 , -1.16661084,  0.36412278, -0.9806821 ]])
 ```
 同样，还能赋值
+
 ```python
 data[data < 0] =0
 
@@ -378,6 +393,7 @@ array([[ 0.        ,  1.01375816,  0.        ,  0.        ],
 
 ### 1.4.4 花式索引
 为了特定的选取行的子集，可以传入一个列表或者ndarray。
+
 ```python
 arr
 Out[26]:
@@ -407,6 +423,7 @@ array([[ 4.,  4.,  4.,  4.],
        [ 0.,  0.,  0.,  0.]])
 ```
 也可以同时传入两个参数：
+
 ```python
 arr = np.arange(32).reshape(8,4)
 
@@ -428,6 +445,7 @@ Out[32]: array([ 4, 23, 29, 10])
 花式索引与切片不一样，总是复制到新的数组中。
 
 ### 1.4.5 数组转置和轴对换
+
 ```python
 arr = np.arange(15).reshape(3,5)
 
@@ -472,6 +490,7 @@ array([[ 3.72937613, -0.86744575, -1.62911498, -3.47666555,  0.32576022,
 通用函数ufunc是一种对ndarray中的数据执行元素级运算的函数，可以理解为“**简单函数的矢量化包装**”。
 
 现有的通用函数，如sqrt,exp等
+
 ```python
 a = np.arange(10)
 
@@ -495,6 +514,7 @@ array([  1.00000000e+00,   2.71828183e+00,   7.38905610e+00,
 ![image](../images/python数据分析/1ufunc2.PNG)
 
 实例：
+
 ```python
 a  = np.random.randn(4,4)
 
@@ -612,6 +632,7 @@ array([[False, False, False, False],
 
 ![image](../images/python数据分析/2ufunc.PNG)
 
+
 ```python
 a = np.random.randint(0,100,(2,5))
 
@@ -697,6 +718,7 @@ Numpy数组可以代替循环，进行矢量化的运算，通常会比纯python
 
 ## 3.1 将条件逻辑表述为数组运算
 np.where函数是`x if condition else y`的矢量化版本。
+
 ```python
 In [15]: yarr = np.array([2.1,2.2,2.3,2.4,2.5])
 
@@ -709,6 +731,7 @@ Out[18]: array([ 1.1,  2.2,  1.3,  1.4,  2.5])
 
 ```
 另一个例子，希望将一组随机数，正数替换为2，负数替换为-2
+
 ```python
 In [19]: arr = np.random.randn(4,4)
 
@@ -736,6 +759,7 @@ array([[ 2.        ,  2.        ,  2.        ,  2.        ],
 
 ## 3.2 数学和统计方法
 这些方法一般可以作为实例方法调用，也可以当做Numpy函数使用。
+
 ```python
 In [23]: arr = np.random.randn(5,4)
 
@@ -751,6 +775,7 @@ Out[25]: -0.024836906150552153
 ![image](../images/python数据分析/基本数组统计方法1.PNG)
 
 ![image](../images/python数据分析/基本数组统计方法2.PNG)
+
 
 ```python
 In [26]: arr
@@ -813,6 +838,7 @@ array([ -3.06544789e-02,  -2.80011979e-02,   2.17884059e-02,
 ```
 ## 3.3 用于布尔型数组的方法
 布尔值是True和False，同时也是1和0。我们可以使用sum来统计True值得计数。
+
 ```python
 In [39]: arr
 Out[39]:
@@ -834,6 +860,7 @@ array([[False,  True, False, False],
        [False,  True, False, False]], dtype=bool)
 ```
 还有ang和all两个方法，可以用于布尔型数组，也可以用于非布尔型。在用于非布尔型数组时，所有非0元素都被当做True。
+
 ```python
 In [46]: bools = arr > 0   #将arr>0这个bool型数组赋值
 
@@ -856,6 +883,7 @@ Out[50]: True
 ```
 ## 3.4 排序
 Numpy数组可以通过sort方法就地排序。
+
 ```python
 In [51]: arr
 Out[51]:
@@ -896,6 +924,7 @@ array([[-2.56571303, -2.05527855, -1.38280997,  0.49837502],
        [ 0.11536984,  0.98126805,  1.06389757,  1.73736452]])
 ```
 举个例子，求一个数组百分之5的分位数。
+
 ```python
 In [62]: arr = np.random.randn(1000)
 
@@ -910,6 +939,7 @@ Out[67]: -1.6307748333138019
 
 ## 3.5 唯一化（去重）以及数组的集合运算
 `np.unique`方法为数组去重，并排序。
+
 ```python
 In [68]: names = np.array(["Bob","Joe","Will","Bob","Will","Joe","Joe"])
 
@@ -924,6 +954,7 @@ Out[70]: ['Bob', 'Joe', 'Will']
 其他集合运算：
 
 ![image](../images/python数据分析/数组集合运算.PNG)
+
 
 
 ```python
@@ -1012,6 +1043,7 @@ array([  1,   2,   3,   4,   5,   6,   7,   8,   9,  10,  11,  12,  13,
 Numpy可以读写文本数据或二进制数据。后续有pandas来处理文本，因此本部分简单介绍。
 ## 4.1 以二进制方式保存和读取numpy数组
 单个数组，保存时会自动添加后缀名.npy
+
 ```python
 In [86]: arr = np.arange(10)
 
@@ -1021,6 +1053,7 @@ In [90]: np.load("some_array.npy")
 Out[90]: array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
 ```
 多个数组，可以使用压缩方式存储，后缀名.npz
+
 ```python
 In [91]: arr
 Out[91]: array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
@@ -1042,6 +1075,7 @@ array([ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16,
 ## 4.2 存取文本文件
 
 使用`np.savetxt`和`np.loadtxt`两个方法来实现。后面会主要介绍pandas中的read_csv和read_table函数，这里不详细介绍。
+
 ```python
 In [99]: arr  = np.random.randn(5,5)
 
@@ -1069,6 +1103,7 @@ array([[ 0.45439906, -0.11067033,  1.67561654,  0.14142381,  0.1016269 ],
 线性代数（Linear algebra）相关相关的有一个`np.linalg`可以解决这些问题。
 
 ![image](../images/python数据分析/linalg_func.png)
+
 
 ```python
 import numpy as np
@@ -1134,6 +1169,7 @@ Out[19]: array([ 16., -25.,  12.])
 
 Numpy中有`np.random`作为python内置random模块的补充，增加了一些高效的函数。
 Numpy的random模块不仅能生成1个样本值，也能产生大量样本值。
+
 ```python
 In [1]: import numpy as np  #numpy库
 
@@ -1154,6 +1190,7 @@ In [4]: %timeit np.random.normal(size=1000000)
 
 
 部分例子：
+
 ```python
 
 In [6]: np.random.rand()
@@ -1193,6 +1230,7 @@ Out[16]: 9.555706096455244
 
 seed()用于指定随机数生成时所用算法开始的整数值，如果使用相同的seed()值，则每次生成的随即数都相同，如果不设置这个值，则系统根据时间来自己选择这个值，此时每次生成的随机数因时间差异而不同。
 
+
 ```python
 In [17]: np.random.seed(0)
 
@@ -1221,6 +1259,7 @@ array([[ 1.86755799, -0.97727788],
 
 ## 7.1 用纯python实现
 用纯python实现1000步的随机漫步。
+
 ```python
 import random
 
@@ -1252,6 +1291,7 @@ plt.show()
 
 ## 7.2 用numpy来实现
 用numpy.random模块实现1000步随机漫步。
+
 ```python
 import numpy as np
 def random_walk_numpy(N):
@@ -1277,6 +1317,7 @@ plt.show()
 ![](../images/python数据分析/random_walk2.png)
 
 而且，我们很容易算出最大值，最小值。
+
 ```python
 yy.max() #最大值
 Out[12]: 9
@@ -1293,6 +1334,7 @@ Out[15]: 488
 
 ## 7.2 同时实现多个随机漫步
 比如一下子产生5000个随机漫步，每个随机漫步步数为1000。
+
 ```python
 In [22]: draws = np.random.randint(0,2,(5000,1000))
 In [23]: steps = np.where(draws>0,1,-1)
@@ -1309,6 +1351,7 @@ array([[ -1,  -2,  -3, ...,   2,   1,   2],
        [  1,   2,   1, ..., -40, -41, -40]], dtype=int32)
 ```
 计算最大值和最小值
+
 ```python
 In [34]: walks.max()
 Out[34]: 115
@@ -1319,6 +1362,7 @@ Out[35]: -128
 ```
 
 如果想要得到这五千个随机漫步达到30或-30的平均时间（步数），该如何计算？
+
 ```python
 
 In [37]: np.abs(walks)>= 30  #绝对值大于30的都为True

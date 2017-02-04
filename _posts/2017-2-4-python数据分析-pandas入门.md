@@ -1,3 +1,18 @@
+---
+
+layout: post
+title: python数据分析-Pandas入门学习笔记
+author: felo
+
+---
+
+
+摘要：
+Pandas基础学习笔记，记录了《利用python进行数据分析》学习过程和笔记。
+
+
+
+
 pandas是基于numpy创建，提供更高级的数据结构和操作工具，是一个不可获取的工具。
 
 为了更好的阐述，约定如下：
@@ -350,7 +365,7 @@ Out[76]:
 ```
 下面是所有DataFrame能接受的数据类型：
 
-![](../_data/images/python数据分析/data_to_dataframe.PNG)
+![](../images/python数据分析/data_to_dataframe.PNG)
 
 
 ```python
@@ -447,7 +462,7 @@ Out[96]: array([ True,  True,  True], dtype=bool)
 pandas中主要的index对象：
 
 
-![](../_data/images/python数据分析/pandas_index.PNG)
+![](../images/python数据分析/pandas_index.PNG)
 
 
 
@@ -471,7 +486,7 @@ Out[99]: False
 ```
 因此，索引也有自己的方法和属性：
 
-![](../_data/images/python数据分析/pandas_index_method.PNG)
+![](../images/python数据分析/pandas_index_method.PNG)
 
 
 
@@ -619,7 +634,7 @@ d    NaN   NaN         NaN
 
 reindex函数的参数
 
-![](../_data/images/python数据分析/reindex_func.PNG)
+![](../images/python数据分析/reindex_func.PNG)
 
 
 ## 2.2 丢弃指定轴上的项
@@ -829,10 +844,10 @@ Name: two, dtype: int32
 ```
 DataFrame的索引选项
 
-![](../_data/images/python数据分析/dataframe_index_opt.PNG)
+![](../images/python数据分析/dataframe_index_opt.PNG)
 
 
-![](../_data/images/python数据分析/dataframe_index_opt2.PNG)
+![](../images/python数据分析/dataframe_index_opt2.PNG)
 
 
 ## 2.4 算术运算和数据对齐
@@ -1192,7 +1207,7 @@ dtype: float64
 当然，有很多方法可以“打破”这种平级关系。
 
 
-![](../_data/images/python数据分析/data_rank1.png)
+![](../images/python数据分析/data_rank1.png)
 
 
 ```python
@@ -1271,7 +1286,7 @@ ValueError: cannot reindex from a duplicate axis
 pandas有一组用于常用的数学和统计方法。他们一般都是基于没有缺失数据而构建的。
 下面是一些简约方法的选项：
 
-![](../_data/images/python数据分析/pandas_sample_func_opt.png)
+![](../images/python数据分析/pandas_sample_func_opt.png)
 
 
 ```python
@@ -1316,9 +1331,9 @@ dtype: float64
 下面是描述和汇总统计相关的方法：
 
 
-![](../_data/images/python数据分析/描述和汇总统计1.png)
+![](../images/python数据分析/描述和汇总统计1.png)
 
-![](../_data/images/python数据分析/描述和汇总统计2.png)
+![](../images/python数据分析/描述和汇总统计2.png)
 
 ```python
 In [88]: df.describe()
@@ -1603,7 +1618,7 @@ dtype: object
 
 如下表：
 
-![](../_data/images/python数据分析/pandas_unique_valuecounts_isin.png)
+![](../images/python数据分析/pandas_unique_valuecounts_isin.png)
 
 
 形成一个相关列的柱状图
@@ -1652,7 +1667,7 @@ dtype: bool
 ```
 **注意**：python中的None值也会被当成Nan处理。
 
-![](../_data/images/python数据分析/NA_process.png)
+![](../images/python数据分析/NA_process.png)
 
 
 ## 4.1 滤除缺失数据
@@ -1804,10 +1819,10 @@ Out[178]:
 同样，也可以使用其他选项
 
 
-![](../_data/images/python数据分析/fillna_opt1.png)
+![](../images/python数据分析/fillna_opt1.png)
 
 
-![](../_data/images/python数据分析/fillna_opt2.png)
+![](../images/python数据分析/fillna_opt2.png)
 
 
 

@@ -1,10 +1,24 @@
-本部分为pandas的输入输出对象。
+---
 
+layout: post
+title: python数据分析-Pandas数据加载学习笔记
+author: felo
+
+---
+
+
+摘要：
+Pandas数据加载存储相关的学习笔记，记录了《利用python进行数据分析》学习过程和笔记。
+
+
+
+
+本部分为pandas的输入输出对象。
 # 1 读写文本格式的数据
 
 先上表，其中read_csv和read_table最常用。
 
-![](../_data/images/python数据分析/pandas中的解析函数.png)
+![](../images/python数据分析/pandas中的解析函数.png)
 
 
 这些函数的选项可以划分几类：
@@ -16,7 +30,7 @@
 
 类型推断（type inference）：不需要指定数据类型，可以自动识别。
 ```python
-In [286]: df = pd.read_csv('../_data/source/ch06/ex1.csv')
+In [286]: df = pd.read_csv('../source/ch06/ex1.csv')
 
 In [287]: df
 Out[287]:
@@ -25,7 +39,7 @@ Out[287]:
 1  5   6   7   8   world
 2  9  10  11  12     foo
 
-In [289]: pd.read_table('../_data/source/ch06/ex1.csv',sep=',')
+In [289]: pd.read_table('../source/ch06/ex1.csv',sep=',')
 Out[289]:
    a   b   c   d message
 0  1   2   3   4   hello
@@ -33,12 +47,12 @@ Out[289]:
 2  9  10  11  12     foo
 ```
 ```python
-In [290]: cat ../_data/source/ch06/ex2.csv
+In [290]: cat ../source/ch06/ex2.csv
 1,2,3,4,hello
 5,6,7,8,world
 9,10,11,12,foo
 
-In [291]: pd.read_csv('../_data/source/ch06/ex2.csv',names=['a','b','c','d','message'])
+In [291]: pd.read_csv('../source/ch06/ex2.csv',names=['a','b','c','d','message'])
 Out[291]:
    a   b   c   d message
 0  1   2   3   4   hello
@@ -47,7 +61,7 @@ Out[291]:
 
 In [292]: names=['a','b','c','d','message']
 
-In [293]: pd.read_csv('../_data/source/ch06/ex2.csv',names=names, index_col='message')
+In [293]: pd.read_csv('../source/ch06/ex2.csv',names=names, index_col='message')
 Out[293]:
          a   b   c   d
 message               
@@ -59,7 +73,7 @@ foo      9  10  11  12
 read_csv时可以使用skiprows跳过文件的某些行。
 
 ```python
-In [294]: !cat ../_data/source/ch06/ex4.csv
+In [294]: !cat ../source/ch06/ex4.csv
 # hey!
 a,b,c,d,message
 # just wanted to make things more difficult for you
@@ -67,7 +81,7 @@ a,b,c,d,message
 1,2,3,4,hello
 5,6,7,8,world
 9,10,11,12,foo
-In [295]: pd.read_csv('../_data/source/ch06/ex4.csv',skiprows=[0,2,3])
+In [295]: pd.read_csv('../source/ch06/ex4.csv',skiprows=[0,2,3])
 Out[295]:
    a   b   c   d message
 0  1   2   3   4   hello
@@ -76,19 +90,19 @@ Out[295]:
 ```
 
 ```python
-In [296]: !cat ../_data/source/ch06/ex5.csv
+In [296]: !cat ../source/ch06/ex5.csv
 something,a,b,c,d,message
 one,1,2,3,4,NA
 two,5,6,,8,world
 three,9,10,11,12,foo
-In [297]: pd.read_csv('../_data/source/ch06/ex5.csv')
+In [297]: pd.read_csv('../source/ch06/ex5.csv')
 Out[297]:
   something  a   b     c   d message
 0       one  1   2   3.0   4     NaN
 1       two  5   6   NaN   8   world
 2     three  9  10  11.0  12     foo
 
-In [298]: result = pd.read_csv('../_data/source/ch06/ex5.csv')
+In [298]: result = pd.read_csv('../source/ch06/ex5.csv')
 
 In [299]: result.isnull()
 Out[299]:
@@ -100,16 +114,16 @@ Out[299]:
 
 read_csv/read_table选项：
 
-![](../_data/images/python数据分析/read_csv_opt1.png)
+![](../images/python数据分析/read_csv_opt1.png)
 
-![](../_data/images/python数据分析/read_csv_opt2.png)
+![](../images/python数据分析/read_csv_opt2.png)
 
 
 ## 1.1 逐块读取文本文件
 
 当文件太大时候，我们只想读取其中一部分。
 ```python
-In [303]: result = pd.read_csv('../_data/source/ch06/ex6.csv',nrows=5)
+In [303]: result = pd.read_csv('../source/ch06/ex6.csv',nrows=5)
 
 In [304]: result
 Out[304]:
@@ -120,7 +134,7 @@ Out[304]:
 3  0.204886  1.074134  1.388361 -0.982404   R
 4  0.354628 -0.133116  0.283763 -0.837063   Q
 
-In [305]: chunker = pd.read_csv('../_data/source/ch06/ex6.csv',chunksize=1000)
+In [305]: chunker = pd.read_csv('../source/ch06/ex6.csv',chunksize=1000)
 
 In [306]: chunker
 Out[306]: <pandas.io.parsers.TextFileReader at 0x1147e5850>
@@ -196,7 +210,7 @@ In [335]: s1.to_csv(sys.stdout)
 
 CSV文件的形式有很多，只需要定义csv.Dialect的一个子类接口。
 
-![](../_data/images/python数据分析/csv语支选项.png)
+![](../images/python数据分析/csv语支选项.png)
 
 ```python
 In [340]: import csv

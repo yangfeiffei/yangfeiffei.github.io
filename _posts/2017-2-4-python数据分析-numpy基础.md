@@ -1,3 +1,17 @@
+---
+
+layout: post
+title: python数据分析-Numpy基础学习笔记
+author: felo
+
+---
+
+
+摘要：
+Numpy基础学习笔记，记录了《利用python进行数据分析》学习过程和笔记。
+
+
+
 Numpy（Numerical Python的简称）高性能科学计算和数据分析的基础包。其部分功能如下：
 - ndarray，具有矢量算术运算和复杂广播能力的快速且节省空间的多维数组。
 - 数组运算，不用编写循环
@@ -79,9 +93,9 @@ dtype的表示形式有几种：
 下表是所有支持的类型和说明：
 
 
-![image](../_data/images/python数据分析/dtype.png)
+![image](../images/python数据分析/dtype.png)
 
-![image](../_data/images/python数据分析/dtype1.png)
+![image](../images/python数据分析/dtype1.png)
 
 
 也可以使用astype修改dtype。
@@ -192,7 +206,7 @@ Out[41]: array([  0,   1, 100,   3,   4,   5,   6,   7,   8,   9])
 二维数组索引如下
 
 
-![image](../_data/images/python数据分析/ndarray_index.png)
+![image](../images/python数据分析/ndarray_index.png)
 
 
 可以使用两种方式：
@@ -476,9 +490,9 @@ array([  1.00000000e+00,   2.71828183e+00,   7.38905610e+00,
 
 ## 2.1 一元通用函数
 
-![image](../_data/images/python数据分析/1ufunc.PNG)
+![image](../images/python数据分析/1ufunc.PNG)
 
-![image](../_data/images/python数据分析/1ufunc2.PNG)
+![image](../images/python数据分析/1ufunc2.PNG)
 
 实例：
 ```python
@@ -596,7 +610,7 @@ array([[False, False, False, False],
 
 ## 2.2 二元通用函数
 
-![image](../_data/images/python数据分析/2ufunc.PNG)
+![image](../images/python数据分析/2ufunc.PNG)
 
 ```python
 a = np.random.randint(0,100,(2,5))
@@ -734,9 +748,9 @@ Out[25]: -0.024836906150552153
 基本数组统计方法如下：
 
 
-![image](../_data/images/python数据分析/基本数组统计方法1.PNG)
+![image](../images/python数据分析/基本数组统计方法1.PNG)
 
-![image](../_data/images/python数据分析/基本数组统计方法2.PNG)
+![image](../images/python数据分析/基本数组统计方法2.PNG)
 
 ```python
 In [26]: arr
@@ -909,7 +923,7 @@ Out[70]: ['Bob', 'Joe', 'Will']
 ```
 其他集合运算：
 
-![image](../_data/images/python数据分析/数组集合运算.PNG)
+![image](../images/python数据分析/数组集合运算.PNG)
 
 
 ```python
@@ -1054,7 +1068,7 @@ array([[ 0.45439906, -0.11067033,  1.67561654,  0.14142381,  0.1016269 ],
 # 5.线性代数
 线性代数（Linear algebra）相关相关的有一个`np.linalg`可以解决这些问题。
 
-![image](../_data/images/python数据分析/linalg_func.png)
+![image](../images/python数据分析/linalg_func.png)
 
 ```python
 import numpy as np
@@ -1134,9 +1148,9 @@ In [4]: %timeit np.random.normal(size=1000000)
 ```
 可以看出，`np.random`要快很多。
 
-![](../_data/images/python数据分析/np_random1.PNG)
+![](../images/python数据分析/np_random1.PNG)
 
-![](../_data/images/python数据分析/np_random2.PNG)
+![](../images/python数据分析/np_random2.PNG)
 
 
 部分例子：
@@ -1233,7 +1247,7 @@ plt.show()
 
 结果图：
 
-![](../_data/images/python数据分析/random_walk1.png)
+![](../images/python数据分析/random_walk1.png)
 
 
 ## 7.2 用numpy来实现
@@ -1260,7 +1274,7 @@ plt.show()
 ```
 结果图：
 
-![](../_data/images/python数据分析/random_walk2.png)
+![](../images/python数据分析/random_walk2.png)
 
 而且，我们很容易算出最大值，最小值。
 ```python

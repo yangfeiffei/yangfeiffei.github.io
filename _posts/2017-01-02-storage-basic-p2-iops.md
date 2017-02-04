@@ -2,15 +2,10 @@
 
 layout: post
 title: Storage Basics – Part II IOPS
-date:  2017-1-5 17:21:13
-categories: storage
-tags: storage
 author: felo
 
 ---
 
-* content
-{:toc}
 
 摘要：
 介绍IOPS的定义和计算方法
@@ -34,15 +29,15 @@ IOPS = 1000/(寻道延迟 + 旋转延迟)   延迟时间单位为：ms
 
 使用读取延迟数，是这样的：
 ```
-1000/(2.0+3.4) = 185          最大 read IOPS 
+1000/(2.0+3.4) = 185          最大 read IOPS
 ```
 最大写入IOPS的就会少一点（~169iops），因为写寻道延迟更高一些，写作比读更“昂贵”，因此更慢。
 幸运的是，有一些被广泛接受的“工作数字”，所以你不必要每个硬盘都计算一次。因为旋转延迟是基于旋转速度的，我们每分钟可以使用已发布的旋转（RPM，每分钟的旋转次数）的来猜测估计IOPS能力评级。典型的主轴速度（以RPM）和等效的IOPS如下：
-RPM | IOPS 
+RPM | IOPS
 -- | --
-7,200     |     80 
-10,000    |   130 
-15,000    |  180 
+7,200     |     80
+10,000    |   130
+15,000    |  180
 SSD       |    2500 – 6000
 
 不仅仅是机械旋转硬盘，还包括市场上的固态硬盘（SSD）。SSD的IOPS是一个范围，因为不同的科技型（SLC、MLC等）。你可以检查http://en.wikipedia.org/wiki/solid-state_drive的介绍，或让你的供应商提供更深入的技术信息。
@@ -59,13 +54,3 @@ SSD       |    2500 – 6000
 本文翻译了vm today的一篇系列文章，原文地址如下：
 [Storage Basics – Part I: An Introduction](http://vmtoday.com/2009/12/storage-basics-part-i-intro/)
 [Storage Basics – Part II: IOPS](http://vmtoday.com/2009/12/storage-basics-part-ii-iops/#comments)
-
-
-
-
-
-
-
-
-
-

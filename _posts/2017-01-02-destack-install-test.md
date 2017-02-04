@@ -1,23 +1,11 @@
 ---
-
 layout: post
 title: 使用虚拟机部署devstack
-date: 2017-01-02 21:02:42 +0800
-categories: openstack
-tags: devstack ubuntu1404
 author: felo
-
 ---
-
-* content
-{:toc}
-
 
 摘要：
 记录两个节点的devstack安装和部署过程。
-
-
-
 
 
 

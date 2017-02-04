@@ -2,15 +2,10 @@
 
 layout: post
 title: Storage Basics – Part III RAID
-date: 2017-1-5 17:18:29
-categories: storage
-tags: storage RAID
 author: felo
 
 ---
 
-* content
-{:toc}
 
 摘要：
 介绍RAID的定义和不同RAID的IOPS
@@ -33,7 +28,7 @@ author: felo
 这是最基本的聚合，没有冗余，一个磁盘的错误或失败就会使数据失效，不推荐生产中使用。
 
 ```
-I =n*i 
+I =n*i
 ```
 因为没有镜像或校验开销，理论最大读与写的IOPS是相同的。
 
@@ -69,7 +64,7 @@ I = (n*i)/(r+4 *w)
 ```
 I = Target workload IOPS  #目标负载iops
 f = IO penalty # io惩罚，一次读或一次写需要的io次数
-r = % Read 
+r = % Read
 w = % Write
 ```
 ```

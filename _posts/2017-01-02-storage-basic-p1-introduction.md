@@ -2,15 +2,8 @@
 
 layout: post
 title: Storage Basics – Part I An Introduction
-date: 2017-1-5 17:18:29
-categories: storage
-tags: storage
 author: felo
-
 ---
-
-* content
-{:toc}
 
 摘要：
 介绍存储基本概念
@@ -37,4 +30,3 @@ author: felo
 ---
 本文翻译了vm today的一篇系列文章，原文地址如下：
 [Storage Basics – Part I: An Introduction](http://vmtoday.com/2009/12/storage-basics-part-i-intro/)
-

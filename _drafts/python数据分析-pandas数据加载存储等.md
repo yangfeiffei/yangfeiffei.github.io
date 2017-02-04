@@ -198,10 +198,223 @@ CSV文件的形式有很多，只需要定义csv.Dialect的一个子类接口。
 
 ![](../_data/images/python数据分析/csv语支选项.png)
 
+```python
+In [340]: import csv
 
+In [341]: class my_dialect(csv.Dialect):
+     ...:     lineterminator = "\n"
+     ...:     delimiter = ";"
+     ...:     
+     ...:     
+
+In [342]: with open("mydata.csv",'w') as f:
+     ...:     writer = csv.writer(f,dialect = my_dialect)
+     ...:     writer.writerow(('one','two','three'))
+     ...:     writer.writerow(('1','2','3'))
+```
+
+## 1.4 JSON数据
+
+JSON数据格式十分灵活
+- 键都是字符串类型
+- 使用python标准库json
+
+```python
+In [344]: import json
+
+In [350]: obj = {'name':'alex','age':18,'job':'enginer'}
+
+In [353]: a = json.dumps(obj)
+
+In [354]: a
+Out[354]: '{"job": "enginer", "age": 18, "name": "alex"}'
+
+In [355]: json.loads(a)
+Out[355]: {u'age': 18, u'job': u'enginer', u'name': u'alex'}
+```
+
+## 1.5 xml和html：web信息收集
+
+lxml是python处理xml的库。
+- lxml.html
+- lxml.objectify
+
+待续。。
 
 # 2 二进制数据格式
 
+实现二进制数据存储最方便的方式就是使用python标准库pickle序列化。
+
+```python
+In [356]: frame = pd.read_csv('ex1.csv')
+
+In [357]: frame
+Out[357]:
+   a   b   c   d message
+0  1   2   3   4   hello
+1  5   6   7   8   world
+2  9  10  11  12     foo
+
+In [358]: frame.save('frame_pickle')  # 没这个方法了。
+---------------------------------------------------------------------------
+AttributeError                            Traceback (most recent call last)
+<ipython-input-358-f936768749d3> in <module>()
+----> 1 frame.save('frame_pickle')
+
+/Users/yangfeilong/anaconda/lib/python2.7/site-packages/pandas/core/generic.pyc in __getattr__(self, name)
+   2670             if name in self._info_axis:
+   2671                 return self[name]
+-> 2672             return object.__getattribute__(self, name)
+   2673
+   2674     def __setattr__(self, name, value):
+
+AttributeError: 'DataFrame' object has no attribute 'save'
+
+```
+
+
+## 2.1 使用HDF5格式
+
+HDF5流行的工业库，支持多种压缩器的即时压缩，更有效的存储数据。对于那些很大，但是不能存放在内存中的数据，
+hdf5是一个不错的选择。
+
+python有两个库处理HDF5接口：
+- PyTables
+- h5py
+
+pandas有一个HDFStore的类，它通过PyTables存储pandas对象。
+```python
+In [359]: store = pd.HDFStore('myhdf.h5')
+
+In [360]: frame
+Out[360]:
+   a   b   c   d message
+0  1   2   3   4   hello
+1  5   6   7   8   world
+2  9  10  11  12     foo
+
+In [361]: store['obj1'] = frame
+
+In [362]: store['obj1_col'] = frame['a']
+
+In [363]: store
+Out[363]:
+<class 'pandas.io.pytables.HDFStore'>
+File path: myhdf.h5
+/obj1                frame        (shape->[3,5])
+/obj1_col            series       (shape->[3])  
+
+In [367]: store['obj1']
+Out[367]:
+   a   b   c   d message
+0  1   2   3   4   hello
+1  5   6   7   8   world
+2  9  10  11  12     foo
+```
+
+## 2.2 读取ms excel文件
+
+```python
+In [368]: xls = pd.ExcelFile('data.xls')
+
+In [369]: table = xls.parse('Sheet1')
+
+```
+
+
 # 3 使用html和web api
 
+使用request库可以很容易的处理web api，简单的get一个url：
+```python
+In [373]: import requests
+
+In [374]: url = "http://www.baidu.com"
+
+In [375]: resp = requests.get(url)
+
+In [376]: resp
+Out[376]: <Response [200]>
+
+```
+
 # 4 使用数据库
+
+## 4.1 sqlite存取数据
+
+```python
+In [388]: import sqlite3
+
+In [390]: con = sqlite3.connect(':memory:')
+
+
+In [394]: query = '''
+     ...: CREATE TABLE test
+     ...: (a VARCHAR(20),
+     ...: b VARCHAR(20),
+     ...: c REAL,
+     ...: d INTEGER);'''
+
+In [395]: con.execute(query)
+Out[395]: <sqlite3.Cursor at 0x117414dc0>
+
+In [396]: con.commit()
+
+In [399]: data = [('hello','123',1.25,6),('world','Beijing',2.0,3),('foo','shanghai',2.1,20)]
+
+In [400]: data
+Out[400]:
+[('hello', '123', 1.25, 6),
+ ('world', 'Beijing', 2.0, 3),
+ ('foo', 'shanghai', 2.1, 20)]
+
+In [401]: stmt = "INSERT INTO test VALUES(?,?,?,?)"
+
+In [403]: con.executemany(stmt,data)
+Out[403]: <sqlite3.Cursor at 0x1174148f0>
+
+In [404]: con.commit()
+
+In [405]: cursor = con.execute('select * from test;')
+
+In [406]: cursor
+Out[406]: <sqlite3.Cursor at 0x1174145e0>
+
+In [407]: cursor.fetchall()
+Out[407]:
+[(u'hello', u'123', 1.25, 6),
+ (u'world', u'Beijing', 2.0, 3),
+ (u'foo', u'shanghai', 2.1, 20)]
+
+
+
+ In [419]: cursor = con.execute('select * from test')
+
+ In [420]: df = cursor.fetchall()
+
+ In [421]: df
+ Out[421]:
+ [(u'hello', u'123', 1.25, 6),
+  (u'world', u'Beijing', 2.0, 3),
+  (u'foo', u'shanghai', 2.1, 20)]
+
+ In [422]: DataFrame(df,columns=zip(*cursor.description)[0])
+ Out[422]:
+        a         b     c   d
+ 0  hello       123  1.25   6
+ 1  world   Beijing  2.00   3
+ 2    foo  shanghai  2.10  20
+```
+同样DataFrame也可以：
+```python
+In [423]: import pandas.io.sql as sql
+
+In [425]: sql.read_sql('select * from test',con)
+Out[425]:
+       a         b     c   d
+0  hello       123  1.25   6
+1  world   Beijing  2.00   3
+2    foo  shanghai  2.10  20
+```
+## 4.2 存取mongodb数据
+
+待续。。。

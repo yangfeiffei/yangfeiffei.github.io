@@ -2,6 +2,7 @@
 
 layout: post
 title: python数据分析-Pandas数据加载学习笔记
+date: 2017-02-04 21:33
 author: felo
 
 ---
@@ -18,7 +19,7 @@ Pandas数据加载存储相关的学习笔记，记录了《利用python进行�
 
 先上表，其中read_csv和read_table最常用。
 
-![](../images/python数据分析/pandas中的解析函数.png)
+![](/images/python数据分析/pandas中的解析函数.png)
 
 
 这些函数的选项可以划分几类：
@@ -122,9 +123,9 @@ Out[299]:
 
 read_csv/read_table选项：
 
-![](../images/python数据分析/read_csv_opt1.png)
+![](/images/python数据分析/read_csv_opt1.png)
 
-![](../images/python数据分析/read_csv_opt2.png)
+![](/images/python数据分析/read_csv_opt2.png)
 
 
 ## 1.1 逐块读取文本文件
@@ -226,7 +227,7 @@ In [335]: s1.to_csv(sys.stdout)
 
 CSV文件的形式有很多，只需要定义csv.Dialect的一个子类接口。
 
-![](../images/python数据分析/csv语支选项.png)
+![](/images/python数据分析/csv语支选项.png)
 
 
 ```python

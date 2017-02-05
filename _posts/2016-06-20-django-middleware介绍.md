@@ -17,7 +17,8 @@ Middleware是一个镶嵌到django的request/response处理机制中的一个hoo
 ## 激活中间件
 
 要想激活中间件，需要在settings文件中的 MIDDLEWARE_CLASSES下增加。在 MIDDLEWARE_CLASSES中，每个中间件以一个字符串的形势保存。比如，下面是默认创建工程的中间件 MIDDLEWARE_CLASSES内容：
-```
+
+```python
 MIDDLEWARE_CLASSES = ['django.middleware.security.SecurityMiddleware',
 'django.contrib.sessions.middleware.SessionMiddleware',
 'django.middleware.common.CommonMiddleware',
@@ -28,6 +29,7 @@ MIDDLEWARE_CLASSES = ['django.middleware.security.SecurityMiddleware',
 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 ```
+
 一个django工程的创建不需要任何一个中间件，即如果你喜欢的话，MIDDLEWARE_CLASSES可以为空，但是强烈建议至少包含 CommonMiddleware这个中间件。
 中间件在MIDDLEWARE_CLASSES中是有顺序的，因为中间件之间有相互依赖关系。比如说AuthenticationMiddleware 在session中保存认证的用户信息，因此，它必须在 SessionMiddleware之后，详细的内容可以参考[Middleware ordering](https://docs.djangoproject.com/en/1.9/ref/middleware/#middleware-ordering)。
 
@@ -36,6 +38,7 @@ MIDDLEWARE_CLASSES = ['django.middleware.security.SecurityMiddleware',
 在请求阶段，调用views之前，django按照MIDDLEWARE_CLASSES中定义的顺序从上到下调用中间件。有两个hooks：
 - process_request()
 - process_view()
+
 
 在响应阶段，调用views之后，中间件被从下到上反向调用，有三个hooks：
 - process_exception() (只有当view中raise一个例外时)
@@ -61,6 +64,7 @@ MIDDLEWARE_CLASSES = ['django.middleware.security.SecurityMiddleware',
 
 
 ### 2） process_view()
+
  process_view(request, view_func, view_args, view_kwargs)
 其中request是HttpRequest 对象， view_func是django要使用的view函数 (它是实际的函数对象，而不是函数名字的字符串) view_args是view函数的列表参数, view_kwargs是view函数的字典参数。  view_args和 view_kwargs都不需要包含request这个参数。
 process_view()就在django调用view函数之前被调用。
@@ -75,6 +79,7 @@ Accessing request.POST inside middleware from process_request orprocess_view wil
 The CsrfViewMiddleware class can be considered an exception, as it provides the csrf_exempt() and csrf_protect() decorators which allow views to explicitly control at what point the CSRF validation should occur.
 
 ### 3） process_template_response()
+
 process_template_response(request, response)
 其中request 是 HttpRequest 对象， response 是一个由django view或者中间件返回的TemplateResponse  对象。
 process_template_response()在view使用render渲染一个模版对象完成之后被调用，它必须返回一个render 方法执行后的response对象，它可以修改view中返回的 response.template_name 和 response.context_data，或者为view返回的模板增加一个商标等等。
@@ -82,14 +87,18 @@ process_template_response()在view使用render渲染一个模版对象完成之�
 带有process_template_response()的中间件将会被自下而上反向执行。
 
 ### 4） process_response()
+
 process_response(request, response)
 其中request是 HttpRequest 对象， response 是一个django view或者中间件返回的 HttpResponse 或者StreamingHttpResponse对象。
 process_response()在所有的响应被返回到浏览器之前执行。
 它**必须**返回一个 HttpResponse 或者StreamingHttpResponse 对象，它可以修改response, 或者为 HttpResponse 或StreamingHttpResponse增加一个商标等。
 它不像 process_request() 和process_view() 方法可能会被跳过（在他之前有人返回了HttpResponse对象）， process_response()方法一定会被执行。因此，你的process_response() 方法不能依赖于你的process_request()方法。
 最后，记住在响应阶段，中间件会被反向执行，你最后在 MIDDLEWARE_CLASSES定义的中间件将会被最先执行。
+
 #### 处理流式响应
+
 不同于HttpResponse，StreamingHttpResponse沒有content属性，因此中间件不能认为所有的响应都有content 属性，如果想要访问content，需要测试流式响应：
+
 ```
 if response.streaming:
     response.streaming_content = wrap_streaming_content(response.streaming_content)
@@ -99,7 +108,8 @@ else:
 
 >Note
 streaming_content 被假定为太大而不能存放在内存中， 响应中间件可以将它包裹在一个生成器中，但是必须不能消费它，通常如下所示：
-```
+
+```python
 def wrap_streaming_content(content):
     for chunk in content:
         yield alter_content(chunk)

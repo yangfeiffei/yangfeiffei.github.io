@@ -18,11 +18,10 @@ author: felo
 
 
 确认django是否安装在本机上：
-```
+
+```python
 $python -c "import django; print(django.get_version())"
-
 1.9.6
-
 ```
 
 ---
@@ -31,16 +30,13 @@ $python -c "import django; print(django.get_version())"
 
 
 
-```
-
+```python
 localhost:PycharmProjects$ django-admin startproject mysite
-
 ```
 
 startproject将会创建以下文件：
 
-```
-
+```python
 mysite/  #django工程的根目录
     manage.py  #django工程的一个命令行工具
     mysite/    #这是一个python包，后面我们会用来导入使用，
@@ -59,7 +55,6 @@ mysite/  #django工程的根目录
 来确认下project是否工作？
 
 ```
-
 localhost:PycharmProjects$ cd mysite/
 
 localhost:mysite$ ls
@@ -91,7 +86,6 @@ Django version 1.9.6, using settings 'mysite.settings'
 Starting development server at http://127.0.0.1:8000/
 
 Quit the server with CONTROL-C.
-
 ```
 
 使用chrome浏览器，http://127.0.0.1:8000/ ,查看效果,it worked!
@@ -99,15 +93,13 @@ Quit the server with CONTROL-C.
 
 如果想要指定端口：
 
-```
-
+```python
 $ python manage.py runserver 8080
 ```
 
 如果想要指定ip地址：
 
-```
-
+```python
 $ python manage.py runserver 0.0.0.0:8000
 # 0.0.0.0 表示这个设备上的所有IP地址
 ```
@@ -135,15 +127,13 @@ A project is a collection of configuration and apps for a particular website.
 
 创建app，可以在任何python能够识别的路径下
 
-```
-
+```python
 $ python manage.py startapp polls
 ```
 
 查看下pools的目录结构：
 
-```
-
+```python
 polls/
     __init__.py
     admin.py
@@ -163,8 +153,7 @@ polls/
 
 在polls/views下写一个最简单的view：
 
-```
-
+```python
 from django.http import HttpResponse
 
 
@@ -174,8 +163,7 @@ def index(request):
 
 想要访问这个view，就需要配置URLconf，在polls下创建一个urls.py文件
 
-```
-
+```python
 polls/
     __init__.py
     admin.py
@@ -190,8 +178,7 @@ polls/
 
 在polls/urls.py中增加：
 
-```
-
+```python
 localhost:polls$ more urls.py
 
 from django.conf.urls import url
@@ -210,8 +197,7 @@ urlpatterns = [
 
 然后需要将这个URLconf添加到mysite的url中。
 
-```
-
+```python
 localhost:mysite$ more mysite/urls.py
 
 from django.conf.urls import url,include
@@ -236,7 +222,7 @@ include函数允许访问其他URLconf，注意include函数对应的前面正�
 
 正则表达式不包含get和post的参数，如
 
-```
+```python
 https://www.example.com/myapp/, the URLconf will look for myapp/.
 https://www.example.com/myapp/?page=3, the URLconf will also look for myapp/.
 ```

@@ -12,12 +12,15 @@ author: felo
 # 1 数据库设置
 打开` mysite/settings.py`进行设置，这是一个普通的python模块作为设置文件。默认的数据库设置为SQLite，日常测试或开发可以使用它，但是要用于生产的话，你需要更加强劲的数据库。
 如果要使用其他数据库，修改`DATABASES 'default'`下面的参数：
+
 - ENGINE – Either 'django.db.backends.sqlite3', 'django.db.backends.postgresql','django.db.backends.mysql', or 'django.db.backends.oracle'. Other backends are also available.
+
 - NAME – The name of your database. If you’re using SQLite, the database will be a file on your computer; in that case, NAME should be the full absolute path, including filename, of that file. The default value,os.path.join(BASE_DIR, 'db.sqlite3'), will store the file in your project directory.
 
 如果不是使用SQLite还需要增加 USER, PASSWORD, and HOST这些参数，并且**需要创建好数据库实例**，但是我们这里就用sqlite，不需要对settings进行任何的修改就行使用。
 
 另外，设置好set TIME_ZONE to your time zone.
+
 
 By default, INSTALLED_APPS 包含下面几个APP，都是django自带的:
 - django.contrib.admin – The admin site. You’ll use it shortly.
@@ -28,6 +31,7 @@ By default, INSTALLED_APPS 包含下面几个APP，都是django自带的:
 - django.contrib.staticfiles – A framework for managing static files.
 
 在使用这个默认的app之前，我们需要执行：
+
 ```
 $ python manage.py migrate
 ```
@@ -38,6 +42,7 @@ migrate会根据app在数据库中创建相应的表结构，并且只对INSTALL
 本质上就是创建数据库的结构，model是一个单独的，权威的数据源，它包含你所存储数据必要的类型和动作，django遵循DRY Principle，目的是让所有数据都来自一个地方。
 不同于Ruby On Rails ，django能够滚动更新数据库到最新的models。
 在我们的polls例子中，创建两个models：Question and Choice.
+
 ```
 localhost:polls$ more models.py
 from __future__ import unicode_literals
@@ -68,6 +73,7 @@ class Choice(models.Model):
 
 但是首先要将polls这个app installed：
 编辑`mysite/settings.py`文件在`INSTALLED_APPS`下增加`polls.apps.PollsConfig`，如下所示：
+
 ```
 INSTALLED_APPS = [
 'polls.apps.PollsConfig',    #增加此行，直接增加"polls"亦可以
@@ -79,12 +85,16 @@ INSTALLED_APPS = [
 'django.contrib.staticfiles',
 ]
 ```
+
 然后运行：
+
 ```
 $ python manage.py makemigrations polls
 #$ python manage.py makemigrations 不加app名称将检查所有app的变化
 ```
+
 可以看到类似下面的信息：
+
 ```
 Migrations for 'polls':
 0001_initial.py:
@@ -95,10 +105,13 @@ Migrations for 'polls':
 `makemigrations`告诉django在models中出现了哪些变化，这些变化将使用`migrate`保存到数据库中。
 这些变化存放在`polls/migrations/0001_initial.py.`文件中。
 在运行migrate之前，可以通过一个命令来查看将在数据库中执行哪些sql语句：
+
 ```
 $ python manage.py sqlmigrate polls 0001
 ```
+
 得到类似SQL语句：（这里是PostgreSQL的例子）
+
 ```
 BEGIN;
 --
@@ -130,10 +143,12 @@ REFERENCES "polls_question" ("id")
 DEFERRABLE INITIALLY DEFERRED;
 COMMIT;
 ```
+
 如果你有兴趣，可以运行python manage.py check; this checks for any problems in your project
 without making migrations or touching the database.
 
 好，下面开始运行migrate了：
+
 ```
 $ python manage.py migrate
 Operations to perform:
@@ -151,16 +166,21 @@ django的migration十分的强大，不需要删除database或tables，就能直
 分开创建和接受migrations的原因是便于版本控制系统，也方便其他开发者阅读。
 
 # 4 Playing with the API
+
 django有一个单独的shell，直接用python的话存在一些问题， manage.py文件设置了从 mysite/settings.py中导入的DJANGO_SETTINGS_MODULE的环境变量。
+
 ```
 $ python manage.py shell
 ```
+
 那么有没有办法绕过manage.py呢，有。
+
 ```
 >>> import django
 >>> django.setup()
 ```
 但是试了下，貌似不行，还是用第一个办法吧。
+
 ```
 >>> from polls.models import Question, Choice #导入我们刚写的models类
 >>> Question.objects.all()  #列举所有对象，现在沒有对象
@@ -183,7 +203,9 @@ datetime.datetime(2012, 2, 26, 13, 0, 0, 775217, tzinfo=<UTC>)
 [<Question: Question object>]
 
 ```
+
 等等，`[<Question: Question object>]`根本就不是人能看明白的啊，让我们在`polls/models.py`文件中增加一个__str__()的方法，django默认会将对象显示为__str__()方法所返回的内容。
+
 ```
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
@@ -201,6 +223,7 @@ def __str__(self):
     return self.choice_text
 ```
 咱也可以自定义一个方法：
+
 ```
 import datetime
 from django.db import models
@@ -210,7 +233,9 @@ class Question(models.Model):
 def was_published_recently(self):  #
     return self.pub_date >= timezone.now() - datetime.timedelta(days=1) #如果pub_date在一天内就返回True
 ```
+
 保存这些变化，开启一个manage.py shell，
+
 ```
 >>> from polls.models import Question, Choice
 # Make sure our __str__() addition worked.
@@ -274,13 +299,16 @@ True
 >>> c = q.choice_set.filter(choice_text__startswith='Just hacking')
 >>> c.delete()
 ```
+
 ---
+
 # 5 django admin简介
 
 django admin的理念是用于后台管理员使用的，而非普通用户使用。django admin完全自动的为models生成管理接口。
 django产生于新闻编辑室的环境下，非常清晰的分开内容发布和公开的位置，管理员们轻松的增加新闻，内容，故事等，然后这些内容在相应的地方公开显示，django解决了一个管理员们创建统一的编辑内容的接口。
 
 ## 创建一个admin user
+
 ```
 localhost:mysite$ python manage.py createsuperuser
 Username (leave blank to use 'admin'): admin
@@ -297,8 +325,11 @@ admin显示语言可以在setting中设置。
 ## 进入管理界面
 刚开始只能管理admin中默认的Groups和Users两个类，他们是由django.contrib.auth这个app提供的。
 ![](http://images2015.cnblogs.com/blog/866969/201605/866969-20160531213124961-1854698528.jpg)
+
 ## 使得polls在admin中可修改
+
 我们要告诉admin，Question对象有admin接口，即在polls/admin.py 下增加几行：
+
 ```
 from django.contrib import admin
 
@@ -307,6 +338,7 @@ from . import models
 
 admin.site.register(models.Question)
 ```
+
 ## 探索admin的简单功能
 ![](http://images2015.cnblogs.com/blog/866969/201605/866969-20160531213138117-953752625.jpg)
 可以对Questions进行增加记录，修改记录，删除记录，查询记录等操作，还可以查看历史。

@@ -2,5 +2,5 @@ name: "Felo·Blog"
 description: "立志  勤学  改过  责善"
 url: ""
 markdown: kramdown
-highlighter: pygments
+highlighter: rouge
 exclude: ["fabfile.py*", "*.bak"]

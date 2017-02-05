@@ -23,6 +23,7 @@ pandas是基于numpy创建，提供更高级的数据结构和操作工具，是
 import pandas as pd
 from pandas import Series,DataFrame
 ```
+
 # 1 pandas数据结构
 两个最重要的数据结构：Series和DataFrame，基本可以解决绝大部分问题。
 

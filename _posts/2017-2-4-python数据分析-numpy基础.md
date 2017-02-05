@@ -25,7 +25,11 @@ python能够包装c、c++以numpy数组形式的数据。pandas提供了结构�
 
 # 1.ndarray：多维数组对象
 多维数组，要求所有元素的类型一致，通常说的“数组”、“Numpy数组”、“ndarray”都是指“ndarray”对象。
+
+
 ## 1.1 创建ndarray
+
+
 函数 | 说明
 - | -
 array | 输入数据转换为ndarray对象，可以是python元组、列表或其他序列类型。可以自动识别dtype，或者手动指定类型

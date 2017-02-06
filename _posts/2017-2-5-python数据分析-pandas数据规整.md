@@ -1228,7 +1228,9 @@ dtype: int64
 
 ## 3.6 检测和过滤异常值
 
-只看个例子：
+只看个例子：把绝对值大于3的值都替换为`3`或`-3`。
+
+
 ```python
 In [101]: data = DataFrame(np.random.randn(1000,4))
 

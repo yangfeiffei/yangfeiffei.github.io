@@ -619,24 +619,789 @@ Out[98]:
 
 
 
+# 2 重塑和轴向旋转
+
+# 2.1 重塑层次化索引
+
+针对DataFrame，有stack和unstack。stack将数据的列“旋转”为行，unstack反之。
+
+```python
+In [6]: data = DataFrame(np.arange(6).reshape(2,3),index=pd.Index(['Ohio','Color
+   ...: ado'], name='state'),columns=pd.Index(['one','two','three'],name='number
+   ...: '))
+
+In [7]: data
+Out[7]:
+number    one  two  three
+state                    
+Ohio        0    1      2
+Colorado    3    4      5
+
+In [8]: data.stack()  # 把列转化为行，即形成一个层次化索引的Series
+Out[8]:
+state     number
+Ohio      one       0
+          two       1
+          three     2
+Colorado  one       3
+          two       4
+          three     5
+dtype: int64
+
+In [9]: data.stack().unstack()  # 把层次化索引的Series转化为一个普通的DataFrame
+Out[9]:
+number    one  two  three
+state                    
+Ohio        0    1      2
+Colorado    3    4      5
+In [10]: data.stack().unstack('number')
+Out[10]:
+number    one  two  three
+state                    
+Ohio        0    1      2
+Colorado    3    4      5
+
+In [11]: data.stack().unstack(1)
+Out[11]:
+number    one  two  three
+state                    
+Ohio        0    1      2
+Colorado    3    4      5
+
+In [12]: data.stack().unstack(0)
+Out[12]:
+state   Ohio  Colorado
+number                
+one        0         3
+two        1         4
+three      2         5
+
+In [13]: data.stack().unstack('state')  # 选择指定的列，进行旋转
+Out[13]:
+state   Ohio  Colorado
+number                
+one        0         3
+two        1         4
+three      2         5
+
+```
+
+对于Series也是一样，
+
+```python
+In [14]: s1 = Series([0,1,2,3],index=list('abcd'))
+
+In [15]: s2 = Series([4,5,6],index=list('cde'))
+
+In [16]: data2 = pd.concat([s1,s2],keys=['one','two'])
+
+In [17]: data2
+Out[17]:
+one  a    0
+     b    1
+     c    2
+     d    3
+two  c    4
+     d    5
+     e    6
+dtype: int64
+
+In [18]: data2.unstack()
+Out[18]:
+       a    b    c    d    e
+one  0.0  1.0  2.0  3.0  NaN
+two  NaN  NaN  4.0  5.0  6.0
+
+In [19]: data2.unstack().stack()  # 默认丢弃nan值
+Out[19]:
+one  a    0.0
+     b    1.0
+     c    2.0
+     d    3.0
+two  c    4.0
+     d    5.0
+     e    6.0
+dtype: float64
+
+In [20]: data2.unstack().stack(dropna=False) # 不丢弃nan值
+Out[20]:
+one  a    0.0
+     b    1.0
+     c    2.0
+     d    3.0
+     e    NaN
+two  a    NaN
+     b    NaN
+     c    4.0
+     d    5.0
+     e    6.0
+dtype: float64
+```
+
+
+
+## 2.2 将“长格式”转化为“宽格式”
+
+时间序列的通常以“长格式”或“堆栈”格式存放在数据库或者CSV中。
+
+```python
+In [28]: df = pd.DataFrame({'A' : ['one', 'one', 'two', 'three'] * 3,
+    ...: 'B' : ['A', 'B', 'C'] * 4,'C' : ['foo', 'foo', 'foo', 'bar', 'bar', 'ba
+    ...: r'] * 2,
+    ...: 'D' : np.random.randn(12),'E' : np.random.randn(12)})
+
+In [29]: df
+Out[29]:
+        A  B    C         D         E
+0     one  A  foo -1.130142 -0.800142
+1     one  B  foo  1.453914 -1.344615
+2     two  C  foo  0.452666  0.103939
+3   three  A  bar  0.053393  0.284834
+4     one  B  bar -0.435699  0.885828
+5     one  C  bar  0.492411 -1.280743
+6     two  A  foo -1.819792 -1.654636
+7   three  B  foo  0.364982  1.654728
+8     one  C  foo -1.205436  0.712150
+9     one  A  bar  2.696329  1.357930
+10    two  B  bar -0.561867  1.326672
+11  three  C  bar  0.782410 -0.600689
+
+# 这样就是df表中以D作为数值域，A,B为行，C为列的数据视图。
+
+In [30]: pd.pivot_table(df, values='D', index=['A', 'B'], columns=['C'])
+Out[30]:
+C             bar       foo
+A     B                    
+one   A  2.696329 -1.130142
+      B -0.435699  1.453914
+      C  0.492411 -1.205436
+three A  0.053393       NaN
+      B       NaN  0.364982
+      C  0.782410       NaN
+two   A       NaN -1.819792
+      B -0.561867       NaN
+      C       NaN  0.452666
+```
+
+
+# 3 数据转换
+
+前面两部分说的都是数据的重排，还有一类操作就是过滤、清理和转换。
+
+## 3.1 移除重复数据
+
+
+duplicated方法返回一个bool型Series，判断行是否为重复行。
+drop_duplicates方法：返回一个删除了重复行的DataFrame
+
+```python
+In [31]: data = DataFrame({'k1':['one']*3+['two']*4,'k2':[1,1,2,3,3,4,4]})
+
+In [32]: data
+Out[32]:
+    k1  k2
+0  one   1
+1  one   1
+2  one   2
+3  two   3
+4  two   3
+5  two   4
+6  two   4
+
+In [33]: data.duplicated()
+Out[33]:
+0    False
+1     True
+2    False
+3    False
+4     True
+5    False
+6     True
+dtype: bool
+
+In [34]: data.duplicated('k2')  # 按照列进行判断
+Out[34]:
+0    False
+1     True
+2    False
+3    False
+4     True
+5    False
+6     True
+dtype: bool
+
+In [35]: data.drop_duplicates
+Out[35]:
+<bound method DataFrame.drop_duplicates of     k1  k2
+0  one   1
+1  one   1
+2  one   2
+3  two   3
+4  two   3
+5  two   4
+6  two   4>
+
+In [36]: data.drop_duplicates()  # 返回一个新的去重后的对象
+Out[36]:
+    k1  k2
+0  one   1
+2  one   2
+3  two   3
+5  two   4
+
+In [37]: data  # 原对象不变
+Out[37]:
+    k1  k2
+0  one   1
+1  one   1
+2  one   2
+3  two   3
+4  two   3
+5  two   4
+6  two   4
+
+# 默认保留的是第一个重复值
+In [41]: data.drop_duplicates(['k1','k2'])  #
+Out[41]:
+    k1  k2  v1
+0  one   1   0
+2  one   2   2
+3  two   3   3
+5  two   4   5
+
+In [42]: data.drop_duplicates(['k1','k2'],take_last=True)
+/Users/yangfeilong/anaconda/bin/ipython:1: FutureWarning: the take_last=True keyword is deprecated, use keep='last' instead
+  #!/bin/bash /Users/yangfeilong/anaconda/bin/python.app
+Out[42]:
+    k1  k2  v1
+1  one   1   1
+2  one   2   2
+4  two   3   4
+6  two   4   6
+
+# 也可以指定保留最后一个值
+In [43]: data.drop_duplicates(['k1','k2'],keep='last')
+Out[43]:
+    k1  k2  v1
+1  one   1   1
+2  one   2   2
+4  two   3   4
+6  two   4   6
+
+In [44]: data.drop_duplicates(['k1','k2'],keep='first')
+Out[44]:
+    k1  k2  v1
+0  one   1   0
+2  one   2   2
+3  two   3   3
+5  two   4   5
+```
+
+## 3.2 利用函数或映射进行数据转换
+
+映射可以是一个字典，key为源，value为目标。
+如何转换呢？DataFrame通过apply或者applymap，Series通过map函数进行。
+
+```python
+In [45]: data = DataFrame({'food':['bacon','pulled pork','bacon','Pastrami','cor
+    ...: ned beef','Bacon','pastrami','honey ham','nova lox'],'ounces':[4,3,12,6
+    ...: ,7.5,8,3,5,6]})
+
+In [46]: data
+Out[46]:
+          food  ounces
+0        bacon     4.0
+1  pulled pork     3.0
+2        bacon    12.0
+3     Pastrami     6.0
+4  corned beef     7.5
+5        Bacon     8.0
+6     pastrami     3.0
+7    honey ham     5.0
+8     nova lox     6.0
+
+In [47]: meat_to_animal = {'bacon':'pig','pulled pork':'pig','pastrami':'cow','c
+    ...: orned beef':'cow','honey ham':'pig','nova lox':'salmon'}
+
+In [49]: data['food']
+Out[49]:
+0          bacon
+1    pulled pork
+2          bacon
+3       Pastrami
+4    corned beef
+5          Bacon
+6       pastrami
+7      honey ham
+8       nova lox
+Name: food, dtype: object
+
+# 在data中food列，有些存在大写，所以需要处理一下。
+In [50]: data['food'].map(str.lower).map(meat_to_animal)
+Out[50]:
+0       pig
+1       pig
+2       pig
+3       cow
+4       cow
+5       pig
+6       cow
+7       pig
+8    salmon
+Name: food, dtype: object
+
+
+# 通过字典进行映射
+In [51]: data['animal']=data['food'].map(str.lower).map(meat_to_animal)
+
+In [52]: data
+Out[52]:
+          food  ounces  animal
+0        bacon     4.0     pig
+1  pulled pork     3.0     pig
+2        bacon    12.0     pig
+3     Pastrami     6.0     cow
+4  corned beef     7.5     cow
+5        Bacon     8.0     pig
+6     pastrami     3.0     cow
+7    honey ham     5.0     pig
+8     nova lox     6.0  salmon
+
+
+#通过函数进行映射
+In [53]: data['animal']=data['food'].map(lambda x:meat_to_animal[(x.lower())])
+
+In [54]: data
+Out[54]:
+          food  ounces  animal
+0        bacon     4.0     pig
+1  pulled pork     3.0     pig
+2        bacon    12.0     pig
+3     Pastrami     6.0     cow
+4  corned beef     7.5     cow
+5        Bacon     8.0     pig
+6     pastrami     3.0     cow
+7    honey ham     5.0     pig
+8     nova lox     6.0  salmon
+```
+
+## 3.3 替换值
+
+fillna是填充nan值，可以看成是替换值的一种特殊情况。
+replace方法提供一个简单的替换值得方法。
+
+```python
+In [55]: data = Series([1,-999,2,-999,-1000,3])
+
+In [56]: data
+Out[56]:
+0       1
+1    -999
+2       2
+3    -999
+4   -1000
+5       3
+dtype: int64
+
+In [57]: data.replace(-999,np.nan)
+Out[57]:
+0       1.0
+1       NaN
+2       2.0
+3       NaN
+4   -1000.0
+5       3.0
+dtype: float64
+
+In [58]: data.replace([-999,-1000],np.nan) # 列表 + 标量
+Out[58]:
+0    1.0
+1    NaN
+2    2.0
+3    NaN
+4    NaN
+5    3.0
+dtype: float64
+
+In [59]: data.replace([-999,-1000],[np.nan,0])  # 两个列表
+Out[59]:
+0    1.0
+1    NaN
+2    2.0
+3    NaN
+4    0.0
+5    3.0
+dtype: float64
+
+In [60]: data.replace({-999:np.nan,-1000:0})  # 字典形式
+Out[60]:
+0    1.0
+1    NaN
+2    2.0
+3    NaN
+4    0.0
+5    3.0
+dtype: float64
+
+```
+
+## 3.4 重命名轴索引
+
+```python
+# 修改源数据
+In [62]: data
+Out[62]:
+0       1
+1    -999
+2       2
+3    -999
+4   -1000
+5       3
+dtype: int64
+
+In [63]: data.index = range(2,8)
+
+In [64]: data
+Out[64]:
+2       1
+3    -999
+4       2
+5    -999
+6   -1000
+7       3
+dtype: int64
+
+In [65]: data.index.map(lambda x:x+100)
+Out[65]: array([102, 103, 104, 105, 106, 107])
+
+In [67]: data.index = data.index.map(lambda x:x+100)
+
+In [68]: data
+Out[68]:
+102       1
+103    -999
+104       2
+105    -999
+106   -1000
+107       3
+dtype: int64
+
+# 创建一个新数据，使用rename
+In [73]: data2 = DataFrame(np.arange(12).reshape(3,4),columns=list('abcd'),index
+    ...: =range(3))
+
+In [74]: data2
+Out[74]:
+   a  b   c   d
+0  0  1   2   3
+1  4  5   6   7
+2  8  9  10  11
+In [77]: data2.rename(index={0:100})
+Out[77]:
+     a  b   c   d
+100  0  1   2   3
+1    4  5   6   7
+2    8  9  10  11
+
+In [78]: data2.rename(index={0:100},columns={'a':'ff'})
+Out[78]:
+     ff  b   c   d
+100   0  1   2   3
+1     4  5   6   7
+2     8  9  10  11
+```
+
+
+## 3.5 离散化和面元划分
+
+连续数据常常需要被拆分为离散数据。这就需要用cut函数。
+
+```python
+In [79]: ages = range(100)
+
+In [80]: bins = [18,25,35,60,100]
+
+In [81]: pd.cut(ages,bins)
+Out[81]:
+[NaN, NaN, NaN, NaN, NaN, ..., (60, 100], (60, 100], (60, 100], (60, 100], (60, 100]]
+Length: 100
+Categories (4, object): [(18, 25] < (25, 35] < (35, 60] < (60, 100]]
+
+In [82]: cuts = pd.cut(ages,bins)
+
+In [83]: cuts[45]
+Out[83]: '(35, 60]'
+
+In [85]: cuts.dtype
+Out[85]: category
+```
+
+这时，cut返回的是一个category对象，
+
+```python
+In [86]: cuts.labels
+/Users/yangfeilong/anaconda/bin/ipython:1: FutureWarning: 'labels' is deprecated. Use 'codes' instead
+  #!/bin/bash /Users/yangfeilong/anaconda/bin/python.app
+Out[86]:
+array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+       -1, -1,  0,  0,  0,  0,  0,  0,  0,  1,  1,  1,  1,  1,  1,  1,  1,
+        1,  1,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,
+        2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  3,  3,  3,  3,  3,  3,  3,
+        3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,
+        3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3], dtype=int8)
+
+In [87]: cuts.levels
+/Users/yangfeilong/anaconda/bin/ipython:1: FutureWarning: Accessing 'levels' is deprecated, use 'categories'
+  #!/bin/bash /Users/yangfeilong/anaconda/bin/python.app
+Out[87]: Index([u'(18, 25]', u'(25, 35]', u'(35, 60]', u'(60, 100]'], dtype='object')
+
+In [88]: pd.value_counts(cuts) #查看每个种类的数量
+Out[88]:
+(60, 100]    39
+(35, 60]     25
+(25, 35]     10
+(18, 25]      7
+dtype: int64
+
+# 使用right=False可以修改开端和闭端
+
+In [89]: cuts = pd.cut(ages,bins,right=False)
+
+In [90]: cuts
+Out[90]:
+[NaN, NaN, NaN, NaN, NaN, ..., [60, 100), [60, 100), [60, 100), [60, 100), [60, 100)]
+Length: 100
+Categories (4, object): [[18, 25) < [25, 35) < [35, 60) < [60, 100)]
+
+In [91]: cuts = pd.cut(ages,bins,right=False,labels=list('abcd'))
+
+In [92]: cuts
+Out[92]:
+[NaN, NaN, NaN, NaN, NaN, ..., d, d, d, d, d]
+Length: 100
+Categories (4, object): [a < b < c < d]
+
+# 如果cut传入的是数字n，那么就会均分成n份。
+In [94]: pd.cut(ages,5)
+Out[94]:
+[(-0.099, 19.8], (-0.099, 19.8], (-0.099, 19.8], (-0.099, 19.8], (-0.099, 19.8], ..., (79.2, 99], (79.2, 99], (79.2, 99], (79.2, 99], (79.2, 99]]
+Length: 100
+Categories (5, object): [(-0.099, 19.8] < (19.8, 39.6] < (39.6, 59.4] < (59.4, 79.2] < (79.2, 99]]
+
+# qcut使用样本分位数进行划分，比cut更平均，获得大小基本相同的面元
+In [95]: pd.qcut(ages,5)
+Out[95]:
+[[0, 19.8], [0, 19.8], [0, 19.8], [0, 19.8], [0, 19.8], ..., (79.2, 99], (79.2, 99], (79.2, 99], (79.2, 99], (79.2, 99]]
+Length: 100
+Categories (5, object): [[0, 19.8] < (19.8, 39.6] < (39.6, 59.4] < (59.4, 79.2] < (79.2, 99]]
+In [96]: pd.value_counts(pd.qcut(ages,5))
+Out[96]:
+(79.2, 99]      20
+(59.4, 79.2]    20
+(39.6, 59.4]    20
+(19.8, 39.6]    20
+[0, 19.8]       20
+dtype: int64
+
+In [98]: ages = np.random.randn(1000)
+
+In [99]: pd.value_counts(pd.qcut(ages,5))
+Out[99]:
+(0.883, 3.534]      200
+(0.25, 0.883]       200
+(-0.266, 0.25]      200
+(-0.806, -0.266]    200
+[-3.172, -0.806]    200
+dtype: int64
+
+In [100]: pd.value_counts(pd.cut(ages,5))
+Out[100]:
+(-0.489, 0.852]     481
+(-1.831, -0.489]    283
+(0.852, 2.193]      198
+(-3.179, -1.831]     23
+(2.193, 3.534]       15
+dtype: int64
+
+
+```
+
+## 3.6 检测和过滤异常值
+
+只看个例子：
+```python
+In [101]: data = DataFrame(np.random.randn(1000,4))
+
+In [102]: data
+Out[102]:
+            0         1         2         3
+0    0.746898 -0.657217  0.358517  1.075503
+1   -0.821582  1.408816  0.937318 -0.548889
+2   -0.527847  0.749256 -0.524283 -0.977338
+3    0.800118 -0.544609  0.481839  0.555546
+...
+996 -0.081920  0.100507 -0.431551 -1.832261
+997 -1.069475  0.205978  0.918592  0.881498
+998  1.749007  2.658384 -1.079657 -0.023890
+999  1.488167 -0.061146  0.006189  0.070564
+
+[1000 rows x 4 columns]
+
+In [103]: data.describe()
+Out[103]:
+                 0            1            2            3
+count  1000.000000  1000.000000  1000.000000  1000.000000
+mean     -0.018474     0.030781     0.025966     0.041950
+std       1.020634     0.982547     1.010164     0.948116
+min      -3.150278    -3.422772    -3.406069    -2.575391
+25%      -0.719646    -0.621461    -0.644949    -0.572558
+50%      -0.021287     0.043128     0.027890     0.050492
+75%       0.701195     0.711455     0.678644     0.665413
+max       3.270054     2.983500     3.323021     2.925822
+
+
+In [105]: data[(np.abs(data) > 3).any(1)]
+Out[105]:
+            0         1         2         3
+16   1.450842  2.222636 -3.289273  1.265199
+353 -3.067571  0.490152  0.536051  1.252143
+531  1.518928  0.289636  3.323021 -0.695272
+688  1.776682 -0.799736 -3.406069  0.632751
+702  0.807953 -0.674675 -3.045511 -0.267613
+704 -0.469205 -3.422772 -2.669146 -0.712407
+772 -0.861015 -0.573432  3.012727  0.325476
+808  3.270054 -0.035521  0.061092  1.263363
+812 -3.150278 -0.734308  1.376565  0.671424
+
+In [108]: data[np.abs(data) > 3] = 100
+
+In [110]: data.describe()
+Out[110]:
+                 0            1            2            3
+count  1000.000000  1000.000000  1000.000000  1000.000000
+mean      0.284474     0.134204     0.529371     0.041950
+std       5.564261     3.308565     7.123116     0.948116
+min      -2.746446    -2.983108    -2.710984    -2.575391
+25%      -0.714890    -0.619551    -0.635457    -0.572558
+50%      -0.018859     0.048775     0.036321     0.050492
+75%       0.710050     0.712375     0.686314     0.665413
+max     100.000000   100.000000   100.000000     2.925822
+
+In [111]: data[np.abs(data) > 3] = np.sign(data) * 3
+
+In [113]: data.describe()
+Out[113]:
+                 0            1            2            3
+count  1000.000000  1000.000000  1000.000000  1000.000000
+mean     -0.006526     0.037204     0.044371     0.041950
+std       1.019295     0.980940     1.006138     0.948116
+min      -2.746446    -2.983108    -2.710984    -2.575391
+25%      -0.714890    -0.619551    -0.635457    -0.572558
+50%      -0.018859     0.048775     0.036321     0.050492
+75%       0.710050     0.712375     0.686314     0.665413
+max       3.000000     3.000000     3.000000     2.925822
+
+```
+
+
+## 3.7 排列和随机采样
+
+```python
+# 随机重排序
+In [114]: df = DataFrame(np.arange(20).reshape(5,4))
+
+In [115]: df.ix[np.random.permutation(5)]
+Out[115]:
+    0   1   2   3
+0   0   1   2   3
+4  16  17  18  19
+1   4   5   6   7
+2   8   9  10  11
+3  12  13  14  15
+
+# 获取随机前三行
+In [116]: df.ix[np.random.permutation(len(df))[:3]]
+Out[116]:
+    0   1   2   3
+0   0   1   2   3
+2   8   9  10  11
+4  16  17  18  19
+
+# 随机获取10，每个值随机取自bag
+In [118]: bag = np.array([5,7,-1,4,6])
+
+In [119]: bag.take(np.random.randint(0,len(bag),size=10))
+Out[119]: array([ 7,  7,  7,  5,  7,  6,  4, -1,  6,  4])
+```
+
+## 3.8 计算标量/哑变量
+
+还有一种常用的转换方式是：将分类变量转换为哑变量矩阵或指标矩阵。
+
+```python
+# 比较复杂，其实就是用1和0填充一个矩阵，说明元素在一个Series中的位置。
+In [120]: s1 = Series(list('bbacab'))
+
+In [121]: pd.get_dummies(s1)
+Out[121]:
+     a    b    c
+0  0.0  1.0  0.0
+1  0.0  1.0  0.0
+2  1.0  0.0  0.0
+3  0.0  0.0  1.0
+4  1.0  0.0  0.0
+5  0.0  1.0  0.0
+
+```
+
+结合cut和get_dummies函数可以来做一些统计有用的事情：
+
+```python
+In [122]: values = np.random.rand(10)
+
+In [123]: values
+Out[123]:
+array([ 0.96294606,  0.15142481,  0.38260636,  0.01174038,  0.44699216,
+        0.3726047 ,  0.50965999,  0.61532174,  0.27740518,  0.28994142])
+
+In [126]: bins = [0,0.2,0.4,0.6,0.8,1.]
+
+In [127]: pd.cut(values,bins)
+Out[127]:
+[(0.8, 1], (0, 0.2], (0.2, 0.4], (0, 0.2], (0.4, 0.6], (0.2, 0.4], (0.4, 0.6], (0.6, 0.8], (0.2, 0.4], (0.2, 0.4]]
+Categories (5, object): [(0, 0.2] < (0.2, 0.4] < (0.4, 0.6] < (0.6, 0.8] < (0.8, 1]]
+
+In [128]: pd.get_dummies(pd.cut(values, bins)) # 查看每个类型的指标矩阵
+Out[128]:
+   (0, 0.2]  (0.2, 0.4]  (0.4, 0.6]  (0.6, 0.8]  (0.8, 1]
+0       0.0         0.0         0.0         0.0       1.0
+1       1.0         0.0         0.0         0.0       0.0
+2       0.0         1.0         0.0         0.0       0.0
+3       1.0         0.0         0.0         0.0       0.0
+4       0.0         0.0         1.0         0.0       0.0
+5       0.0         1.0         0.0         0.0       0.0
+6       0.0         0.0         1.0         0.0       0.0
+7       0.0         0.0         0.0         1.0       0.0
+8       0.0         1.0         0.0         0.0       0.0
+9       0.0         1.0         0.0         0.0       0.0
+
+In [129]: a =pd.get_dummies(pd.cut(values, bins))
+
+In [131]: a.sum(axis=0)  # 统计一下每个类型的数量
+Out[131]:
+(0, 0.2]      2.0
+(0.2, 0.4]    4.0
+(0.4, 0.6]    2.0
+(0.6, 0.8]    1.0
+(0.8, 1]      1.0
+dtype: float64
+```
+
+
 待续。。。
 
 ---
 
-
-
-
-
-
-
-
-
-
-
-
-# 2 重塑和轴向旋转
-
-# 3 数据转换
 
 # 4 字符串操作
 

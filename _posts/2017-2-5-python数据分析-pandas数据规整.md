@@ -1400,11 +1400,297 @@ dtype: float64
 ```
 
 
-待续。。。
-
----
-
 
 # 4 字符串操作
 
+## 4.1 字符串对象方法
+
+大部分的字符处理，内置方法已经够用了。结合“split”和“strip”、‘+’、“join”等方法。
+
+```python
+In [1]: a = 'a,b, guide'
+
+In [2]: a.split(',')
+Out[2]: ['a', 'b', ' guide']
+
+In [4]: [x.strip() for x in a.split(',')]
+Out[4]: ['a', 'b', 'guide']
+
+In [5]: first,second,third = [x.strip() for x in a.split(',')]
+
+In [6]: first
+Out[6]: 'a'
+
+In [7]: second
+Out[7]: 'b'
+
+In [8]: third
+Out[8]: 'guide'
+
+In [9]: first + third
+Out[9]: 'aguide'
+
+In [10]: first.join(third)
+Out[10]: 'gauaiadae'
+
+In [12]: ''.join([third,first])
+Out[12]: 'guidea'
+
+In [13]: 'a' in a
+Out[13]: True
+
+In [14]: a.find(':')
+Out[14]: -1
+
+In [15]: a.index(':')
+---------------------------------------------------------------------------
+ValueError                                Traceback (most recent call last)
+<ipython-input-15-e54927e30300> in <module>()
+----> 1 a.index(':')
+
+ValueError: substring not found
+
+In [16]: a.count(',')
+Out[16]: 2
+```
+
+字符串内置方法：
+
+![](/images/python数据分析/python_inner_str_func1.png)
+
+![](/images/python数据分析/python_inner_str_func2.png)
+
+
+## 4.2 正则表达式
+
+复习一下正则表达式
+
+```python
+In [17]: import re
+
+In [18]: text = 'foo    bar\t baz  \tqux'
+
+In [19]: re.split('\s+', text)  # \s+  表示一个或多个空格
+Out[19]: ['foo', 'bar', 'baz', 'qux']
+
+In [20]: regex = re.compile('\s+')  # 创建regex对象，多次复用，减少大量CPU时间
+
+In [21]: regex.split(text)
+Out[21]: ['foo', 'bar', 'baz', 'qux']
+
+In [22]: regex.findall(text)  # 所有text中匹配到的对象
+Out[22]: ['    ', '\t ', '  \t']
+
+# match ：从头开始匹配
+# search：第一个
+# findall：找到所有
+
+In [23]: text = '''
+    ...: Dave dave@google.com
+    ...: Steve steve@gmail.com
+    ...: Rob rob@gmail.com
+    ...: Ryan ryan@yahoo.com
+    ...: '''
+
+In [24]: pattern = r'[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}'
+# flags=re.IGNORECASE 表示忽略大小写
+In [25]: regex = re.compile(pattern, flags=re.IGNORECASE)
+
+In [26]: regex.findall(text)
+Out[26]: ['dave@google.com', 'steve@gmail.com', 'rob@gmail.com', 'ryan@yahoo.com']
+
+
+In [27]: regex.search(text)
+Out[27]: <_sre.SRE_Match at 0x104227b28>
+
+In [29]: regex.search(text).group(0)
+Out[29]: 'dave@google.com'
+
+# sub 替换
+In [30]: regex.sub('HAHAHA', text)
+Out[30]: '\nDave HAHAHA\nSteve HAHAHA\nRob HAHAHA\nRyan HAHAHA\n'
+
+In [31]: print(regex.sub("HAHAHAAHA", text))
+
+Dave HAHAHAAHA
+Steve HAHAHAAHA
+Rob HAHAHAAHA
+Ryan HAHAHAAHA
+
+# 分组
+In [33]: pattern = r'([A-Z0-9._%+-]+)@([A-Z0-9.-]+)\.([A-Z]{2,4})'
+
+In [34]: regex = re.compile(pattern, flags=re.IGNORECASE)
+
+In [35]: m=regex.match('wesm@bright.net')
+
+In [36]: m.groups()
+Out[36]: ('wesm', 'bright', 'net')
+
+In [37]: m.group(0)
+Out[37]: 'wesm@bright.net'
+
+In [38]: m.group(1)
+Out[38]: 'wesm'
+
+In [39]: m.group(2)
+Out[39]: 'bright'
+
+In [40]: m.group(3)
+Out[40]: 'net'
+
+# 返回一个大的列表
+In [41]: regex.findall(text)
+Out[41]:
+[('dave', 'google', 'com'),
+ ('steve', 'gmail', 'com'),
+ ('rob', 'gmail', 'com'),
+ ('ryan', 'yahoo', 'com')]
+
+# 指定替换
+ In [48]: regex.sub(r'Username:\1,Domain:\2,Suffix:\3',text)
+ Out[48]: '\nDave Username:dave,Domain:google,Suffix:com\nSteve Username:steve,Domain:gmail,Suffix:com\nRob Username:rob,Domain:gmail,Suffix:com\nRyan Username:ryan,Domain:yahoo,Suffix:com\n'
+
+```
+
+![](/images/python数据分析/python_re_func.png)
+
+
+## 4.3 pandas矢量化的字符串函数
+
+```python
+In [61]: data = {
+    ...: 'Dave':'dave@google.com',
+    ...: 'Steve':'steve@gmail.com',
+    ...: 'Rob':'rob@gmail.com',
+    ...: 'Ryan':'ryan@yahoo.com',
+    ...: 'Wes':np.nan}
+
+In [62]: data = Series(data)
+
+In [63]: data
+Out[63]:
+Dave     dave@google.com
+Rob        rob@gmail.com
+Ryan      ryan@yahoo.com
+Steve    steve@gmail.com
+Wes                  NaN
+dtype: object
+
+In [64]: data.isnull()
+Out[64]:
+Dave     False
+Rob      False
+Ryan     False
+Steve    False
+Wes       True
+dtype: bool
+
+# 查看是否包含，返回一个bool Series
+In [65]: data.str.contains('gmail')
+Out[65]:
+Dave     False
+Rob       True
+Ryan     False
+Steve     True
+Wes        NaN
+dtype: object
+
+
+In [66]: pattern
+Out[66]: '([A-Z0-9._%+-]+)@([A-Z0-9.-]+)\\.([A-Z]{2,4})'
+# 返回一个匹配好的Series
+In [67]: data.str.findall(pattern, flags=re.IGNORECASE)
+Out[67]:
+Dave     [(dave, google, com)]
+Rob        [(rob, gmail, com)]
+Ryan      [(ryan, yahoo, com)]
+Steve    [(steve, gmail, com)]
+Wes                        NaN
+dtype: object
+
+
+In [68]: matches = data.str.match(pattern, flags=re.IGNORECASE)
+/Users/yangfeilong/anaconda/bin/ipython:1: FutureWarning: In future versions of pandas, match will change to always return a bool indexer.
+  #!/bin/bash /Users/yangfeilong/anaconda/bin/python.app
+
+In [69]: matches
+Out[69]:
+Dave     (dave, google, com)
+Rob        (rob, gmail, com)
+Ryan      (ryan, yahoo, com)
+Steve    (steve, gmail, com)
+Wes                      NaN
+dtype: object
+
+In [70]: matches.str.get(1)
+Out[70]:
+Dave     google
+Rob       gmail
+Ryan      yahoo
+Steve     gmail
+Wes         NaN
+dtype: object
+
+In [71]: matches.str.get(2)
+Out[71]:
+Dave     com
+Rob      com
+Ryan     com
+Steve    com
+Wes      NaN
+dtype: object
+
+In [72]: matches.str[0]
+Out[72]:
+Dave      dave
+Rob        rob
+Ryan      ryan
+Steve    steve
+Wes        NaN
+dtype: object
+
+In [73]: data.str[:5]
+Out[73]:
+Dave     dave@
+Rob      rob@g
+Ryan     ryan@
+Steve    steve
+Wes        NaN
+dtype: object
+
+
+```
+
+![](/images/python数据分析/矢量化字符串方法.png)
+
+
+
 # 5 示例：usda食品数据库
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+本部分完。

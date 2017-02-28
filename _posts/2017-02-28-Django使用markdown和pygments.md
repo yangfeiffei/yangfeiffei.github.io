@@ -87,7 +87,7 @@ def custom_markdown(value):
 
 ```python
 ...
-{% load custom_markdown %}  # 加载tag文件
+load custom_markdown  # 加载tag文件
 ...
 {{ articles.content | custom_markdown  }}  # 使用函数
 
@@ -104,7 +104,7 @@ content中一部分markdown文本作为例子，如下所示：
     from django.http import HttpResponse
     def index(request):
         return HttpResponse("Hello, world. You're at the polls index.")
-    
+
 ```
 
 

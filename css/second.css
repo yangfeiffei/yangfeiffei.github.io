@@ -241,7 +241,7 @@ code {
 /*
 /*****************************************************************************/
 /* for colorful */
-.highlight  { background: #fbfffd; }
+/*.highlight  { background: #fbfffd; }*/
 
 /* add scrollbar if code too long */
 .highlight pre {

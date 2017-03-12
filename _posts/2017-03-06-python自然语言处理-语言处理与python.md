@@ -235,20 +235,114 @@ Out[6]:
 
 ### 细粒度的选择词
 
+取出词长度大于15的所有词。
+
+```python_nltk
+In [3]: v = set(book.text1)
+
+In [4]: long_words = [ w for w in v if len(w)>15 ]
+
+In [5]: long_words
+Out[5]:
+[u'hermaphroditical',
+ u'subterraneousness',
+ u'uninterpenetratingly',
+ u'irresistibleness',
+...]
+```
+
+取出出现次数超过7次的词。
+
+```python
+In [7]: fdist5 = nltk.FreqDist(book.text5)
+
+In [8]: sorted([w for w in set(book.text5) if fdist5[w]>7 ])
+Out[8]:
+[u'!',
+ u'!!',
+ u'!!!',
+ u'!!!!',
+...
+```
+
+### 词语搭配和双联词
+
+搭配是指经常在一起出现的常用词，一般不能随便使用近义词替换。
+
+```python
+# 获取所有双连词
+In [9]: nltk.bigrams(book.text1)
+Out[9]: <generator object bigrams at 0x10f07e410>
+
+# 获取最频繁的关联词
+In [16]: book.text4.collocations()
+United States; fellow citizens; four years; years ago; Federal
+Government; General Government; American people; Vice President; Old
+World; Almighty God; Fellow citizens; Chief Magistrate; Chief Justice;
+God bless; every citizen; Indian tribes; public debt; one another;
+foreign nations; political parties
+
+```
+
+### 计数其他东西
+
+```python
+In [17]: fdist = nltk.FreqDist([len(w) for w in book.text1])
+
+In [18]: fdist.keys()
+Out[18]: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20]
+
+In [19]: fdist.plot()
+
+```
+
+![](/images/python_nltk/fdistcountplot.png)
+
+
+
+nltk频率分布的相关函数
+
+![](/images/python_nltk/freq_dist_func1.png)
+
+![](/images/python_nltk/freq_dist_func2.png)
 
 
 
 
+## 1.4 python决策与控制
+
+- 条件
+- 嵌套
+- 条件循环
+
+略。
+
+## 1.5 自动理解自然语言
 
 
+### 词意消歧
+
+在词意消歧中，我们要算出特定上下文中的词被赋予的是哪个意思。
 
 
+### 指代消解
 
+一种更深刻的语言理解是解决“谁对谁做了什么”，即检测主语和动词的宾语。虽然你在 小学已经学会了这些，但它比你想象的更难。
+要回答这个问题涉及到寻找代词 they 的先行词 thieves 或者 paintings。处理这个问题的 计算技术包括指代消解(anaphora resolution)——确定代词或名词短语指的是什么——和 语义角色标注(semantic role labeling)——确定名词短语如何与动词相关联(如施事，受 事，工具等)。
 
+### 自动生成语言
 
+如果我们能够解决自动语言理解等问题，我们将能够继续那些包含自动生成语言的任 务，如自动问答和机器翻译。
 
+### 机器翻译
 
+NLP的起源就是机器翻译（MT）.
+从新 闻和政府网站发布的两种或两种以上的语言文档中可以收集到大量的相似文本。给出一个德 文和英文双语的文档或者一个双语词典，我们就可以自动配对组成句子，这个过程叫做文本 对齐。
 
+### 人机对话系统
 
+在人工智能的历史，主要的智能测试是一个语言学测试，叫做图灵测试.
 
-end
+### NLP 的局限性
+
+自然语言处理研究的一个重要目标一直是使 用浅显但强大的技术代替无边无际的知识和推理能力，促进构建“ 语言理解”技术的艰巨任务 的不断取得进展。

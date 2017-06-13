@@ -13,7 +13,7 @@
 html, body { height: 100%; }
 
 body {
-  font-size: 14px;
+  font-size: 15px;
   /* font-family: Arial, Helvetica, sans-serif; */
   /* font-family: Cambria, "Hoefler Text", Utopia, "Liberation Serif", "Nimbus Roman No9 L Regular", Times, "Times New Roman", serif; */
   /* font-family: Helvetica, "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif; */
@@ -26,7 +26,8 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  margin-bottom: 1em;
+  margin-bottom: 0.6em;
+  padding-left: 0.5em;
 }
 
 p { margin-bottom: 1em; }
@@ -62,11 +63,11 @@ hr {
 	margin-bottom: -1px;
 	height: 34px;
 	overflow: hidden;
-	border-left: 1px solid #FFFFFF;
-	border-right: 1px solid #FFFFFF;
-	border-top: 1px solid #EFEFEF;
-	border-bottom: 1px solid #FFFFFF;
-	/* cursor: pointer; */
+	/*border-left: 1px solid #FFFFFF;*/
+	/*border-right: 1px solid #FFFFFF;*/
+	/*border-top: 1px solid #EFEFEF;*/
+	border-bottom: 1px solid #E6E6F2;
+	/*cursor: pointer;*/
 }
 
 .posts span {
@@ -91,24 +92,39 @@ hr {
 
 .site {
   text-align: justify;
-  width: 800px;
-  margin: 0 auto;
+  /*width: 80%;*/
+  /*width: 800px;*/
+  /*margin: 0 auto;*/
   line-height: 1.6em;
   padding: 1em 2em 2em 2em;
   /* border: 1px solid #ddd; */
-  /* background-color: #fbfffd; */
   background-color: #fff;
+  /*background-image: url("/background.png");*/
+  margin: 0em auto;
+  /*background-image: "background.png";*/
+}
+
+
+.site-content {
+  text-align: justify;
+  width: 80%;
   margin: 2em auto;
 }
+
 
 .header {
   border-bottom: 1px solid #e8e8e8;
   margin-bottom: 2em;
+  background-color: #336666;
+  height: 2em;
+  padding: 1em;
+  border-radius: 5px;
 }
 
 .header a {
   font-weight: bold;
   text-decoration: none;
+  color: white;
 }
 
 .title {
@@ -117,7 +133,7 @@ hr {
   font-size: 1em;
 }
 
-.title a       { color: #a00; }
+.title a       { color: #fff; }
 
 .header a.extra {
   /* color: rgb(46, 65, 92); */
@@ -151,6 +167,8 @@ text-decoration: underline;
   color: #8085C1;
 }
 
+
+
 .footer-left {
   float: left;
   padding-top: 1em;
@@ -169,84 +187,78 @@ text-decoration: underline;
 }
 
 #pagetitle h2 {
+  font-size: 25px;
+}
+
+.post h1 {
+  margin-top: 1em;
+  border-bottom: 1px solid black;
   font-size: 19px;
+  background-color: #FFC78E;
+  padding: 0.5em;
 }
 
 .post h2 {
-  margin-top: 2em;
+  margin-top: 1em;
+  font-size: 17px;
+  padding: 0.5em;
 }
 
-/* standard */
+.post img {
+  width: 80%;
+  /*padding-left: 0.5em;*/
+}
+
+.post ul {
+  padding: 0 0 1em 2em;
+
+}
+
+.post p {
+  /*padding-left: 1em;*/
+  font-size: 17px;
+}
+
+
+
+.post table td {
+  border-top: 1px solid black;
+}
+
+.post table th {
+  /*text-align: center;*/
+
+}
+
 pre code {
     font-size: 1em;
     padding: 0px;
     top: 0px;
+    width: 100%;
+    word-wrap : break-word;
 }
 
-code, pre {
-	color: rgb(46, 65, 92);
-	background-color: #f1f5fa;
-    padding-top: 2px;
-    padding-bottom: 2px;
-    border-radius: 3px;
-    /* font-family: Consolas,"Liberation Mono",Menlo,Courier,monospace; */
+.post table {
+  /*border: 1px solid black;*/
+  width: 90%;
+  /*margin: 0.5em 1em;*/
+  background-color: #fff;
+  /*border-radius: 5px;*/
+
+  border: 1px solid 	#009100;
+  border-radius:5px;
+  padding: 10px ;
+  margin: 10px;
 }
 
 pre {
-    font-size: .9em;
-    padding: 16px 16px 14px 16px;
-    white-space: pre-wrap;
-}
-
-code {
-    padding-left: 5px;
-    padding-right: 5px;
-    font-size: .9em;
-    position: relative;
-    top: -1px;
-}
-
-.post pre {
-  overflow: auto;
-  margin: 1em 0;
-  white-space: pre-wrap;       /* CSS 3 */
-  white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
-  white-space: -pre-wrap;      /* Opera 4-6 */
-  white-space: -o-pre-wrap;    /* Opera 7 */
-  word-wrap: break-word;       /* Internet Explorer 5.5+ */
-}
-
-.post ul, .post ol {
-  margin-left: 2.6em;
-  margin-bottom: 1em;
-}
-
-.post p code {
-  white-space: nowrap;
-}
-
-.post h1 {
-  font-size: 1.6em;
-  line-height: 1em;
-  margin-bottom: 0.66em;
-}
-
-.post p img {
-  width: 100%;
-}
-
-/*****************************************************************************/
-/*
-/* Reset Syntax color
-/*
-/*****************************************************************************/
-/* for colorful */
-/*.highlight  { background: #fbfffd; }*/
-
-/* add scrollbar if code too long */
-.highlight pre {
-  max-height: 300px;
-  overflow-y: auto;
+  /*max-height: 300px;*/
+  /*overflow-y: auto;*/
+  border: 1px solid 	#009100;
+  border-radius:5px;
+  padding: 10px;
+  margin: 10px 0;
+  word-wrap : break-word;
 }
 
 /******/

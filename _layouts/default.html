@@ -31,34 +31,37 @@
     <body>
 
         <div class="site">
-          <div class="header">
-            <h1 class="title"><a href="/">{{ site.name }}</a></h1>
-            <a class="extra" href="/">HOME</a>
-            <a class="extra" href="https://github.com/yangfeiffei">GITHUB</a>
-            <a class="extra" href="/about.html">ABOUT</a>
-            <div class="">{{ site.description }}</div>
+          <div class="site-content">
+            <div class="header">
+              <h1 class="title"><a href="/">{{ site.name }}</a></h1>
+              <a class="extra" href="/">HOME</a>
+              <a class="extra" href="https://github.com/yangfeiffei">GITHUB</a>
+              <a class="extra" href="/about.html">ABOUT</a>
+              <!-- <div class="">{{ site.description }}</div> -->
+            </div>
+
+            {{ content }}
+
+            <div class="footer">
+
+              <div class="contact">
+                <p>
+                  <div class="">{{ site.description }}@2017</div>
+                </p>
+              </div>
+            </div>
+
           </div>
 
-          {{ content }}
 
-          <div class="footer">
-            <div class="contact">
-            </div>
-            <div class="license">
-              <p>
-                <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="知识共享许可协议" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png" /></a><br />本作品采用<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>进行许可。
-              </br>
-              Template From <a href="https://blog.tankywoo.com/">Blog·Tanky Woo</a>
-              </p>
-            </div>
-          </div>
+
         </div>
 
 
-<script type="text/javascript">
+<!-- <script type="text/javascript">
     var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
     document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F6f8eefe3f13b327ada7a7406d2af3232' type='text/javascript'%3E%3C/script%3E"));
-</script>
+</script> -->
 
 
     </body>

@@ -3,6 +3,7 @@ layout: post
 title: Scipy Tutorial
 date: 2017-05-06 12:00
 author: felo
+tag: scipy
 ---
 
 

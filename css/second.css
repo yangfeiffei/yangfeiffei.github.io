@@ -130,7 +130,7 @@ hr {
 .title {
   display: inline-block;
   /* margin-bottom: 2em; */
-  font-size: 1em;
+  font-size: 1.2em;
 }
 
 .title a       { color: #fff; }
@@ -206,7 +206,7 @@ text-decoration: underline;
 
 .post img {
   width: 80%;
-  /*padding-left: 0.5em;*/
+  padding-left: 10%;
 }
 
 .post ul {
@@ -222,7 +222,7 @@ text-decoration: underline;
 
 
 .post table td {
-  border-top: 1px solid black;
+  border-top: 1px solid #009100;
 }
 
 .post table th {
@@ -234,21 +234,25 @@ pre code {
     font-size: 1em;
     padding: 0px;
     top: 0px;
-    width: 100%;
-    word-wrap : break-word;
+    word-break: break-all;
+    max-width: 1000px;
 }
+
+/*div.language-python.highlighter-rouge {
+    word-break: break-all;
+}*/
 
 .post table {
   /*border: 1px solid black;*/
-  width: 90%;
+  width: 97%;
   /*margin: 0.5em 1em;*/
   background-color: #fff;
   /*border-radius: 5px;*/
 
   border: 1px solid 	#009100;
   border-radius:5px;
-  padding: 10px ;
-  margin: 10px;
+  padding: 0 10px ;
+  margin: 0 10px;
 }
 
 pre {
@@ -258,7 +262,7 @@ pre {
   border-radius:5px;
   padding: 10px;
   margin: 10px 0;
-  word-wrap : break-word;
+  wword-break: break-all;
 }
 
 /******/

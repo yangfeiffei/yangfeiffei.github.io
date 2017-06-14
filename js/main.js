@@ -5,7 +5,7 @@ $(document).ready(function () {
   $(".highlight > pre:has(code[data-lang])").each(function() {
     $(this).addClass("lang");
     var lang = $(this).children("code:first").attr("data-lang");
-    $(this).addClass(lang);  // add language named class
+    $(this).addClass("lang");  // add language named class
   });
 
 
@@ -30,5 +30,16 @@ $(document).ready(function () {
   if (isSafari || is.safari()) {
     $("body").css('font-family', 'Seravek');
   }
-});
 
+  $("img").each(function(){
+
+      var src = $(this).attr("src");
+
+      var txt1 = '<div style="text-align:center;font-size:15px" >\
+      原图：<a href="'+ src +'">'+ src + "</a>\
+      </div>"
+      console.log(txt1)
+      $(this).after(txt1);
+  });
+
+});

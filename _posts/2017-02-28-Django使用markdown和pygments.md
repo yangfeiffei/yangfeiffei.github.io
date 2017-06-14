@@ -3,15 +3,14 @@ layout: post
 title: Django中解析markdown文本并用pygments实现代码高亮
 date: 2017-02-28 12:00
 author: felo
+tag: django
 ---
 
 
 
-python版本：3.5.1；
 
-django版本：1.9.5；
 
-获取版本：
+获取python和django版本：
 
 ```python
 localhost:css$ python3
@@ -32,9 +31,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 ```python
 localhost:css$ pip install markdown pygments
-
 # or
-
 localhost:css$ easy_install install markdown pygments
 ```
 
@@ -76,7 +73,8 @@ register = template.Library()  # 自定义filter时必须加上
 def custom_markdown(value):
     return mark_safe(markdown.markdown(
            value,
-           extensions=['markdown.extensions.fenced_code', 'markdown.extensions.codehilite'], # codehilite即为代码高亮准备
+           extensions=['markdown.extensions.fenced_code',
+            'markdown.extensions.codehilite'], # codehilite即为代码高亮准备
            safe_mode=True,
            enable_attributes=False))
 ```
@@ -131,7 +129,10 @@ localhost:css$ pygmentize -S xcode -f html -a .codehilite > code.css
 ```python
 >>> from pygments.styles import STYLE_MAP
 >>> STYLE_MAP.keys()
-dict_keys(['perldoc', 'vs', 'fruity', 'borland', 'monokai', 'xcode', 'autumn', 'algol_nu', 'abap', 'paraiso-dark', 'rainbow_dash', 'murphy', 'emacs', 'manni', 'pastie', 'bw', 'arduino', 'lovelace', 'native', 'algol', 'trac', 'friendly', 'paraiso-light', 'vim', 'colorful', 'tango', 'igor', 'rrt', 'default'])
+dict_keys(['perldoc', 'vs', 'fruity', 'borland', 'monokai', 'xcode', 'autumn',
+ 'algol_nu', 'abap', 'paraiso-dark', 'rainbow_dash', 'murphy', 'emacs', 'manni',
+  'pastie', 'bw', 'arduino', 'lovelace', 'native', 'algol', 'trac', 'friendly',
+   'paraiso-light', 'vim', 'colorful', 'tango', 'igor', 'rrt', 'default'])
 ```
 
 ## 3.2 使用

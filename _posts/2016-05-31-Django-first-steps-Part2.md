@@ -3,6 +3,7 @@ layout: post
 title: Django first steps Part2[译]
 date: 2016-05-31 12：00
 author: felo
+tag: django
 ---
 
 
@@ -13,7 +14,9 @@ author: felo
 打开` mysite/settings.py`进行设置，这是一个普通的python模块作为设置文件。默认的数据库设置为SQLite，日常测试或开发可以使用它，但是要用于生产的话，你需要更加强劲的数据库。
 如果要使用其他数据库，修改`DATABASES 'default'`下面的参数：
 
-- ENGINE – Either 'django.db.backends.sqlite3', 'django.db.backends.postgresql','django.db.backends.mysql', or 'django.db.backends.oracle'. Other backends are also available.
+- ENGINE – Either 'django.db.backends.sqlite3',
+ 'django.db.backends.postgresql','django.db.backends.mysql', or
+  'django.db.backends.oracle'. Other backends are also available.
 
 - NAME – The name of your database. If you’re using SQLite, the database will be a file on your computer; in that case, NAME should be the full absolute path, including filename, of that file. The default value,os.path.join(BASE_DIR, 'db.sqlite3'), will store the file in your project directory.
 

@@ -4,7 +4,7 @@ layout: post
 title: python数据分析-Pandas入门学习笔记
 date: 2017-02-04 21:33
 author: felo
-
+tag: pandas
 ---
 
 
@@ -456,8 +456,8 @@ TypeError                                 Traceback (most recent call last)
 <ipython-input-92-676fdeb26a68> in <module>()
 ----> 1 index[1] = 'd'
 
-C:\Users\yangfl\Anaconda3\lib\site-packages\pandas\indexes\base.py in __setitem_
-_(self, key, value)
+C:\Users\yangfl\Anaconda3\lib\site-packages\pandas\indexes\base.py
+in __setitem__(self, key, value)
    1243
    1244     def __setitem__(self, key, value):
 -> 1245         raise TypeError("Index does not support mutable operations")
@@ -1204,7 +1204,8 @@ dtype: int64
 
 
 In [58]: frame.sort_index(by='b')
-/Users/yangfeilong/anaconda/bin/ipython:1: FutureWarning: by argument to sort_index is deprecated, pls use .sort_values(by=...)
+/Users/yangfeilong/anaconda/bin/ipython:1: FutureWarning:
+by argument to sort_index is deprecated, pls use .sort_values(by=...)
   #!/bin/bash /Users/yangfeilong/anaconda/bin/python.app
 Out[58]:
           b     d     e
@@ -1333,7 +1334,8 @@ pandas有一组用于常用的数学和统计方法。他们一般都是基于�
 
 
 ```python
-In [81]: df = DataFrame([[1.4,np.nan],[7.1,-4.5],[np.nan,np.nan],[0.73,-1.3]],index=list('abcd'),columns=['one','two'])
+In [81]: df = DataFrame([[1.4,np.nan],[7.1,-4.5],[np.nan,np.nan],[0.73,-1.3]],
+index=list('abcd'),columns=['one','two'])
 
 In [82]: df
 Out[82]:
@@ -1381,7 +1383,8 @@ dtype: float64
 
 ```python
 In [88]: df.describe()
-/Users/yangfeilong/anaconda/lib/python2.7/site-packages/numpy/lib/function_base.py:3834: RuntimeWarning: Invalid value encountered in percentile
+/Users/yangfeilong/anaconda/lib/python2.7/site-packages/numpy/lib/
+function_base.py:3834: RuntimeWarning: Invalid value encountered in percentile
   RuntimeWarning)
 Out[88]:
             one       two
@@ -1442,7 +1445,8 @@ Out[100]: 49.5
 In [101]: s1.mad()
 Out[101]: 25.0
 
-In [102]: df = DataFrame(np.arange(100).reshape(10,10),columns=list('abcdefghij'))
+In [102]: df = DataFrame(np.arange(100).reshape(10,10),
+columns=list('abcdefghij'))
 
 In [103]: df
 Out[103]:
@@ -1562,7 +1566,8 @@ Out[112]:
 
 相关概念：
 - 相关系数：反映两变量间线性相关关系的统计指标称为相关系数
-- 协方差：在概率论和统计学中，协方差用于衡量两个变量的总体误差。而方差是协方差的一种特殊情况，即当两个变量是相同的情况。
+- 协方差：在概率论和统计学中，协方差用于衡量两个变量的总体误差。
+而方差是协方差的一种特殊情况，即当两个变量是相同的情况。
 
 
 ```python
@@ -1985,7 +1990,8 @@ DataFrame每条轴都可以分层索引。
 可以重排调整某条轴上的索引顺序，swaplevel可以互换两个索引值，并范围一个新的对象。
 
 ```python
-In [193]: frame = DataFrame(np.random.randn(4,3),index=[list('aabb'),[1,2,1,2]],columns=[['Ohio','Ohio','Colorado'],['Green','Red','Green']])
+In [193]: frame = DataFrame(np.random.randn(4,3),index=[list('aabb'),[1,2,1,2]],
+columns=[['Ohio','Ohio','Colorado'],['Green','Red','Green']])
      ...:
 
 In [194]: frame
@@ -2198,7 +2204,8 @@ KeyError                                  Traceback (most recent call last)
 In [231]: ser3 = Series(np.arange(3),index=[-5,1,3])
 
 In [232]: ser3.iget_value(2)
-/Users/yangfeilong/anaconda/bin/ipython:1: FutureWarning: iget_value(i) is deprecated. Please use .iloc[i] or .iat[i]
+/Users/yangfeilong/anaconda/bin/ipython:1: FutureWarning:
+iget_value(i) is deprecated. Please use .iloc[i] or .iat[i]
   #!/bin/bash /Users/yangfeilong/anaconda/bin/python.app
 Out[232]: 2
 
@@ -2259,15 +2266,22 @@ Panel中的每一项都是一个DataFrame。
 
 ```python
 In [247]: import pandas.io.data as web
-/Users/yangfeilong/anaconda/lib/python2.7/site-packages/pandas/io/data.py:35: FutureWarning:
-The pandas.io.data module is moved to a separate package (pandas-datareader) and will be removed from pandas in a future version.
-After installing the pandas-datareader package (https://github.com/pydata/pandas-datareader), you can change the import ``from pandas.io import data, wb`` to ``from pandas_datareader import data, wb``.
+/Users/yangfeilong/anaconda/lib/python2.7/site-packages/pandas/io/data.py:35:
+ FutureWarning:
+The pandas.io.data module is moved to a separate package (pandas-datareader)
+ and will be removed from pandas in a future version.
+After installing the pandas-datareader package
+ (https://github.com/pydata/pandas-datareader),
+ you can change the import ``from pandas.io import data, wb`` to ``from
+  pandas_datareader import data, wb``.
   FutureWarning)
 
 In [248]: web
-Out[248]: <module 'pandas.io.data' from '/Users/yangfeilong/anaconda/lib/python2.7/site-packages/pandas/io/data.py'>
+Out[248]: <module 'pandas.io.data' from '/Users/yangfeilong/anaconda/
+lib/python2.7/site-packages/pandas/io/data.py'>
 
-In [249]: pdata = pd.Panel(dict((stk ,web.get_data_yahoo(stk,'1/1/2009','6/1/2012')) for stk in ['AAPL','GOOG','MSFT','DELL']))
+In [249]: pdata = pd.Panel(dict((stk ,web.get_data_yahoo(stk,'1/1/2009',
+'6/1/2012')) for stk in ['AAPL','GOOG','MSFT','DELL']))
 
 In [250]: pdata
 Out[250]:

@@ -3,6 +3,7 @@ layout: post
 title: Django Middleware 介绍[译]
 date: 2016-06-20 12：00
 author: felo
+tag: django
 ---
 
 # Middleware

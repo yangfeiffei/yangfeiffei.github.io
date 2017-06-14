@@ -1,6 +1,6 @@
-name: "Felo·Blog"
+name: "Yangfeiffei"
 description: "立志，勤学，改过，责善。"
 url: ""
 markdown: kramdown
 highlighter: rouge
-exclude: ["fabfile.py*", "*.bak"]
+exclude: ["*.py*",]

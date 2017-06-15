@@ -3,7 +3,7 @@ layout: post
 title: 语言处理与python
 date: 2017-03-06 12:00
 author: felo
-tag: python
+tags: python nltk
 ---
 
 
@@ -238,7 +238,7 @@ Out[6]:
 
 取出词长度大于15的所有词。
 
-```python_nltk
+```python
 In [3]: v = set(book.text1)
 
 In [4]: long_words = [ w for w in v if len(w)>15 ]

@@ -4,7 +4,7 @@ layout: post
 title: python数据分析-Numpy基础学习笔记
 date: 2017-02-04 21:33
 author: felo
-tag: numpy
+tags: numpy python
 ---
 
 

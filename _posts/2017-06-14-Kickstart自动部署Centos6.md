@@ -3,7 +3,8 @@ layout: post
 title: Kickstart自动部署Centos6(未完成)
 date: 2017-06-14 12:00
 author: felo
-tag: centos
+tags: centos pxe
+published: false
 ---
 
 
@@ -12,6 +13,14 @@ tag: centos
 ## 1.1 PXE
 
 ## 1.2 kickstart
+
+## 1.3 使用tcpdump抓包测试
+
+tcpdump是一个简单的抓包工具，抓包测试一下在部署一个操作系统中都发生了啥。
+> tcpdump参考资料：
+- [Linux tcpdump命令详解](http://www.cnblogs.com/ggjucheng/archive/2012/01/14/2322659.html)
+- [tcpdump非常实用的抓包实例](http://blog.csdn.net/nanyun2010/article/details/23445223)
+- [TCPDUMP man page](http://www.tcpdump.org/manpages/tcpdump.1.html)
 
 
 
@@ -116,6 +125,8 @@ ServerName 127.0.0.1:80
 
 [root@centos603 ~]# mkdir /var/www/html/CentOS-6.9/
 [root@centos603 ~]# /bin/mount /dev/cdrom /var/www/html/CentOS-6.9/
+
+[root@centos603 ~]# /etc/init.d/httpd restart
 ```
 
 ### 2.2.4 PXE配置 default 文件

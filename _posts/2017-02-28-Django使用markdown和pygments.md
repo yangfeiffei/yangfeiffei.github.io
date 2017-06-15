@@ -3,7 +3,7 @@ layout: post
 title: Django中解析markdown文本并用pygments实现代码高亮
 date: 2017-02-28 12:00
 author: felo
-tag: django
+tags: django python markdown
 ---
 
 

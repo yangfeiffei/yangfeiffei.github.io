@@ -150,7 +150,7 @@ url --url="http://10.10.3.167/CentOS-6.9/"
 
 
 
-# 2.安装测试
+# 2.一个安装的例子
 
 
 ## 2.1 安装环境
@@ -250,14 +250,33 @@ ServerName 127.0.0.1:80
 
 [root@centos603 ~]# mkdir /var/www/html/CentOS-6.9/
 [root@centos603 ~]# /bin/mount /dev/cdrom /var/www/html/CentOS-6.9/
-
+# 将iso文件发布出来
 [root@centos603 ~]# /etc/init.d/httpd restart
 ```
 
 ### 2.2.4 PXE配置 default 文件
 
+编写一些default文件：
+```bash
+[root@centos603 ~]# cat /var/lib/tftpboot/pxelinux.cfg/default
+default ks
+prompt 0
+label ks
+    menu label ^Install a system
+    kernel vmlinuz
+    append initrd=initrd.img ks=http://10.10.3.167/ks_config/CentOS-6.9-ks.cfg ksdevice=eth0
+```
 
-
+里面指定vmlinuz、initrd文件等，详细内容可以看linux启动相关的内容；
+其中：
+```bash
+...
+prompt 0 # 不提示，直接开始安装
+...
+ks=http://10.10.3.167/ks_config/CentOS-6.9-ks.cfg   # 该参数指定ks文件位置
+ksdevice=eth0  # 指定启动的网卡名称，针对pxe客户端有多个网卡的情况
+...
+```
 
 ### 2.2.5 编写 ks.cfg 文件
 

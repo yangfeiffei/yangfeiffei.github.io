@@ -98,7 +98,7 @@ hr {
   line-height: 1.6em;
   padding: 1em 2em 2em 2em;
   /* border: 1px solid #ddd; */
-  background-color: #fff;
+  background-color: #ffffee;
   /*background-image: url("/background.png");*/
   margin: 0em auto;
   /*background-image: "background.png";*/
@@ -117,7 +117,7 @@ hr {
 .header {
   border-bottom: 1px solid #e8e8e8;
   margin-bottom: 2em;
-  background-color: #336666;
+  background-color: #333666;
   height: 2em;
   padding: 1em;
   border-radius: 5px;

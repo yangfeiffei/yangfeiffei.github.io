@@ -245,6 +245,7 @@ pre code {
     top: 0px;
     word-break: break-all;
     max-width: 1000px;
+    color: #ffffff;
 }
 
 /*div.language-python.highlighter-rouge {

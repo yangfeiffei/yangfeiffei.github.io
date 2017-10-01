@@ -42,4 +42,14 @@ $(document).ready(function () {
       $(this).after(txt1);
   });
 
+    
+
+  //为h1配置回到页面上端
+  $(".post h1").each(function(){
+      
+      
+      
+  });
+
+
 });

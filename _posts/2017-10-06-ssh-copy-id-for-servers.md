@@ -29,12 +29,13 @@ CentOS release 6.5 (Final)
 
 # 1.方法1：使用ssh-copy-id配置
 
-![](https://yangfeiffei.github.io/2017/09/26/gpfs%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2%E6%B5%8B%E8%AF%95.html)
+[参考这里](https://yangfeiffei.github.io/2017/09/26/gpfs%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2%E6%B5%8B%E8%AF%95.html)
 
 
 # 2.方法2：手动拷贝
 
 ## 2.1 zhunbei
+```bash
 [root@c01 ~]# for i in 1 2 3 ;do ping c0$i -c 3;done
 PING c01 (192.168.56.101) 56(84) bytes of data.
 64 bytes from c01 (192.168.56.101): icmp_seq=1 ttl=64 time=0.029 ms
@@ -60,10 +61,11 @@ PING c03 (192.168.56.103) 56(84) bytes of data.
 --- c03 ping statistics ---
 3 packets transmitted, 3 received, 0% packet loss, time 2004ms
 rtt min/avg/max/mdev = 0.585/1.033/1.922/0.628 ms
-
+```
 
 
 ## 2.2 config nfs server 
+```bash
 [root@c01 ~]# yum list |grep -E "rpcbind|nfs-utils"
 nfs-utils.x86_64                           1:1.2.3-75.el6              base
 nfs-utils-lib.i686                         1.1.5-13.el6                base
@@ -144,10 +146,12 @@ Starting sshd:                                             [  OK  ]
 
 [root@c01 c01ssh]# cat /root/.ssh/id_rsa.pub >>/root/c01ssh/authorized_keys
 
-
+```
 
 # 3.测试
 
+```bash
 
+```
 
 

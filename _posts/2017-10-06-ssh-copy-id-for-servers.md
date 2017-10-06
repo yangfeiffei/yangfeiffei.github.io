@@ -29,43 +29,54 @@ CentOS release 6.5 (Final)
 
 # 1.方法1：使用ssh-copy-id配置
 
-[参考这里](https://yangfeiffei.github.io/2017/09/26/gpfs%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2%E6%B5%8B%E8%AF%95.html)
+```bash
+# 所有节点上执行，一路回车+yes+密码
+[root@c01 ~]# ssh-keygen
+[root@c01 ~]# ssh-copy-id c01
+[root@c01 ~]# ssh-copy-id c02
+[root@c01 ~]# ssh-copy-id c03
+
+# 测试
+[root@c01 ~]# for i in 1 2 3;do ssh c0$i date;done
+Fri Oct  6 18:00:29 CST 2017
+Fri Oct  6 18:00:30 CST 2017
+Fri Oct  6 18:00:30 CST 2017
+
+# 如果节点很多，直接崩溃
+```
+
+更好一些的办法，如果所有节点的密码都一样的话，这里root的所有密码均为root，
+然后使用expect自动交互，将秘钥复制到其他节点。
+
+> 使用expect，可以参考[linux expect详解(ssh自动登录)](http://www.cnblogs.com/lzrabbit/p/4298794.html)。
+
+```bash
+# 所有节点上执行，删除ssh提示
+sed -i "s/.*StrictHostKeyChecking.*/StrictHostKeyChecking no/" /etc/ssh/ssh_config
+# 重启ssh服务
+service sshd restart
+# 安装expect
+yum -y install expect
+# 新增密钥对
+ssh-keygen -q -t rsa -N "" -f ~/.ssh/id_rsa
+# 复制到各个节点（这里是c01，c02，c03）
+for i in 1 2 3;do expect -c "spawn ssh-copy-id c0$i;\
+expect "*password:" { send "root\\r" ;exp_continue}";done
+
+# 测试
+[root@c01 ~]# for i in 1 2 3;do ssh c0$i date;done
+Fri Oct  6 20:29:17 CST 2017
+Fri Oct  6 20:29:18 CST 2017
+Fri Oct  6 20:29:17 CST 2017
+```
 
 
 # 2.方法2：手动拷贝
 
-## 2.1 zhunbei
+
+## 2.1 配置nfs服务
 ```bash
-[root@c01 ~]# for i in 1 2 3 ;do ping c0$i -c 3;done
-PING c01 (192.168.56.101) 56(84) bytes of data.
-64 bytes from c01 (192.168.56.101): icmp_seq=1 ttl=64 time=0.029 ms
-64 bytes from c01 (192.168.56.101): icmp_seq=2 ttl=64 time=0.043 ms
-64 bytes from c01 (192.168.56.101): icmp_seq=3 ttl=64 time=0.048 ms
-
---- c01 ping statistics ---
-3 packets transmitted, 3 received, 0% packet loss, time 1999ms
-rtt min/avg/max/mdev = 0.029/0.040/0.048/0.008 ms
-PING c02 (192.168.56.102) 56(84) bytes of data.
-64 bytes from c02 (192.168.56.102): icmp_seq=1 ttl=64 time=1.01 ms
-64 bytes from c02 (192.168.56.102): icmp_seq=2 ttl=64 time=0.481 ms
-64 bytes from c02 (192.168.56.102): icmp_seq=3 ttl=64 time=0.485 ms
-
---- c02 ping statistics ---
-3 packets transmitted, 3 received, 0% packet loss, time 2003ms
-rtt min/avg/max/mdev = 0.481/0.661/1.019/0.254 ms
-PING c03 (192.168.56.103) 56(84) bytes of data.
-64 bytes from c03 (192.168.56.103): icmp_seq=1 ttl=64 time=1.92 ms
-64 bytes from c03 (192.168.56.103): icmp_seq=2 ttl=64 time=0.592 ms
-64 bytes from c03 (192.168.56.103): icmp_seq=3 ttl=64 time=0.585 ms
-
---- c03 ping statistics ---
-3 packets transmitted, 3 received, 0% packet loss, time 2004ms
-rtt min/avg/max/mdev = 0.585/1.033/1.922/0.628 ms
-```
-
-
-## 2.2 config nfs server 
-```bash
+# all node
 [root@c01 ~]# yum list |grep -E "rpcbind|nfs-utils"
 nfs-utils.x86_64                           1:1.2.3-75.el6              base
 nfs-utils-lib.i686                         1.1.5-13.el6                base
@@ -74,7 +85,6 @@ nfs-utils-lib-devel.i686                   1.1.5-13.el6                base
 nfs-utils-lib-devel.x86_64                 1.1.5-13.el6                base
 rpcbind.x86_64                             0.2.0-13.el6_9.1            updates
 [root@c01 ~]# yum -y install rpcbind nfs-utils
-
 
 # server node
 [root@c01 ~]# mkdir c01ssh
@@ -99,59 +109,39 @@ Export list for c01:
 /root/c01ssh *
 
 # client node
-[root@c02 ~]# mount -t nfs c01:/root/c01ssh /root/c01ssh
+[root@c02 ~]# mount -t nfs c01:/root/c01ssh/ /mnt/
 [root@c02 ~]# df
 Filesystem                 1K-blocks    Used Available Use% Mounted on
-/dev/mapper/vg_c01-lv_root   6795192 1140904   5302444  18% /
-tmpfs                         510024       0    510024   0% /dev/shm
-/dev/sda1                     487652   51796    410256  12% /boot
-c01:/root/c01ssh             6795264 1140864   5302656  18% /root/c01ssh
+c01:/root/c01ssh/            6795264 1140864   5302528  18% /mnt
 
+```
 
+## 2.2 ssh key
+```bash
+在所有节点执行下面几条命令：
+sed -i "s/.*StrictHostKeyChecking.*/StrictHostKeyChecking no/" /etc/ssh/ssh_config
+service sshd restart
+ssh-keygen -q -t rsa -N "" -f ~/.ssh/id_rsa
+mount -t nfs c01:/root/c01ssh /mnt
+cat /root/.ssh/id_rsa.pub >>/mnt/authorized_keys
 
-# ssh key
-
-[root@c01 ~]# ssh-keygen
-Generating public/private rsa key pair.
-Enter file in which to save the key (/root/.ssh/id_rsa):
-Created directory '/root/.ssh'.
-Enter passphrase (empty for no passphrase):
-Enter same passphrase again:
-Your identification has been saved in /root/.ssh/id_rsa.
-Your public key has been saved in /root/.ssh/id_rsa.pub.
-The key fingerprint is:
-63:68:d4:0f:82:9f:e2:84:3d:dc:10:5d:07:da:8f:12 root@c01
-The key's randomart image is:
-+--[ RSA 2048]----+
-|    .. .o..      |
-|     o.+ .       |
-|    o E +        |
-|   + = = =       |
-|  . * B S o      |
-|   o + o .       |
-|    .            |
-|                 |
-|                 |
-+-----------------+
-
-
-[root@c01 ~]# sed -i "/StrictHostKeyChecking/a StrictHostKeyChecking no" /etc/ssh/ssh_config
-[root@c01 ~]# cat /etc/ssh/ssh_config |grep StrictHostKeyChecking
-#   StrictHostKeyChecking ask
-StrictHostKeyChecking no
-[root@c01 ~]# service sshd restart
-Stopping sshd:                                             [  OK  ]
-Starting sshd:                                             [  OK  ]
-
-
-[root@c01 c01ssh]# cat /root/.ssh/id_rsa.pub >>/root/c01ssh/authorized_keys
+全部执行完成后，全部节点再执行下面几条命令：
+/bin/cp /mnt/authorized_keys ~/.ssh/
+chmod 600 ~/.ssh/authorized_keys
+umount /mnt
 
 ```
 
 # 3.测试
 
 ```bash
-
+[root@c02 ~]# for i in 1 2 3 ;do ssh c0$i date;done
+Warning: Permanently added 'c01,192.168.56.101' (RSA) to the list of known hosts.
+Fri Oct  6 17:52:26 CST 2017
+Warning: Permanently added 'c02,192.168.56.102' (RSA) to the list of known hosts.
+Fri Oct  6 17:52:26 CST 2017
+Warning: Permanently added 'c03,192.168.56.103' (RSA) to the list of known hosts.
+Fri Oct  6 17:52:26 CST 2017
 ```
 
 

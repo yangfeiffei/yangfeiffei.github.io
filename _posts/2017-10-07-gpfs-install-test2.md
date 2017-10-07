@@ -7,7 +7,7 @@ tags: centos gpfs
 ---
 
 
-# 0.环境准备和规划
+# 0.环境准备
 
 
 ## 主机
@@ -107,9 +107,9 @@ mmlscluster: Command failed.  Examine previous error messages to determine cause
 name         |  value    
 -------------|-------------------
 集群名称      | 3NodeCluster
-主，备节点     | c01，c02
+主，备节点     | c01,c02
 manager      | c01
-quorum       | ?
+quorum       | c01,c02
 shared disk  | sdb,sdc,sdd,sde
 
 ## 2.2 安装和部署过程
@@ -139,7 +139,8 @@ Disk /dev/sdd: 1073 MB, 1073741824 bytes
 Disk /dev/sde: 1073 MB, 1073741824 bytes
 
 # 创建集群，接受许可
-[root@c01 ~]# mmcrcluster -N "c01:manager-quorum,c02:quorum" -p c01 -s c02 -r /usr/bin/ssh -R /usr/bin/scp -C 3NodeCluster
+[root@c01 ~]# mmcrcluster -N "c01:manager-quorum,c02:quorum" -p c01 -s c02 \
+-r /usr/bin/ssh -R /usr/bin/scp -C 3NodeCluster
 Sat Oct  7 19:00:31 CST 2017: mmcrcluster: Processing node c01
 Sat Oct  7 19:00:31 CST 2017: mmcrcluster: Processing node c02
 mmcrcluster: Command successfully completed
@@ -253,6 +254,20 @@ Sat Oct  7 19:19:32 CST 2017: mmstartup: Starting GPFS ...
        1      c01              active
        2      c02              active
        3      c03              active
+[root@c01 ~]# mmlslicense -L
+ Node name                      Required license   Designated license
+---------------------------------------------------------------------
+c01                                server              server
+c02                                server              server
+c03                                client              client
+
+ Summary information
+---------------------
+Number of nodes defined in the cluster:                          3
+Number of nodes with server license designation:                 2
+Number of nodes with client license designation:                 1
+Number of nodes still requiring server license designation:      0
+Number of nodes still requiring client license designation:      0
 
 # 在c03上查看gpfs2文件系统
 [root@c03 ~]# df

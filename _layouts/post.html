@@ -1,23 +1,27 @@
 ---
 layout: default
 ---
-<div id="pagetitle"><h2>{{ page.title }}</h2></div>
-<small><p class="meta">{{ page.date | date_to_string }}
-{% if page.categories == blank %}
-| {{ page.categories }}
-{% endif %}</p></small>
+<div class="text-center"><h2>{{ page.title }}</h2></div>
+<div class="text-center">
+	<span class="label label-primary"> <span class="glyphicon glyphicon-time"></span> &nbsp;
+		{{ page.date | date: "%B %-d, %Y" }}
+	</span>
+	&nbsp;
+	{% for t in page.tags %}
+	<span class="label label-primary"> <span class="glyphicon glyphicon-tag"></span> &nbsp;{{ t }} </span>
+	&nbsp;
+	{% endfor %}
+</div>
 
-</hr>
+<hr>
 
 <div class="post">
 {{ content }}
 </div>
 
-</br>
-<div>Prev: <a href="{{ page.previous.url }}">{{ page.previous.title }}</a>
-	<span style="float: right;">Next: 
-		<a href="{{ page.next.url }}">{{ page.next.title }}</a>
-	</span>
+<div>
+	<ul class="pager">
+    <li class="previous"><a href="{{ page.previous.url }}"><span aria-hidden="true">&larr;</span> 上一篇：{{ page.previous.title }}</a></li>
+    <li class="next"><a href="{{ page.next.url }}">下一篇：{{ page.next.title }} <span aria-hidden="true">&rarr;</span></a></li>
+  	</ul>
 </div>
-
-

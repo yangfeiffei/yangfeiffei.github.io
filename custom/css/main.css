@@ -1,0 +1,84 @@
+/*body*/
+
+body{
+  font-size: 17px;
+}
+
+/*blog css*/
+
+.blog a {
+  text-decoration: none;
+}
+
+.blog .tags{
+  border-top: solid #ccc 1px;
+  border-bottom: solid #ccc 1px;
+  /*border-radius: 4px;*/
+  padding-top:15px;
+  padding-bottom:15px;
+}
+
+/*post css */
+
+.post h1 {
+  margin-top: 1em;
+  border-bottom: 1px solid black;
+  font-size: 19px;
+  background-color: #FFC78E;
+  padding: 0.5em;
+}
+
+.post h2 {
+  font-size: 17px;
+  padding: 0 0.5em;
+  background-color: #FFCCCC;
+  height: 24px;
+  line-height: 24px;
+}
+
+.post img {
+  width: 70%;
+  padding-left: 10%;
+}
+
+.post ul {
+  padding: 0 0 1em 2em;
+
+}
+
+.post p {
+  /*padding-left: 1em;*/
+  font-size: 17px;
+}
+
+.post blockquote {
+  border-left: 5px solid #888888;
+  /*margin-left: 1em;*/
+  padding: 0.5em 1em;
+  background-color: #eee;
+}
+
+.post table{
+  width: 70%;
+  padding-left: 10%;
+  border: 1px solid #009100;
+}
+
+.post table td {
+  border-top: 1px solid #009100;
+  padding: 0 10px;
+  text-align: center;
+}
+
+.post table th {
+  text-align: center;
+  background-color: #dddddd;
+  padding: 0 10px;
+}
+
+pre code {
+    font-size: 1em;
+    word-break: break-all;
+    max-width: 1000px;
+    color: #ffffff;
+}

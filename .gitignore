@@ -1,4 +1,6 @@
 _site
-*.bak
-*.pyc
+.sass-cache
+.jekyll-metadata
 .DS_Store
+Gemfile
+Gemfile.lock

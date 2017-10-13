@@ -8,7 +8,7 @@ title: "Blog"
     <div class="col-md-9">
       <div id="">
         <ul class="list-group">
-          {% for post in site.posts %}
+          {% for post in site.posts | limit:8 %}
             <li class="list-group-item">
                 <a href="{{ post.url }}">
                     <span class="glyphicon glyphicon-paperclip"></span>&nbsp;

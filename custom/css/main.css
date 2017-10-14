@@ -10,7 +10,7 @@ body{
   text-decoration: none;
 }
 
-.blog .tags{
+.tags{
   border-top: solid #ccc 1px;
   border-bottom: solid #ccc 1px;
   /*border-radius: 4px;*/
@@ -37,7 +37,7 @@ body{
 }
 
 .post img {
-  width: 70%;
+  width: 80%;
   padding-left: 10%;
 }
 

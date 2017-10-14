@@ -1,0 +1,13 @@
+<div class="text-center"><h2>{{ page.title }}</h2></div>
+<div class="text-center">
+	<span class="label label-primary"> <span class="glyphicon glyphicon-time"></span> &nbsp;
+		{{ page.date | date: "%B %-d, %Y" }}
+	</span>
+	&nbsp;
+	{% for t in page.tags %}
+	<span class="label label-primary"> <span class="glyphicon glyphicon-tag"></span> &nbsp;{{ t }} </span>
+	&nbsp;
+	{% endfor %}
+</div>
+
+<hr>

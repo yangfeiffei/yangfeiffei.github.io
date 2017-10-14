@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Django中解析markdown文本并用pygments实现代码高亮
+title: Django中解析markdown文本
 date: 2017-02-28 12:00
 author: felo
 tags: django python markdown

@@ -6,24 +6,7 @@ title: "Blog"
 <br>
 <div class="row blog">
     <div class="col-md-9">
-      <div id="">
-        <ul class="list-group">
-          {% for post in site.posts | limit:8 %}
-            <li class="list-group-item">
-                <a href="{{ post.url }}">
-                    <span class="glyphicon glyphicon-paperclip"></span>&nbsp;
-                    <span class="h3 " >{{ post.title }}</span>
-                </a>
-                <div>{{ post.content | strip_html | truncate:200 }}</div>
-              <div class="">
-              Posted by {% if post.author %}{{ post.author }}{% else %}{{ site.title }}{% endif %} on {{ post.date | date: "%B %-d, %Y" }}
-              </div>
-
-            </li>
-            <!--{% if  forloop.last %}{% else %}<hr>{% endif %}-->
-          {% endfor %}
-        </ul>
-      </div>
+      {% include list.html %}
     </div>
     <div class="col-md-3">
         {% include about.html %}

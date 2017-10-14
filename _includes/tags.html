@@ -3,7 +3,9 @@
     <!--<h3>Tags:</h3>-->
     {% for tag in site.tags %}
     {% assign co =  tag[1]|size|plus:10 %}
-    <a class="btn btn-default" style="color:{{ '#ff'|append:co |append:'aa'}}">
+    <a class="btn btn-default" style="color:{{ '#ff'|append:co |append:'aa'}}"
+		<!--href="/blog/tags/{{ tag[0] }}"-->
+	>
         {{ tag[0] }}
     </a>
     {% endfor %}

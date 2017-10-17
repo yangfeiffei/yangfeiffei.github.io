@@ -23,8 +23,7 @@ for f in file_list:
     wl_space_split = " ".join(wordlist_after_jieba)  
     wc += wl_space_split
 
-my_wordcloud=WordCloud().generate(wl_space_split)  
-  
-plt.imshow(my_wordcloud)  
+my_wordcloud = WordCloud(background_color="black",width=600, height=419, margin=-2).generate(wl_space_split)
+plt.imshow(my_wordcloud, interpolation='bilinear')  
 plt.axis("off")  
 plt.savefig('/Users/yangfeilong/GitHub/yangfeiffei.github.io/images/wordcloud.png', dpi=400, bbox_inches='tight')

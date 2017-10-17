@@ -1,5 +1,5 @@
 $(function(){
-    var padding=[10,20,30,40,50];
+    var padding=[0,10,20,30,40];
     $('.post').find('h1,h2,h3,h4,h5').each(function(){
         // $('<a name="c'+index+'"></a>').insertBefore($(this));
         var headerText=$(this).text();

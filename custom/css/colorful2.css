@@ -1,7 +1,7 @@
-.highlight .hll { background-color: #3C3C3C }
-.highlight  { background: #3C3C3C }
+.highlight .hll { background-color: #ecffd1}
+.highlight  { background: #ecffd1}
 .highlight .c { color: #28FF28 } /* Comment */
-.highlight code { color: #FFFFFF } /* Code */
+.highlight code { color: #000000 } /* Code */
 /*.highlight .err { color: #FFFFFF } !* Error *!*/
 /*.highlight .n { color: #FFFFFF } !* Name *!*/
 /*.highlight .o { color: #FFFFFF } !* Operator *!*/

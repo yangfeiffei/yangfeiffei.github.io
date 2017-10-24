@@ -52,10 +52,11 @@ body{
 }
 
 .post blockquote {
-  border-left: 5px solid #888888;
+  border-left: 5px solid #194fa0;
   /*margin-left: 1em;*/
   padding: 0.5em 1em;
-  background-color: #eee;
+  background-color: #edf4fe;
+  /*font-size: 12px;*/
 }
 
 .post table{

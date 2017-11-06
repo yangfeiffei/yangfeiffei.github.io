@@ -3,7 +3,7 @@ layout: post
 title: Django first steps Part2[译]
 date: 2016-05-31 12：00
 author: felo
-tags: django python
+tags: django
 ---
 
 

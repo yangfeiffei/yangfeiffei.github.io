@@ -4,7 +4,7 @@ layout: post
 title: python数据分析-Pandas数据规整学习笔记
 date: 2017-02-05 14:00
 author: felo
-tags: pandas python
+tags: pandas
 ---
 
 

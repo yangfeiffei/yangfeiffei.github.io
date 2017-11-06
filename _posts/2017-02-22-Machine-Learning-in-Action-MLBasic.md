@@ -4,7 +4,7 @@ layout: post
 title: 机器学习基础
 date: 2017-02-22 12:00
 author: felo
-tags: python 机器学习
+tags: machinelearning
 ---
 
 

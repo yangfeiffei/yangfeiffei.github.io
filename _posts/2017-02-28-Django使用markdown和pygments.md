@@ -3,7 +3,7 @@ layout: post
 title: Django中解析markdown文本
 date: 2017-02-28 12:00
 author: felo
-tags: django python markdown
+tags: django markdown
 ---
 
 

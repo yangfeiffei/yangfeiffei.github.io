@@ -3,7 +3,7 @@ layout: post
 title: multipath.conf配置
 date: 2017-11-04 12:00
 author: felo
-tags: redhat 
+tags: multipath
 ---
 
 绝大部分内容摘至https://zhuanlan.zhihu.com/p/26714897；

@@ -138,13 +138,17 @@ Starting httpd:                                            [  OK  ]
 ```
 
 # 2.配置pxe
+
+
 ```bash
+# 文件复制：需要将syslinux中的几个文件`pxelinux.0`,`vmlinuz`,`initrd.img`复制到tftp路径上，其他文件都可不用。
 [root@pxeserver html]# yum -y install syslinux
 [root@pxeserver html]# mkdir /var/lib/tftpboot/rhel6.8
 [root@pxeserver html]# cp /usr/share/syslinux/pxelinux.0 /var/lib/tftpboot/rhel6.8
-[root@pxeserver html]# cp /var/www/html/repo/isolinux/* /var/lib/tftpboot/rhel6.8
+[root@pxeserver html]# cp /var/www/html/rhel6.8/isolinux/* /var/lib/tftpboot/rhel6.8
+
 [root@pxeserver html]# mkdir -p /var/lib/tftpboot/rhel6.8/pxelinux.cfg
-[root@pxeserver html]# cp /var/www/html/repo/isolinux/isolinux.cfg /var/lib/tftpboot/rhel6.8/pxelinux.cfg/default
+[root@pxeserver html]# cp /var/www/html/rhel6.8/isolinux/isolinux.cfg /var/lib/tftpboot/rhel6.8/pxelinux.cfg/default
 ...省略创建和复制centos7.0的pxe配置文件步骤
 [root@pxeserver ~]# cd /var/lib/tftpboot/
 [root@pxeserver tftpboot]# tree

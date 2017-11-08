@@ -18,4 +18,10 @@ $(function(){
         );
     });
 
+    // 为H2增加标记：
+    $('.post h2').each(function () {
+        $(this).prepend(
+            '<span class="glyphicon glyphicon-menu-right">&nbsp;</span>'
+        );
+    });
 });

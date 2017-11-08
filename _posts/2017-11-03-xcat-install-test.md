@@ -3,7 +3,7 @@ layout: post
 title: CentOS6.5 xCAT Test
 date: 2017-11-03 12:00
 author: felo
-tag: centos xcat
+tags: centos xcat
 ---
 
 

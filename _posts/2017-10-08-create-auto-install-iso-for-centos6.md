@@ -3,7 +3,7 @@ layout: post
 title: 制作自动安装CentOS6的ISO镜像
 date: 2017-10-08 12:00
 author: felo
-tag: centos
+tags: centos
 ---
 
 

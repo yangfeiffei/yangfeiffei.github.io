@@ -1,14 +1,15 @@
 ---
 layout: post
-title: pxeserver install in rhel6.8
+title: 配置一个PXE服务器（rhel6.8）
 date: 2017-11-08 12:00
 author: felo
 tags: redhat pxe
 ---
 
 
-# env
+# 0.环境
 
+```bash
 [root@pxeserver ~]# cat /etc/redhat-release
 Red Hat Enterprise Linux Server release 6.8 (Santiago)
 [root@pxeserver ~]# cat /etc/hosts
@@ -19,9 +20,11 @@ Red Hat Enterprise Linux Server release 6.8 (Santiago)
 192.168.88.21 pxeserver
 192.168.88.22 cpt01
 192.168.88.23 cpt02
+```
+![](/images/pxeserver_install/pxeserver-install-top.png)
 
-# set iptables selinux
-
+## 设置iptables和selinux
+```bash
 [root@pxeserver ~]# /etc/init.d/iptables stop
 iptables: Setting chains to policy ACCEPT: filter          [  OK  ]
 iptables: Flushing firewall rules:                         [  OK  ]
@@ -35,9 +38,11 @@ Enforcing
 [root@pxeserver ~]# getenforce
 Permissive
 
+```
 
-# install dhcp tftp httpd 
+# 1. 安装dhcp&tftp&httpd 
 
+```bash
 [root@pxeserver ~]# mount -t iso9660 /dev/sr0 /mnt/
 mount: no medium found on /dev/sr0
 
@@ -50,19 +55,19 @@ enabled=1
 gpgcheck=0
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-beta,file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
 
+# install dhcp
 [root@pxeserver yum.repos.d]# yum install dhcp -y
 [root@pxeserver yum.repos.d]# rpm -ql dhcp |grep dhcpd.conf
 /etc/dhcp/dhcpd.conf
-/usr/share/doc/dhcp-4.1.1/dhcpd-conf-to-ldap
-/usr/share/doc/dhcp-4.1.1/dhcpd.conf.sample
-/usr/share/man/man5/dhcpd.conf.5.gz
+
+# config file
 [root@pxeserver yum.repos.d]# vim /etc/dhcp/dhcpd.conf
 [root@pxeserver ~]# cat /etc/dhcp/dhcpd.conf
 #
 # DHCP Server Configuration file.
 #   see /usr/share/doc/dhcp*/dhcpd.conf.sample
 #   see 'man 5 dhcpd.conf'
-#
+#		
 subnet 192.168.88.0 netmask 255.255.255.0 {
         range 192.168.88.100 192.168.88.200;
         option subnet-mask 255.255.255.0;
@@ -89,24 +94,12 @@ Starting dhcpd:                                            [  OK  ]
 [root@pxeserver yum.repos.d]# netstat -nltup| grep dhcpd
 udp        0      0 0.0.0.0:67                  0.0.0.0:*                               31437/dhcpd
 
-[root@pxeserver yum.repos.d]# yum install tftp-server tftp
-Loaded plugins: product-id, search-disabled-repos, security, subscription-manager
-This system is not registered to Red Hat Subscription Management. You can use subscription-manager to register.
-Setting up Install Process
-Package tftp-server-0.49-8.el6.x86_64 already installed and latest version
-Package tftp-0.49-8.el6.x86_64 already installed and latest version
-Nothing to do
+# install tftp-server
+[root@pxeserver yum.repos.d]# yum install tftp-server tftp -y
 [root@pxeserver yum.repos.d]# rpm -ql tftp-server |grep tftp
 /etc/xinetd.d/tftp
-/usr/sbin/in.tftpd
-/usr/share/doc/tftp-server-0.49
-/usr/share/doc/tftp-server-0.49/CHANGES
-/usr/share/doc/tftp-server-0.49/README
-/usr/share/doc/tftp-server-0.49/README.security
-/usr/share/doc/tftp-server-0.49/README.security.tftpboot
-/usr/share/man/man8/in.tftpd.8.gz
-/usr/share/man/man8/tftpd.8.gz
-/var/lib/tftpboot
+...
+# disable tftp no
 [root@pxeserver yum.repos.d]# vim /etc/xinetd.d/tftp
 [root@pxeserver yum.repos.d]# cat /etc/xinetd.d/tftp |grep disable
         disable                 = no
@@ -117,6 +110,7 @@ Starting xinetd:                                           [  OK  ]
 [root@pxeserver yum.repos.d]# netstat -nltup |grep xinetd
 udp        0      0 0.0.0.0:69                  0.0.0.0:*                               31485/xinetd
 
+# install httpd
 [root@pxeserver yum.repos.d]# yum install httpd -y
 Loaded plugins: product-id, search-disabled-repos, security, subscription-manager
 This system is not registered to Red Hat Subscription Management. You can use subscription-manager to register.
@@ -125,11 +119,7 @@ Package httpd-2.2.15-53.el6.x86_64 already installed and latest version
 Nothing to do
 [root@pxeserver yum.repos.d]# rpm -ql httpd |grep httpd.conf
 /etc/httpd/conf
-/etc/httpd/conf.d
-/etc/httpd/conf.d/README
-/etc/httpd/conf.d/welcome.conf
-/etc/httpd/conf/httpd.conf
-/etc/httpd/conf/magic
+...
 [root@pxeserver yum.repos.d]# vim /etc/httpd/conf/httpd.conf
 [root@pxeserver yum.repos.d]# cat /etc/httpd/conf/httpd.conf |grep "^ServerName"
 ServerName 127.0.0.1:80
@@ -137,12 +127,25 @@ ServerName 127.0.0.1:80
 [root@pxeserver yum.repos.d]# /etc/init.d/httpd restart
 Stopping httpd:                                            [  OK  ]
 Starting httpd:                                            [  OK  ]
+[root@pxeserver ~]# chkconfig dhcpd on
+[root@pxeserver ~]# chkconfig httpd on
 
+# 把镜像挂到http上
+[root@pxeserver ~]# cd var/www/html/
+[root@pxeserver html]# mkdir centos7.0
+[root@pxeserver html]# mount -t iso9660 /dev/sr1 centos7.0
+[root@pxeserver html]# ln -s /mnt rhel6.8
+```
+
+# 2.配置pxe
+```bash
 [root@pxeserver html]# yum -y install syslinux
-[root@pxeserver html]# cp /usr/share/syslinux/pxelinux.0 /var/lib/tftpboot/
-[root@pxeserver html]# cp /var/www/html/repo/isolinux/* /var/lib/tftpboot/
-[root@pxeserver html]# mkdir -p /var/lib/tftpboot/pxelinux.cfg
-[root@pxeserver html]# cp /var/www/html/repo/isolinux/isolinux.cfg /var/lib/tftpboot/pxelinux.cfg/default
+[root@pxeserver html]# mkdir /var/lib/tftpboot/rhel6.8
+[root@pxeserver html]# cp /usr/share/syslinux/pxelinux.0 /var/lib/tftpboot/rhel6.8
+[root@pxeserver html]# cp /var/www/html/repo/isolinux/* /var/lib/tftpboot/rhel6.8
+[root@pxeserver html]# mkdir -p /var/lib/tftpboot/rhel6.8/pxelinux.cfg
+[root@pxeserver html]# cp /var/www/html/repo/isolinux/isolinux.cfg /var/lib/tftpboot/rhel6.8/pxelinux.cfg/default
+...省略创建和复制centos7.0的pxe配置文件步骤
 [root@pxeserver ~]# cd /var/lib/tftpboot/
 [root@pxeserver tftpboot]# tree
 .
@@ -162,7 +165,13 @@ Starting httpd:                                            [  OK  ]
     │   ├── 01-00-50-56-23-f9-14
     │   └── default.bak
     └── vmlinuz
+    
+# 修改启动菜单，默认加载菜单的顺序按照文件名称：
+# 	1.01-mac地址；
+# 	2.IP地址，转换为16进制
+# 	3.default
 
+# 这里用了一个mac地址的配置文件
 [root@pxeserver tftpboot]# cat rhel6.8/pxelinux.cfg/01-00-50-56-23-f9-14
 default kslinux
 prompt 0
@@ -172,6 +181,7 @@ label kslinux
   kernel vmlinuz
   append initrd=initrd.img ks=http://192.168.88.21/ksconfig/rhel6.8-ks.cfg ksdevice=eth0
 
+# 编写ks配置文件，配置文件的写法略
 [root@pxeserver html]# cd /var/www/html
 [root@pxeserver html]# tree
 .
@@ -183,9 +193,64 @@ label kslinux
 │   └── rhel6.8-ks.cfg
 └── rhel6.8
 	...
+```
 
+# 说明
 
-# cankao 
-http://www.boobooke.com/m/dl.php?vid=5358
-这个确实做得人比较少.前几天boobooke看赶星的一个xen/kvm的视频,里面讲Pxe的时候,提到用grub4dos的pxe引导代码替换pexlinux.0那个文件,引导封装好的Pe的img,你可以找找看看
+## 说明1：dhcpd.conf
+`dhcpd.conf`配置文件是最重要的一个配置，如果只有一个类型的操作系统需要安装，可以：
+```bash
+subnet 192.168.88.0 netmask 255.255.255.0 {
+        range 192.168.88.100 192.168.88.200;
+        option subnet-mask 255.255.255.0;
+        next-server 192.168.88.21;
+        filename "/pxelinux.0";
+       }
+```
+如果有几个类型，可以使用group，最好固定IP地址，这样可以保证在可控的范围内安装操作系统。
+```bash
+subnet 192.168.88.0 netmask 255.255.255.0 {
+        range 192.168.88.100 192.168.88.200;
+        option subnet-mask 255.255.255.0;
+        #next-server 192.168.88.21;
+        #filename "/pxelinux.0";
+       }
 
+group  {
+        filename "/rhel6.8/pxelinux.0";
+        next-server 192.168.88.21;
+
+        host cpt01 { hardware ethernet 00:50:56:23:F9:14;fixed-address 192.168.88.22;}
+       }
+
+group  {
+        filename "/centos7.0/pxelinux.0";
+        next-server 192.168.88.21;
+
+        host cpt02 { hardware ethernet 00:50:56:33:DC:57;fixed-address 192.168.88.23;}
+       }
+```
+
+> 注意不要出现重启，无意中重装系统的窘境。
+
+## 说明2：pxelinux.cfg配置文件
+
+同样的，`pxelinux.cfg`中的启动菜单最好也按照mac地址进行命名。
+
+```bash
+[root@pxeserver tftpboot]# cat rhel6.8/pxelinux.cfg/01-00-50-56-23-f9-14
+default kslinux
+prompt 0
+
+label kslinux
+  menu label ^Install system with kickstart
+  kernel vmlinuz
+  append initrd=initrd.img ks=http://192.168.88.21/ksconfig/rhel6.8-ks.cfg ksdevice=eth0
+```
+> 可以使用`ksdevice`来指定网卡，但是需要注意的是centos7和6中的网卡名称的改变问题。
+
+# 参考文件 
+
+- [这里提到用grub4dos的pxe引导代码替换pexlinux.0那个文件,引导封装好的Pe的img](http://www.boobooke.com/m/dl.php?vid=5358)
+- [KICKSTART无人值守安装](http://www.zyops.com/autoinstall-kickstart)
+- [The Syslinux Project](http://www.syslinux.org/wiki/index.php?title=The_Syslinux_Project)

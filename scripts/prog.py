@@ -3,19 +3,24 @@ parser = argparse.ArgumentParser(description="prog help...",   # 描述
                                  prog="prog",                  # 这个命令的名称
                                  usage="hhhh...a..."           # 用法
                                  )
-# 增加必选参数
-# parser.add_argument("echo",                                    # 必选参数名称
-#                     help="echo the string you use here."       # 帮助信息
-#                     )
-# 增加可选参数
-parser.add_argument("-s",                                      # 可选参数
-                    "--square",                                # 可选参数，完整
-                    help="echo the square of your given number.",
-                    type=int                                   # 参数的类型
+增加必选参数
+parser.add_argument("addnode",                                    # 必选参数名称
+                    help="add a node"       # 帮助信息
                     )
-parser.add_argument("-v","--verb", help="increase output verbosity.",
-                    action="store_true"                        # 后面不再跟参数值
+
+parser.add_argument("-h",
+                    "--hostname",
+                    help="node hostname",
                     )
+parser.add_argument("-i",
+										"--ipaddr", 
+										help="node ip address",
+                    )
+parser.add_argument("-m",
+										"--mac", 
+										help="node mac address",
+                    )
+                    
 
 arg = parser.parse_args()
 

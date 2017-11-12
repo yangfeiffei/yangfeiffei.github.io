@@ -1,7 +1,10 @@
 
+# 0.准备
 
+三个虚拟机，一个xcat管理节点，两个compute节点。注意关闭虚拟网络中的dhcp服务，以免相互冲突。
 
-
+## /etc/hosts
+```bash
 [root@xcatmn ~]# vim /etc/hosts
 [root@xcatmn ~]# cat /etc/hosts
 127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
@@ -10,10 +13,11 @@
 192.168.56.130 xcatmn
 192.168.56.131 cpt01
 192.168.56.132 cpt02
+```
 
 
-
-
+## selniux & iptables
+```
 [root@xcatmn ~]# vim /etc/selinux/config 
 [root@xcatmn ~]# cat /etc/selinux/config |grep SELINUX=
 # SELINUX= can take one of these three values:
@@ -21,10 +25,12 @@ SELINUX=disabled
 [root@xcatmn ~]# service iptables stop
 [root@xcatmn ~]# chkconfig iptables off
 
+```
 
+# 1.安装xcat
 
-
-
+## 解压并创建本地rpeo
+```bash
 [root@xcatmn ~]# mkdir /install
 [root@xcatmn ~]# mkdir /install/xcat2
 [root@xcatmn ~]# mv xcat-
@@ -61,12 +67,16 @@ xcat-core  xcat-core-2.10.tar.bz2  xcat-dep-201506110324.tar.bz2
 /install/xcat2/xcat-dep/rh6/x86_64
 [root@xcatmn x86_64]# ls /etc/yum.repos.d/
 redhat.repo  rhel-source.repo  xCAT-core.repo  xCAT-dep.repo
+
+```
+## 安装xcat
+```bash
 [root@xcatmn x86_64]# yum -y install xCAT
 ...
 
-
-
 [root@xcatmn ~]# source /etc/profile.d/xcat.sh 
+
+# 验证安装情况
 [root@xcatmn ~]# tabdump site
 #key,value,comments,disable
 "blademaxp","64",,
@@ -103,11 +113,15 @@ redhat.repo  rhel-source.repo  xCAT-core.repo  xCAT-dep.repo
 "dhcplease","43200",,
 "auditnosyslog","0",,
 "xcatsslversion","TLSv1",,
+```
+
+
+# 2.开始配置
 
 
 
-
-
+## 修改networks表
+```bash
 [root@xcatmn ~]# chtab net=192.168.56.0 networks.dhcpserver=192.168.56.130
 [root@xcatmn ~]# chtab net=192.168.56.0 networks.ntpservers=192.168.56.130
 [root@xcatmn ~]# chtab net=192.168.56.0 networks.logservers=192.168.56.130
@@ -117,18 +131,10 @@ redhat.repo  rhel-source.repo  xCAT-core.repo  xCAT-dep.repo
 #netname,net,mask,mgtifname,gateway,dhcpserver,tftpserver,nameservers,ntpservers,logservers,dynamicrange,staticrange,staticrangeincrement,nodehostname,ddnsdomain,vlanid,domain,comments,disable
 "192_168_56_0-255_255_255_0","192.168.56.0","255.255.255.0","eth0","<xcatmaster>","192.168.56.130","192.168.56.130","192.168.56.130","192.168.56.130","192.168.56.130",,,,,,,,,
 [root@xcatmn ~]# 
-[root@xcatmn ~]# 
+```
+## 修改site表，makedns
+```
 [root@xcatmn ~]# chtab key=ntpservers site.value=192.168.56.130
-[root@xcatmn ~]# chtab node=xcatdefaults postscripts.postscripts=syslog,remoteshell,setupntp
-[root@xcatmn ~]# tabdump postscripts
-#node,postscripts,postbootscripts,comments,disable
-"xcatdefaults","syslog,remoteshell,setupntp","otherpkgs",,
-"service","servicenode",,,
-
-
-
-
-
 [root@xcatmn ~]# rpm -qa|grep bind-chroot
 [root@xcatmn ~]# 
 [root@xcatmn ~]# vim /etc/sysconfig/network
@@ -138,6 +144,7 @@ HOSTNAME=xcatmn
 DOMAINNAME=f.com
 [root@xcatmn ~]# echo "/bin/domainname f.com" >>/etc/rc.local 
 [root@xcatmn ~]# chtab key=domain site.value=f.com
+
 [root@xcatmn ~]# makedns -n
 Warning: SELINUX is not disabled. The makedns command will not be able to generate a complete DNS setup. Disable SELINUX and run the command again.
 Handling cpt01 in /etc/hosts.
@@ -164,19 +171,20 @@ Address:	192.168.56.130#53
 
 Name:	cpt01.f.com
 Address: 192.168.56.131
+```
 
-
-
+## 修改nodelist表
+```bash
 [root@xcatmn ~]# chtab node=cpt01 nodelist.groups=compute,all
 [root@xcatmn ~]# chtab node=cpt02 nodelist.groups=compute,all
 [root@xcatmn ~]# tabdump nodelist
 #node,groups,status,statustime,appstatus,appstatustime,primarysn,hidden,updatestatus,updatestatustime,zonename,comments,disable
 "cpt01","compute,all",,,,,,,,,,,
 "cpt02","compute,all",,,,,,,,,,,
+```
 
-
-
-
+## 增加两个节点的mac地址
+```
 [root@xcatmn ~]# nodeadd cpt01 groups=compute,all mac.interface=eth0 hosts.ip=192.168.56.131 mac.mac=﻿08:00:27:14:FB:04 nodehm.mgt=ipmi nodehm.power=ipmi
 [root@xcatmn ~]# nodeadd cpt02 groups=compute,all mac.interface=eth0 hosts.ip=192.168.56.132 mac.mac=﻿﻿08:00:27:0A:4F:4A nodehm.mgt=ipmi nodehm.power=ipmi
 
@@ -185,9 +193,9 @@ Address: 192.168.56.131
 "cpt01","eth0","08:00:27:14:FB:04",,
 "cpt02","eth0","08:00:27:0A:4F:4A",,
 
-
-
-
+```
+## 修改hosts表
+```
 [root@xcatmn ~]# tabdump hosts
 #node,ip,hostnames,otherinterfaces,comments,disable
 "cpt01","192.168.56.131",,,,
@@ -200,11 +208,11 @@ Address: 192.168.56.131
 192.168.56.130 xcatmn
 192.168.56.131 cpt01 cpt01.f.com 
 192.168.56.132 cpt02 cpt02.f.com 
+```
 
 
-
-
-
+## makedhcp
+```
 [root@xcatmn ~]# makedhcp -n
 Renamed existing dhcp configuration file to  /etc/dhcp/dhcpd.conf.xcatbak
 
@@ -212,33 +220,36 @@ The dhcp server must be restarted for OMAPI function to work
 Warning: No dynamic range specified for 192.168.56.0. If hardware discovery is being used, a dynamic range is required.
 [root@xcatmn ~]# 
 [root@xcatmn ~]# chkconfig dhcpd on
+```
 
-
-
-
+## 修改noderes表
+```
 [root@xcatmn ~]# chtab node=cpt01 noderes.netboot=pxe noderes.xcatmaster=192.168.56.130 noderes.installnic=eth0 noderes.primarynic=eth0 noderes.nfsserver=192.168.56.130
 [root@xcatmn ~]# chtab node=cpt02 noderes.netboot=pxe noderes.xcatmaster=192.168.56.130 noderes.installnic=eth0 noderes.primarynic=eth0 noderes.nfsserver=192.168.56.130
 [root@xcatmn ~]# tabdump noderes
 #node,servicenode,netboot,tftpserver,tftpdir,nfsserver,monserver,nfsdir,installnic,primarynic,discoverynics,cmdinterface,xcatmaster,current_osimage,next_osimage,nimserver,routenames,nameservers,proxydhcp,comments,disable
 "cpt01",,"pxe",,,"192.168.56.130",,,"eth0","eth0",,,"192.168.56.130",,,,,,,,
 "cpt02",,"pxe",,,"192.168.56.130",,,"eth0","eth0",,,"192.168.56.130",,,,,,,,
+```
 
 
-
-
-
+## 修改nodetype表
+```bash
 [root@xcatmn ~]# chtab node=cpt01 nodetype.os=centos6.5 nodetype.arch=x86_64 nodetype.profile=compute nodetype.nodetype=osi
 [root@xcatmn ~]# chtab node=cpt02 nodetype.os=rhels6u9 nodetype.arch=x86_64 nodetype.profile=compute nodetype.nodetype=osi
 [root@xcatmn ~]# tabdump nodetype
 #node,os,arch,profile,provmethod,supportedarchs,nodetype,comments,disable
 "cpt01","centos6.5","x86_64","compute",,,"osi",,
 "cpt02","rhels6u9","x86_64","compute",,,"osi",,
+```
 
-
+## 修改passwd表
+```bash
 [root@xcatmn rh]# chtab key=system passwd.username=root passwd.password=12345678aA
+```
 
-
-
+## 修改postscripts表
+```bash
 [root@xcatmn ~]#  chtab node=compute postscripts.postscripts="setupGang,reboot"
 [root@xcatmn ~]# 
 [root@xcatmn ~]# tabdump postscripts
@@ -246,23 +257,26 @@ Warning: No dynamic range specified for 192.168.56.0. If hardware discovery is b
 "xcatdefaults","syslog,remoteshell,syncfiles,setupntp","otherpkgs",,
 "service","servicenode",,,
 "compute","setupGang,reboot",,,
+```
 
-
-
+## 为每个节点创建一个dhcp client
+```bash
 [root@xcatmn ~]# chtab key=dhcpinterfaces site.value='192.168.56.130|eth0'
 [root@xcatmn ~]# makedhcp compute
 [root@xcatmn ~]# service dhcpd restart
 Shutting down dhcpd:                                       [  OK  ]
 Starting dhcpd:                                            [  OK  ]
+```
 
-
+## 准备镜像
+```bash
 [root@xcatmn ~]# copycds CentOS-6.5-x86_64-minimal.iso 
 Copying media to /install/centos6.5/x86_64
 Media copy operation successful
+```
 
-
-
-
+## 为节点挂载镜像，选择安装的操作系统
+```bash
 [root@xcatmn rh]# nodeset cpt02 osimage=rhels6u9-x86_64-install-compute
 cpt02: install rhels6u9-x86_64-compute
 [root@xcatmn rh]# nodeset cpt01 osimage=centos6.5-x86_64-install-compute
@@ -271,6 +285,6 @@ cpt01: install centos6.5-x86_64-compute
 #node,os,arch,profile,provmethod,supportedarchs,nodetype,comments,disable
 "cpt01","centos6.5","x86_64","compute","centos6.5-x86_64-install-compute",,"osi",,
 "cpt02","rhels6u9","x86_64","compute","rhels6u9-x86_64-install-compute",,"osi",,
-
-
+```
+## 手动打开虚拟机即可
 

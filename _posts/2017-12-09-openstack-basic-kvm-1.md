@@ -20,8 +20,7 @@ KVM目前由Red Hat等厂商开发，对CentOS/Fedora/RHEL等Red Hat系发行版
 - KVM能在不改变linux或windows镜像的情况下同时运行多个虚拟机，（它的意思是多个虚拟机使用同一镜像）并为每一个虚拟机配置个性化硬件环境（网卡、磁盘、图形适配器……）同时KVM还能够使用ksm技术帮助宿主服务器节约内存。
 - 在主流的Linux内核，如2.6.20以上的内核均已包含了KVM核心。
 
-上述摘自维基百科-![KVM](https://zh.wikipedia.org/wiki/%E5%9F%BA%E4%BA%8E%E5%86%85%E6%A0%B8%E7%9A%84%E8%99%9A%E6%8B%9F%E6%9C%BA)
-
+上述摘自维基百科:KVM
 # 1.安装
 
 ```bash
@@ -75,10 +74,6 @@ ERROR
 An install method must be specified
 (--location URL, --cdrom CD/ISO, --pxe, --import, --boot hd|cdrom|...)
 ```
-
-![](/images/openstack-basic-kvm/virt-manager-cut.png)
-
-
 
 # 2.创建一个虚拟机
 

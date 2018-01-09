@@ -1,13 +1,13 @@
 ---
 layout: post
-title: HPE DP10.00 & Oracle 11gR2 backup and restore
+title: HPE DP A1000 & Oracle 11gR2 backup and restore
 date: 2018-01-09 12:00
 author: felo
 tags: oracle dp
 ---
 
 
-# 1.
+# 1.
 
 DP Server
 ```bash
@@ -15,13 +15,13 @@ DP Server
 DPA.10.00
 ```
 
-
+
 ```bash
 [root@db-server ~]# cat /etc/redhat-release
 Red Hat Enterprise Linux Server release 6.4 (Santiago)
 ```
 
-
+
 ```bash
 export ORACLE_BASE=/u01/app/oracle
 export ORACLE_HOME=$ORACLE_BASE/product/11.2.0/dbhome_1
@@ -30,13 +30,13 @@ export PATH=$PATH:$ORACLE_HOME/bin
 export ORACLE_SID=test
 ```
 
-
+
 ```bash
 Oracle Database 11g Enterprise Edition Release 11.2.0.4.0 - 64bit Production
 ```
 
 
-
+
 ```bash
 localhost:backup$ scp HPE_DP_10.00_for_Linux_DP_A1000_GPLx86_64.tar.gz root@192.168.56.176:/root/
 root@192.168.56.176's password: 
@@ -44,11 +44,11 @@ HPE_DP_10.00_for_Linux_DP_A1000_GPLx86_64.tar 100% 2797MB  17.1MB/s   02:43
 localhost:backup$ 
 ```
 
-# 2.
+# 2.
 
-## 2.1 host
+## 2.1 host
 
-Oracle 
+Oracle 
 ```bash
 [root@db-server ~]# vim /etc/hosts
 [root@db-server ~]# cat /etc/hosts
@@ -68,13 +68,13 @@ rtt min/avg/max/mdev = 0.695/1.172/1.649/0.477 ms
 
 ```
 
-
+
 
 ```bash
 192.168.56.176  db-server
 ```
 
-## 2.2 oracle
+## 2.2 oracle
 
 ```bash
 [root@db-server ~]# tar -zxvf HPE_DP_10.00_for_Linux_DP_A1000_GPLx86_64.tar.gz
@@ -86,7 +86,7 @@ Stopping xinetd:                                           [FAILED]
 Starting xinetd:                                           [  OK  ]
 [root@db-server LOCAL_INSTALL]# pwd
 /root/DP_A1000_GPLx86_64/LOCAL_INSTALL
-# da  oracle 
+# da  oracle 
 [root@db-server LOCAL_INSTALL]# ./omnisetup.sh -install da
 [root@db-server LOCAL_INSTALL]# ./omnisetup.sh -install oracle8
 ...
@@ -97,7 +97,7 @@ Data Protector software package successfully installed
     step2: Perform the import manually from cell manager or from one of the other clients of the cell.
  
   Installation/upgrade session finished.
-#
+# 
 [root@db-server LOCAL_INSTALL]#  /opt/omni/bin/omnicc -secure_comm -configure_peer backupserver
  - Please use the fingerprint to validate the certificate manually!
 Certificate information:
@@ -110,13 +110,13 @@ Host 'backupserver' configured for secure configuration successfully.
 
 
 
-2.3 
+2.3 
 
-
+
 
 ![](/images/dp-oracle-backup/02e.png)
 
-db-server`hosts`
+db-server`hosts`
 
 ![](/images/dp-oracle-backup/02f.png)
 
@@ -326,3 +326,4 @@ SQL> select count(*) from user001.t1;
 ----------
     636842
 ```
+

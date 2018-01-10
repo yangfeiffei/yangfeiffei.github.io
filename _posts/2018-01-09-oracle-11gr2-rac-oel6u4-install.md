@@ -4,6 +4,7 @@ title: Oracle RAC 11gR2 & OEL r6u4 install test
 date: 2018-01-09 12:00
 author: felo
 tags: oracle rac
+typora-root-url: ../../yangfeiffei.github.io
 ---
 
 

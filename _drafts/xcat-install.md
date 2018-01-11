@@ -1,3 +1,13 @@
+---
+layout: post
+title: xCat install test
+date: 2018-01-09 12:00
+author: felo
+tags: oracle dp
+typora-root-url: ../../yangfeiffei.github.io
+---
+
+
 
 # 0.准备
 

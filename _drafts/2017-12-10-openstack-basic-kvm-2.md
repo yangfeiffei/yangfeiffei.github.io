@@ -4,6 +4,7 @@ title: Openstack学习笔记-基础知识-KVM-2
 date: 2017-12-10 12:00
 author: felo
 tags: openstack kvm
+typora-root-url: ../../yangfeiffei.github.io
 ---
 
 使用virsh管理虚拟机, Domain Management (help keyword 'domain')

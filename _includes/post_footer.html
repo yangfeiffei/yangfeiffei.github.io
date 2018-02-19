@@ -7,10 +7,17 @@
         </a>
     </li>
     <li class="next">
+		{% if page.next.title %}
         <a href="{{ page.next.url }}">
             下一篇：{{ page.next.title }}
             <span aria-hidden="true" class="glyphicon glyphicon-menu-right"></span>
         </a>
+		{% else %}
+		<a href="">
+            这是最后一篇了
+            <span aria-hidden="true" class="glyphicon glyphicon-menu-right"></span>
+        </a>
+		{% endif %}
     </li>
   	</ul>
 </div>

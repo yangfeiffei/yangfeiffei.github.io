@@ -52,3 +52,18 @@ ForwardX11Trusted yes
 ```
 xhost +
 ```
+
+
+
+<pre name="code" class="plain">Windows Registry Editor Version 5.00  
+[HKEY_CLASSES_ROOT\ssh]  
+@="ssh"  
+"URL Protocol"=""  
+[HKEY_CLASSES_ROOT\ssh\DefaultIcon]  
+@="C:\\Progran\ Files\\OpenSSH\\ssh..exe"  
+[HKEY_CLASSES_ROOT\ssh\shell]  
+[HKEY_CLASSES_ROOT\ssh\shell\open]  
+[HKEY_CLASSES_ROOT\ssh\shell\open\command]  
+@="C:\\Progran\ Files\\OpenSSH\\ssh..exe\"%1\""  
+
+

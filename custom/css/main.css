@@ -2,6 +2,7 @@
 
 body{
   font-size: 17px;
+  font-family: "Helvetica Neue",KaiTi,"Microsoft YaHei",sans-serif
 }
 
 /*blog css*/
@@ -21,32 +22,38 @@ body{
 /*post css */
 
 .post h1 {
-  /*margin-top: 1em;
-  border-bottom: 1px solid black;
-  font-size: 19px;
-  background-color: #FFC78E;
-  padding: 0.5em;*/
-  
   background: #f5f6f7;
   border-top: .2em solid #dbddec;
   border-bottom: .2em solid #dbddec;
   margin-bottom: 1em;
   margin-top: 1em;
   padding: .4em;
-  font-size: 21px;
+  font-size: 24px;
 }
 
 .post h2 {
-  font-size: 19px;
-  padding: 0 0.5em;
-  /*background-color: #FFCCCC;*/
-  height: 24px;
-  line-height: 24px;
+  background: #f5f6f7;
+  border-top: .2em solid #dbddec;
+  border-bottom: .2em solid #dbddec;
+  margin-bottom: 1em;
+  margin-top: 1em;
+  padding: .4em;
+  font-size: 20px;
+}
+
+.post h3 {
+  margin-bottom: 1em;
+  margin-top: 1em;
+  padding: .4em;
+  font-size: 18px;
 }
 
 .post img {
   width: 80%;
   /*padding-left: 10%;*/
+  max-width: 800px;
+  /*text-align: center;*/
+  margin: 0 auto;
 }
 
 .post ul {
@@ -89,5 +96,4 @@ pre code {
     font-size: 1em;
     word-break: break-all;
     max-width: 1000px;
-    color: #ffffff;
 }

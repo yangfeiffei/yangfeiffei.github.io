@@ -2,7 +2,9 @@
 
 body{
   font-size: 17px;
-  font-family: "Helvetica Neue",KaiTi,"Microsoft YaHei",sans-serif
+  /*font-family: "Helvetica Neue",KaiTi,"Microsoft YaHei",sans-serif */
+  font-family: "Microsoft YaHei",sans-serif
+
 }
 
 /*blog css*/

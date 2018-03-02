@@ -7,19 +7,13 @@ tags: linux
 typora-root-url: ../../yangfeiffei.github.io
 ---
 
-
-
 ## 1. 配置文件
 
 全局配置文件：
 
 - `/etc/profile`：环境变量
-
 - `/etc/profile.d/`：自定义配置存放位置
-
 - `/etc/bashrc`或者`/etc/bash.bashrc`：系统全局函数和别名
-
-  ​
 
 用户配置文件：
 
@@ -27,8 +21,6 @@ typora-root-url: ../../yangfeiffei.github.io
 - `~./bash_login`
 - `~/.profile`
 - `~/.bashrc`：
-
-
 
 ## 2. 测试环境-CentOS7
 
@@ -149,9 +141,100 @@ Last login: Fri Mar  2 12:36:04 CST 2018 on pts/2
 test-bashrc   # 执行了.bashrc
 ```
 
+## 3. 测试环境-ubuntu16.04
 
+```bash
+[root@host1 /]# cat /etc/os-release
+NAME="Ubuntu"
+VERSION="16.04.2 LTS (Xenial Xerus)"
+ID=ubuntu
+ID_LIKE=debian
+PRETTY_NAME="Ubuntu 16.04.2 LTS"
+VERSION_ID="16.04"
+HOME_URL="http://www.ubuntu.com/"
+SUPPORT_URL="http://help.ubuntu.com/"
+BUG_REPORT_URL="http://bugs.launchpad.net/ubuntu/"
+VERSION_CODENAME=xenial
+UBUNTU_CODENAME=xenial
+```
 
-### 2.3 总结
+### 3.1 全局
+
+```bash
+[root@host1 /]# ls -l /etc/ |grep profile
+-rw-r--r-- 1 root root     575 Oct 23  2015 profile
+drwxr-xr-x 2 root root    4096 Dec 26 21:17 profile.d
+[root@host1 /]# ls -l /etc/ |grep bash
+-rw-r--r-- 1 root root    2188 Sep  1  2015 bash.bashrc
+-rw-r--r-- 1 root root      45 Aug 13  2015 bash_completion
+drwxr-xr-x 2 root root    4096 Dec 27 08:37 bash_completion.d
+```
+
+有两个地方：
+
+- `profile.d`：自定义全局配置文件，编写`.sh`文件放在这个目录下面即可；
+
+  ```bash
+  [root@host1 ~]# ls -l /etc/profile.d/
+  total 16
+  -rw-r--r-- 1 root root  101 Jan 14  2017 apps-bin-path.sh
+  -rw-r--r-- 1 root root  663 May 18  2016 bash_completion.sh
+  -rw-r--r-- 1 root root 1003 Dec 29  2015 cedilla-portuguese.sh
+  -rw-r--r-- 1 root root 1557 Apr 15  2016 Z97-byobu.sh
+  ```
+
+- `bash_completion.d`：自定义补全脚本
+
+  ```bash
+  [root@host1 ~]# ls -l /etc/bash_completion.d/
+  total 52
+  -rw-r--r-- 1 root root  6636 Mar 31  2016 apport_completion
+  -rw-r--r-- 1 root root   408 Aug 21  2015 cryptdisks
+  -rw-r--r-- 1 root root 12179 Dec 27 08:36 docker-machine.bash
+  -rw-r--r-- 1 root root  1469 Dec 27 08:36 docker-machine-prompt.bash
+  -rw-r--r-- 1 root root  1525 Dec 27 08:37 docker-machine-wrapper.bash
+  -rw-r--r-- 1 root root   439 Mar 23  2016 git-prompt
+  -rw-r--r-- 1 root root 11144 Oct 13 04:48 grub
+  -rw-r--r-- 1 root root   736 May  7  2013 insserv
+  ```
+
+### 3.2 用户配置文件
+
+默认有两个配置文件，`.bashrc`和`.profile`：
+
+```bash
+user01@host1:~$ ls -al
+-rw-r--r-- 1 felo felo 3771 Dec 26 21:20 .bashrc
+-rw-r--r-- 1 felo felo  655 Dec 26 21:20 .profile
+```
+
+从`.profile`可以看到
+
+```bash
+user01@host1:~$ head -n 5 .profile
+# ~/.profile: executed by the command interpreter for login shells.
+# This file is not read by bash(1), if ~/.bash_profile or ~/.bash_login
+# exists.
+# see /usr/share/doc/bash/examples/startup-files for examples.
+# the files are located in the bash-doc package.
+```
+
+如果`~/.bash_profile`和`~/.bash_login`不存在的情况下，会读取`.profile`这个文件。`.profile`再调用`.bashrc`：
+
+```bash
+# if running bash
+if [ -n "$BASH_VERSION" ]; then
+    # include .bashrc if it exists
+    if [ -f "$HOME/.bashrc" ]; then
+        . "$HOME/.bashrc"
+    fi
+fi
+```
+
+所以，同样的，还是定义`.bashrc`是最合适的。
+
+## 4. 总结
 
 - 如果添加系统全局配置的话，在`/etc/profile.d/`下自定义一个`.sh`的脚本；
 - 如果添加用户配置的话，直接修改`~/.bashrc`即可。
+

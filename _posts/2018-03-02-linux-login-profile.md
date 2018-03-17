@@ -20,7 +20,7 @@ typora-root-url: ../../yangfeiffei.github.io
 - `~/.bash_profile`
 - `~./bash_login`
 - `~/.profile`
-- `~/.bashrc`：
+- `~/.bashrc`
 
 ## 2. 测试环境-CentOS7
 

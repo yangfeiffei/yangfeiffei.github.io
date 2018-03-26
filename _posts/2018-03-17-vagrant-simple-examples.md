@@ -148,15 +148,52 @@ Bringing machine 'default' up with 'virtualbox' provider...
     default: SSH username: vagrant
     default: SSH auth method: private key
     some error...
-# 由于我的这个lfs虚拟机缺少一些基本服务，虽然不能完全启动，但是虚拟机仍然可以启动的。
 ```
-虽然能启动虚拟机，但是仍有一些问题，如不能正常配置IP，或者启动相应的服务等。所以需要对`Vagrantfile`进行调整。
+虽然能启动虚拟机，但是仍有一些问题，需要`安装增强功能` 。
 
 
 
 # 3. Vagrantfile编写
 
 
+
+## 3.1 一个`vagrantfile`
+
+```bash
+######## 定义一些全局参数 ############
+io1_disk1 = './vdisk/io1_disk1.vdi'
+io2_disk1 = './vdisk/io2_disk1.vdi'
+io3_disk1 = './vdisk/io3_disk1.vdi'
+io4_disk1 = './vdisk/io4_disk1.vdi'
+
+######## 开始配置
+Vagrant.configure("2") do |config|
+  ### 定义一些其他配置
+  config.ssh.username = "vagrant"
+  config.ssh.password = "vagrant"
+  
+################################ 开始配置虚拟机 #####################
+################################ io1 ###############################
+    config.vm.define :"io1" do |io|
+      io.vm.box = "centos7-standard-v2"
+      io.vm.network :private_network, ip: "192.168.56.191"
+      io.vm.hostname = "io1"
+      io.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
+      io.vm.provider "virtualbox" do |v|
+        v.name = "io1"
+        #v.gui = true
+        unless File.exist?(io1_disk1)
+        v.customize ['createhd', '--filename', io1_disk1,'--size', 1 * 20480]
+        v.customize ['storageattach', :id,  '--storagectl', 'SATA', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', io1_disk1]
+        end
+      end
+    end
+################################ end ################################
+# io2...
+# io3...
+# io4...
+end
+```
 
 
 
@@ -166,5 +203,6 @@ Bringing machine 'default' up with 'virtualbox' provider...
 $ vagrant up   # 启动虚拟机
 $ vagrant halt  # 关闭虚拟机
 $ vagrant destroy   # 删除虚拟机
+$ vagrant ssh vm_name # 连接虚拟机
 ```
 

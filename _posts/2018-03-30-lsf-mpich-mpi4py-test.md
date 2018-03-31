@@ -1,6 +1,6 @@
 ---
 layout: post
-title: LSF & MPICH $ MPI4PY 的简单例子
+title: LSF & MPICH & MPI4PY 的简单例子
 date: 2018-03-30 12:00
 author: felo
 tags: lsf mpi

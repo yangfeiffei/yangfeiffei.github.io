@@ -56,7 +56,7 @@ localhost:my_lfs$ vagrant package --base new-lfs --output lfs.box
     new-lfs: capable.
 ==> new-lfs: Forcing shutdown of VM...
 ==> new-lfs: Exporting VM...
-==> new-lfs: Compressing package to: /Users/yangfeilong/GitHub/my_lfs/lfs.box
+==> new-lfs: Compressing package to: /my_lfs/lfs.box
 localhost:my_lfs$ du -sh lfs.box 
 1.1G	lfs.box
 ```
@@ -204,5 +204,136 @@ $ vagrant up   # 启动虚拟机
 $ vagrant halt  # 关闭虚拟机
 $ vagrant destroy   # 删除虚拟机
 $ vagrant ssh vm_name # 连接虚拟机
+```
+
+
+
+# 5. 一个例子
+
+## 5.1 使用centos6.5创建一个vagrant box
+
+- 安装操作系统
+
+```bash
+最小安装
+```
+
+- 安装virtualbox增强功能
+
+```bash
+[root@cio ~]# mount /dev/sr0 /mnt/
+mount: block device /dev/sr0 is write-protected, mounting read-only
+[root@cio ~]# cd /mnt/
+[root@cio mnt]# ls
+32Bit        cert          VBoxLinuxAdditions.run          VBoxWindowsAdditions-x86.exe
+64Bit        OS2           VBoxSolarisAdditions.pkg
+AUTORUN.INF  runasroot.sh  VBoxWindowsAdditions-amd64.exe
+autorun.sh   TRANS.TBL     VBoxWindowsAdditions.exe
+[root@cio mnt]# ./VBoxLinuxAdditions.run 
+# 注意需要安装make，perl，gcc等，使用echo $?安装结果
+```
+
+- 创建vagrant用户
+
+```bash
+# 创建用户vagrant
+[root@cio mnt] useradd -m vagrant
+# 修改密码为vagrant
+[root@cio mnt] passwd vagrant
+```
+
+- 修改sudo配置
+
+```bash
+[root@cio mnt] visudo
+# visudo，在root ALL行下增加两行
+vagrant ALL=(ALL) NOPASSWD:ALL
+Defaults:vagrant !requiretty
+```
+
+- 创建box 并导入
+
+```bash
+# 在宿主机操作
+localhost:~$ vagrant package --base c65-base 
+==> c65-base: Attempting graceful shutdown of VM...
+    c65-base: Guest communication could not be established! This is usually because
+    c65-base: SSH is not running, the authentication information was changed,
+    c65-base: or some other networking issue. Vagrant will force halt, if
+    c65-base: capable.
+==> c65-base: Forcing shutdown of VM...
+==> c65-base: Exporting VM...
+==> c65-base: Compressing package to: /Users/package.box
+localhost:~$ vagrant box add --name centos-6.5-base ./package.box 
+==> box: Box file was not detected as metadata. Adding it directly...
+==> box: Adding box 'centos-6.5-base' (v0) for provider: 
+    box: Unpacking necessary files from: file:///Users/package.box
+==> box: Successfully added box 'centos-6.5-base' (v0) for 'virtualbox'!
+localhost:~$ vagrant box list
+centos-6.5-base     (virtualbox, 0)
+```
+
+- 创建一个vagrantfile
+
+```bash
+localhost:cluster2$ cat Vagrantfile 
+
+cio1_disk1 = './vdisk/cio1_disk1.vdi'
+
+Vagrant.configure("2") do |config|
+  config.ssh.username = "vagrant"
+  config.ssh.password = "vagrant"
+################################ cio1 ###############################
+    config.vm.define :"cio1" do |io|
+      io.vm.box = "centos-6.5-base"
+      io.vm.network :private_network, ip: "192.168.56.181"
+      io.vm.hostname = "cio1"
+      io.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
+      io.vm.provider "virtualbox" do |v|
+        v.name = "cio1"
+        #v.gui = true
+        unless File.exist?(cio1_disk1)
+        v.customize ['createhd', '--filename', cio1_disk1,'--size', 1 * 20480]
+        v.customize ['storageattach', :id,  '--storagectl', 'SATA', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', cio1_disk1]
+        end
+      end
+    end
+################################ end ##############################
+end
+```
+
+- 启动虚拟机
+
+```bash
+localhost:lustre_cluster2$ vagrant up cio1
+Bringing machine 'cio1' up with 'virtualbox' provider...
+==> cio1: Importing base box 'centos-6.5-base'...
+==> cio1: Matching MAC address for NAT networking...
+==> cio1: Setting the name of the VM: cio1
+==> cio1: Clearing any previously set network interfaces...
+==> cio1: Preparing network interfaces based on configuration...
+    cio1: Adapter 1: nat
+    cio1: Adapter 2: hostonly
+==> cio1: Forwarding ports...
+    cio1: 22 (guest) => 2222 (host) (adapter 1)
+==> cio1: Running 'pre-boot' VM customizations...
+==> cio1: Booting VM...
+==> cio1: Waiting for machine to boot. This may take a few minutes...
+    cio1: SSH address: 127.0.0.1:2222
+    cio1: SSH username: vagrant
+    cio1: SSH auth method: password
+    cio1: 
+    cio1: Inserting generated public key within guest...
+    cio1: Removing insecure key from the guest if it's present...
+    cio1: Key inserted! Disconnecting and reconnecting using new SSH key...
+==> cio1: Machine booted and ready!
+==> cio1: Checking for guest additions in VM...
+==> cio1: Setting hostname...
+==> cio1: Configuring and enabling network interfaces...
+    cio1: SSH address: 127.0.0.1:2222
+    cio1: SSH username: vagrant
+    cio1: SSH auth method: password
+==> cio1: Mounting shared folders...
+    cio1: /vagrant => /Users/GitHub/cluster2
 ```
 

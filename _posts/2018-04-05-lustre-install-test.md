@@ -213,7 +213,7 @@ reboot
 - 安装kmod包
 
 ```bash
-yum --nogpgcheck --enablerepo=lustre-client-2.10.0 install \
+yum --nogpgcheck --enablerepo=lustre-client install \
 kmod-lustre-client \
 lustre-client
 ```

@@ -99,3 +99,9 @@ pre code {
     word-break: break-all;
     max-width: 1000px;
 }
+
+.head-img {
+  width: 80%;
+  max-width: 200px;
+  border: #2e7bb3 solid 3px;
+}

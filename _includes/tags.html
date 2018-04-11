@@ -1,16 +1,17 @@
 
-<div class=" list-group">
+<div class=" ">
     <!--<h3>Tags:</h3>-->
     <a class="list-group-item active"></a>
     {% for tag in site.tags %}
 
-    <!--{% assign co =  tag[1]|size|plus:10 %}-->
-    <!--<a class="btn btn-default" style="color:{{ '#ff'|append:co |append:'aa'}}" >-->
-        <!--&lt;!&ndash;href="/blog/tags/{{ tag[0] }}">&ndash;&gt;-->
-        <!--{{ tag[0] }}-->
-    <!--</a>-->
+    {% assign co =  tag[1]|size|plus:10 %}
+    <a class="btn btn-default" style="color:{{ '#3'|append:co}};" >
+    <!--<a class="btn btn-default" style="color:{{ '#'|append:co|append:co |append:'aa'}};" >-->
+        <!--href="/blog/tags/{{ tag[0] }}">-->
+        {{ tag[0] }}
+    </a>
 
-    <a href="#" class="list-group-item small"><span class="badge">{{ tag[1]|size }}</span>{{ tag[0] }}</a>
+    <!--<a href="#" class="list-group-item small"><span class="badge">{{ tag[1]|size }}</span>{{ tag[0] }}</a>-->
     {% endfor %}
 </div>
 

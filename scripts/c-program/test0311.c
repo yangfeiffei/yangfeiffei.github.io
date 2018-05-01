@@ -1,18 +1,16 @@
-/*
- * 输入两个整数，计算他们的差
- * 判断差小于等于10，还是大于等于11
- */
-
 #include <stdio.h>
-int main(void){
-	int x,y;
-	
-	printf("输入整数X："); scanf("%d",&x);	
-	printf("输入整数Y："); scanf("%d",&y);	
 
-	if ((x >= y && x - y <= 10) || (x < y && y - x <= 10)) {
-		printf("他们的差小于等于10.\n");
-	} else {
-		printf("他们的差大于等于11.\n");	
+int main(void){
+	int no;
+
+	printf("请输入一个整数：");
+	scanf("%d",&no);
+
+	switch (no % 2) {
+		case 0		: puts("偶数。");		break;
+		case 1		: puts("奇数。");		break;
+		default		: puts("")	;		break;
 	}
+
+	return 0;
 }

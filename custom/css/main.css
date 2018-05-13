@@ -101,7 +101,9 @@ pre code {
 }
 
 .head-img {
-  width: 80%;
+  width: 50%;
   max-width: 200px;
-  border: #2e7bb3 solid 3px;
+  border: #01f2c2 solid 1px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }

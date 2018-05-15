@@ -250,7 +250,6 @@ logging {
 amf {
     mode: disabled
 }
-1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677787980818283848586
 ```
 
 这里只列出了MDS节点的配置文件，OSS节点与此类似。
@@ -260,7 +259,6 @@ amf {
 
 ```
 corosync-keygen
-12
 ```
 
 执行该命令后会，在/etc/corosync/目录下会生成authkey文件，将该文件和corosync.conf一起拷贝到另外一个mds节点上。
@@ -293,7 +291,6 @@ res_Filesystem_ost03    (ocf::heartbeat:Filesystem):    Started oss00
 res_Filesystem_ost04    (ocf::heartbeat:Filesystem):    Started oss00
 res_Filesystem_ost05    (ocf::heartbeat:Filesystem):    Started oss00
 res_Filesystem_ost06    (ocf::heartbeat:Filesystem):    Started oss00
-1234567891011121314151617181920212223242526
 ```
 
 看到有2个节点在线oss00和oss01。下面是这两个节点的资源分配情况，这里借助的是图形化工具lcmc，进行资源添加和分配，并设置优先级，也可通过命令行来操作，但较为麻烦。借助图形化工具划分好资源后，我们可通过命令行进行配置文件查看，具体方法如下：
@@ -302,7 +299,6 @@ res_Filesystem_ost06    (ocf::heartbeat:Filesystem):    Started oss00
 [root@oss00 ~]# crm
 crm(live)# configure
 crm(live)configure# show
-1234
 ```
 
 执行前面2条命令后，查看配置文件可执行show，通过LCMC添加完资源后，我们可通过命令行的方式进行参数编辑，若想编辑配置文件可执行edit，进入后，同vim编辑器操作相同。
@@ -325,7 +321,6 @@ size=19G features='0' hwhandler='0' wp=rw
 | `- 11:0:0:1 sdc 8:32 active ready running
 `-+- policy='round-robin 0' prio=1 status=enabled
   `- 12:0:0:1 sde 8:64 active ready running
-1234567891011121314
 ```
 
 这里列出的是MDS节点上的mdt存储磁盘，这里有2个设备：mdt与mgt，也可将mgt与mdt合并，我这里磁盘比较富裕，就单独为mgt创建了一块分区作为mgt存储区域。同时再另外一台备份节点上也可发现相同的2个设备，如下：
@@ -344,7 +339,6 @@ size=19G features='0' hwhandler='0' wp=rw
 | `- 11:0:0:1 sdc 8:32 active ready running
 `-+- policy='round-robin 0' prio=1 status=enabled
  `- 12:0:0:1 sde 8:64 active ready running
-1234567891011121314
 ```
 
 ### 网络HA
@@ -384,7 +378,6 @@ NETMASK=255.255.255.0
 USERCTL=no
 BOOTPROTO=static
 ONBOOT=yes
-12345678910111213141516171819202122232425262728293031
 ```
 
 新建bond.conf文件，内容如下：
@@ -393,14 +386,12 @@ ONBOOT=yes
 [root@mds00 ~]# cat /etc/modprobe.d/bond.conf
 alias bond0 bonding
 options bond0 mode=1 miimon=100
-1234
 ```
 
 加载该配置文件
 
 ```
 modprobe bonding
-12
 ```
 
 重启网卡后，查看网卡状态：
@@ -432,7 +423,6 @@ Duplex: full
 Link Failure Count: 0
 Permanent HW addr: a0:04:03:00:fe:80
 Slave queue ID: 0
-123456789101112131415161718192021222324252627
 ```
 
 这里绑定模式选择的是1，即active-backup模式。
@@ -448,7 +438,6 @@ Slave queue ID: 0
 
 ```
 ./configure --with-o2ib=/usr/src/ofa_kernel/default/ --with-linux=/usr/src/kernels/2.6.32-504.el6.x86_64/ --disable- server
-12
 ```
 
 –with-o2ib 参数指定了 lustre 所支持的网络为 IB 网络,如果 lustre 环 境并没有 IB 的网络,而是仅有 tcp 的网络(千兆网络,万兆网络),那么就可 以不使用这个参数了。 
@@ -457,14 +446,12 @@ Slave queue ID: 0
 
 ```
 # make -j8
-12
 ```
 
 系统会继续执行,知道编译过程中没有任何错误信息后,通过
 
 ```
 # make rpms
-12
 ```
 
 命令生成 lustre 客户端的 rpm 安装包。 
@@ -477,14 +464,12 @@ Slave queue ID: 0
 error: Failed dependencies:
 /usr/bin/expect is needed by lustre-client-source-
 2.5.29.ddnpf5-2.6.32_504.el6.x86_64_g2139632.x86_64 lustre-iokit is needed by lustre-client-tests-2.5.29.ddnpf5-2.6.32_504.el6.x86_64_g2139632.x86_64
-12345
 ```
 
 提示信息为操作系统的系统关联,也就是说在安装 lustre 软件包的时候 需要依赖 expect 软件包才能继续进行安装。 手动安装 expect。
 
 ```
 # yum install expect sg3_utils
-12
 ```
 
 这里我把sg3_utils也安装了，不然后面还会提示缺少这个包。
@@ -493,7 +478,6 @@ error: Failed dependencies:
 
 ```
 #rpm -ivh lustre-*  
-12
 ```
 
 ### Lnet 设置
@@ -502,7 +486,6 @@ error: Failed dependencies:
 
 ```
 modprobe lustre
-12
 ```
 
 加载成功后，查看 lnet 信息
@@ -510,7 +493,6 @@ modprobe lustre
 ```
 # lctl list_nids
 11.11.11.161@o2ib
-123
 ```
 
 查看与 mgs 之间的通讯
@@ -518,7 +500,6 @@ modprobe lustre
 ```
 # lctl ping 11.11.11.34@o2ib
 12345-0@lo 12345-11.11.11.34@o2ib
-123
 ```
 
 通过上面的输出可以确认该节点的 lnet 与 mgs 之间的通讯正常。
@@ -529,7 +510,6 @@ lustre 客户端的安装和配置完成之后,就可以对文件系统进行挂
 
 ```
 mount -t lustre 11.11.11.34@o2ib:11.11.11.35@o2ib:/lustre /lustre/
-12
 ```
 
 看是很长的一条命令,也非常不容易记忆。但是等知道这条命令的具体意义的话,就会非常容易理解和记忆这条命令了。

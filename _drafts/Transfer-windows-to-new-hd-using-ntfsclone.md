@@ -11,6 +11,11 @@ yum install ftp://ftp.pbone.net/mirror/ftp.pramberger.at/systems/linux/contrib/r
 yum install ftp://ftp.pbone.net/mirror/ftp.pramberger.at/systems/linux/contrib/rhel6/x86_64/ntfs-3g-libs-2017.3.23-1.el6.pp.x86_64.rpm
 
 yum install ftp://ftp.icm.edu.pl/vol/rzm8/linux-fedora/linux/epel/6/x86_64/Packages/n/ntfsprogs-2017.3.23-1.el6.x86_64.rpm
+
+
+# for rhel 7 
+ntfs-3g-2017.3.23-1.el7.x86_64.rpm  
+ntfsprogs-2017.3.23-1.el7.x86_64.rpm
 ```
 
 

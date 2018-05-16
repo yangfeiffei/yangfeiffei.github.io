@@ -24,7 +24,7 @@ Linux localhost 3.10.0-693.el7.x86_64 #1 SMP Tue Aug 22 21:09:27 UTC 2017 x86_64
 [root@localhost ~]# yum install livecd-tools syslinux createrepo
 ```
 
-准备一些ntfs工具包：`ntfsprogs`，如果是centos7需要安装下面两个包：
+准备一些ntfs工具包：`ntfsprogs`，如果是centos7需要安装下面两个包
 
 ```bash
 ntfs-3g-2017.3.23-1.el7.x86_64.rpm  
@@ -98,7 +98,7 @@ dialog
 
 ## 2. 在源端服务器和目标端服务器启动这个livecd
 
-源端操作系统，本次测试用的2008r2。
+源端操作系统，本次测试用的`2008r2`。
 
 ```bash
 # 个人试过的可以成功迁移的系统有：
@@ -106,11 +106,11 @@ windows server 2008 r2
 windows server 2012 r2
 ```
 
-启动选择livecd即可
+启动选择`livecd`即可
 
 ![](/images/copy-a-windows-server-to-new-server/livecd-start.PNG)
 
-输入用户名和密码，这里是root/root
+输入用户名和密码，这里是`root`/`root`
 
 首先配置IP地址
 
@@ -121,15 +121,15 @@ ip addr add 192.168.30.221/24 dev eth0
 ip link set eth0 up
 ```
 
-同样的，在目标端设置IP地址为192.168.30.222，为了区别源端和目标端，可以配置不同的主机名
+同样的，在目标端设置IP地址为`192.168.30.222`，为了区别源端和目标端，可以配置不同的主机名
 
 ```bash
-源端配置为WIN-SOURCE
+# 源端配置为WIN-SOURCE
 -bash-4.2# hostname WIN-SOURCE
 -bash-4.2# export PS1="\h-\w $"
 WIN-SOURCE-~ $
 
-目标端配置为WIN-TARGET
+# 目标端配置为WIN-TARGET
 -bash-4.2# hostname WIN-TARGET
 -bash-4.2# export PS1="\h-\w $"
 WIN-TARGET-~ $
@@ -186,7 +186,7 @@ Disk identifier: 0x7723064b
 
 ## 4. 将源端分区拷贝到目标端
 
-拷贝方案，使用ntfsclone拷贝，使用nc工具传输，直接看命令。
+拷贝方案，使用`ntfsclone`拷贝，使用`nc`工具传输，直接看命令。
 
 先在目标端执行：
 
@@ -228,15 +228,15 @@ WIN-SOURCE-~ $
 
 同样的，vda2使用相同的方法进行拷贝，注意先在目标端执行，再源端执行。
 
-- ntfsclone --save-image 将ntfs文件系统保存为镜像文件，ntfsclone按照扇区的方式继续复制，只会复制使用到的空间；
-- ntfsclone --restore-image 将ntfs文件系统从镜像文件恢复到一个新的ntfs文件系统中；
-- gunzip -c和gzip -c 表示压缩和解压缩；
-- nc -l 9999  在9999号端口监听；
-- nc 192.168.30.222 9999 将数据发送给到这个主机的9999端口。
+- `ntfsclone --save-image` 将ntfs文件系统保存为镜像文件，ntfsclone按照扇区的方式继续复制，只会复制使用到的空间；
+- `ntfsclone --restore-image` 将ntfs文件系统从镜像文件恢复到一个新的ntfs文件系统中；
+- `gunzip -c`和`gzip -c` 表示压缩和解压缩；
+- `nc -l 9999`  在9999号端口监听；
+- `nc 192.168.30.222 9999` 将数据发送给到这个主机的9999端口。
 
 
 
-## 5. 为目标端增加MBR引导程序
+## 5. 为目标端增加MBR引导代码
 
 迁移完成ntfs文件系统后，其实目标端的硬盘中虽然有源端系统所有数据，但是并不能直接启动，会卡在“Booting from Hard disk...”，需要为目标端硬盘增加引导程序。
 
@@ -301,7 +301,7 @@ WIN-SOURCE-~ $ hexdump -C mbr.hex
 00000200
 ```
 
-解决办法就是将源端的引导程序拷贝到目标端即可，引导代码长度为440字节，加上磁盘签名4个字节。
+将源端的引导程序拷贝到目标端即可，引导代码长度为440字节，加上磁盘签名4个字节。
 
 > MBR扇区由以下四部分组成：
 >
@@ -337,11 +337,9 @@ WIN-TARGET-~ $ dd if=boot.hex of=/dev/vda
 
 
 
+## 参考
 
-
-
-
-
-
-
-
+- [Transfer Windows to New Hard Disk using ntfsclone](http://edoceo.com/exemplar/ntfsclone-transfer-windows)
+- [ntfsclone man page](https://linux.die.net/man/8/ntfsclone)
+- [netcat](http://man.linuxde.net/nc_netcat)
+- [nc man page](https://linux.die.net/man/1/nc)

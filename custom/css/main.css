@@ -77,20 +77,21 @@ body{
 }
 
 .post table{
-  width: 70%;
+  width: 100%;
   padding-left: 10%;
-  border: 1px solid #009100;
+  border: 2px solid #009100;
 }
 
 .post table td {
-  border-top: 1px solid #009100;
+  border: 1px solid #009100;
+  /*border-top: 1px solid #009100;*/
   padding: 0 10px;
   text-align: center;
 }
 
 .post table th {
   text-align: center;
-  background-color: #dddddd;
+  /*background-color: #dddddd;*/
   padding: 0 10px;
 }
 

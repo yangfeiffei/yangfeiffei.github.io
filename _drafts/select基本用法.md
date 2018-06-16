@@ -95,7 +95,6 @@ SYSDATE
 
 ```sql
 HR@ test> select FIRST_NAME,SALARY from EMPLOYEES where SALARY>=4000 and SALARY<=5000;
-
 ```
 
 

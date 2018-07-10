@@ -73,7 +73,8 @@ $ id vivek
 在 CentOS/RHEL 和 Fedora 系统中允许 wheel 组中的用户执行所有的命令。使用 `usermod` 命令将用户 vivek 添加到 wheel 组中：
 
 ```
-$ sudo usermod -aG wheel vivek$ id vivek
+$ sudo usermod -aG wheel vivek
+$ id vivek
 ```
 
 #### 测试 sudo 权限并禁用 ssh root 登录
@@ -81,13 +82,17 @@ $ sudo usermod -aG wheel vivek$ id vivek
 测试并确保用户 vivek 可以以 root 身份登录执行以下命令：
 
 ```
-$ sudo -i$ sudo /etc/init.d/sshd status$ sudo systemctl status httpd
+$ sudo -i$ sudo /etc/init.d/sshd status
+$ sudo systemctl status httpd
 ```
 
 添加以下内容到 `sshd_config` 文件中来禁用 root 登录：
 
 ```
-PermitRootLogin noChallengeResponseAuthentication noPasswordAuthentication noUsePAM no
+PermitRootLogin no
+ChallengeResponseAuthentication no
+PasswordAuthentication no
+UsePAM no
 ```
 
 更多信息参见“[如何通过禁用 Linux 的 ssh 密码登录来增强系统安全](https://www.cyberciti.biz/faq/how-to-disable-ssh-password-login-on-linux/)” 。
@@ -97,7 +102,8 @@ PermitRootLogin noChallengeResponseAuthentication noPasswordAuthentication noUse
 所有的密码登录都应该禁用，仅留下公匙登录。添加以下内容到 `sshd_config` 文件中：
 
 ```
-AuthenticationMethods publickeyPubkeyAuthentication yes
+AuthenticationMethods publickey
+PubkeyAuthentication yes
 ```
 
 CentOS 6.x/RHEL 6.x 系统中老版本的 sshd 用户可以使用以下设置：
@@ -135,7 +141,11 @@ PermitEmptyPasswords no
 为密匙使用强密码和短语的重要性再怎么强调都不过分。暴力破解可以起作用就是因为用户使用了基于字典的密码。你可以强制用户避开[字典密码](https://www.cyberciti.biz/tips/linux-check-passwords-against-a-dictionary-attack.html)并使用[约翰的开膛手工具](https://www.cyberciti.biz/faq/unix-linux-password-cracking-john-the-ripper/)来检测弱密码。以下是一个随机密码生成器（放到你的 `~/.bashrc` 下）：
 
 ```
-genpasswd() {    local l=$1    [ "$l" == "" ] && l=20    tr -dc A-Za-z0-9_ < /dev/urandom | head -c ${l} | xargs}
+genpasswd() {    
+  local l=$1    
+  [ "$l" == "" ] && l=20    
+  tr -dc A-Za-z0-9_ < /dev/urandom | head -c ${l} | xargs
+}
 ```
 
 运行：
@@ -218,7 +228,6 @@ sshd : 192.168.1.2 172.16.23.12
 
 - DenyHosts
 
-   
 
   是一个基于 Python SSH 安全工具。该工具通过监控授权日志中的非法登录日志并封禁原始 IP 的方式来应对暴力攻击。
 

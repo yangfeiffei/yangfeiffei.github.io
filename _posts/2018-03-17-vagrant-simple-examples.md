@@ -337,3 +337,45 @@ Bringing machine 'cio1' up with 'virtualbox' provider...
     cio1: /vagrant => /Users/GitHub/cluster2
 ```
 
+
+
+# 6.vagrantfile
+
+```bash
+Vagrant.configure("2") do |config|
+
+
+    config.vm.define :"mn01" do |io|
+      io.vm.box = "rhel6.9"
+      io.vm.network :private_network, ip: "192.168.56.103"
+      io.vm.hostname = "mn01"
+      io.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
+    end
+
+    config.vm.define :"io1" do |io|
+      io.vm.box = "rhel6.9-v2"
+      io.vm.network :private_network, ip: "192.168.56.101"
+      io.vm.hostname = "io1"
+      io.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
+    end
+    config.vm.define :"io2" do |io|
+      io.vm.box = "rhel6.9-v2"
+      io.vm.network :private_network, ip: "192.168.56.102"
+      io.vm.hostname = "io2"
+      io.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
+    end
+
+# for i in 1..8 do  有报错
+  (1..8).each do |i|
+    config.vm.define :"cn#{i}" do |io|
+      io.vm.box = "rhel6.9"
+      io.vm.network :private_network, ip: "192.168.56.11#{i}"
+      io.vm.hostname = "cn#{i}"
+      io.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
+    end
+  end
+
+end
+
+```
+

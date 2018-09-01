@@ -7,7 +7,7 @@ tags: lustre
 typora-root-url: ../../yangfeiffei.github.io
 ---
 
-
+![](/images/lustre/lustre-arch.png)
 
 # 0.环境准备
 

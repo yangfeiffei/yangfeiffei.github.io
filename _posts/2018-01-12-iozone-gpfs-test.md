@@ -7,6 +7,10 @@ tags: gpfs iozone
 typora-root-url: ../../yangfeiffei.github.io
 ---
 
+
+
+
+
 使用iozone对gpfs集群进行读写性能测试。
 
 # 1.测试方法

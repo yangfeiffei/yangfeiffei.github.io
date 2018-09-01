@@ -7,6 +7,8 @@ tags: linux
 typora-root-url: ../../yangfeiffei.github.io
 ---
 
+![](/images/linux-login-profile/login.png)
+
 ## 1. 配置文件
 
 全局配置文件：

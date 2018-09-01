@@ -52,9 +52,9 @@ body{
 
 .post img {
   width: 80%;
-  /*padding-left: 10%;*/
+  padding-left: 10%;
   max-width: 800px;
-  /*text-align: center;*/
+  text-align: center;
   margin: 0 auto;
 }
 
@@ -104,7 +104,6 @@ pre code {
 .head-img {
   width: 50%;
   max-width: 200px;
-  border: #01f2c2 solid 1px;
   margin-top: 20px;
   margin-bottom: 20px;
 }
@@ -113,3 +112,14 @@ pre code {
 /*.highlighter-rouge {*/
 /*-moz-box-shadow:2px 2px 5px #333333; -webkit-box-shadow:2px 2px 5px #333333; box-shadow:2px 2px 5px #333333;*/
 /*}*/
+
+
+.post-list-img-div{
+
+}
+
+.post-list-img{
+  max-width: 100%;
+  display: table-cell;
+  vertical-align: middle;
+}

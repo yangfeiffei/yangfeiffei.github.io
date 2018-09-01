@@ -7,6 +7,8 @@ tags: vim
 typora-root-url: ../../yangfeiffei.github.io
 ---
 
+![](/images/vim/vim.jpeg)
+
 首先以二进制方式编辑这个文件:
 
 ```bash

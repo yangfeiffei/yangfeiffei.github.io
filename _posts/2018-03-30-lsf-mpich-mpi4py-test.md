@@ -7,6 +7,8 @@ tags: lsf mpi
 typora-root-url: ../../yangfeiffei.github.io
 ---
 
+![](/images/lsf-mpi/para-compute.jpeg)
+
 # 1.env
 
 `lsf`基本环境：

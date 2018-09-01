@@ -7,7 +7,7 @@ tags: vagrant virtualbox
 typora-root-url: ../../yangfeiffei.github.io
 ---
 
-
+![](/images/vagrant/vagrant.jpeg)
 
 # 1. Vagrant
 

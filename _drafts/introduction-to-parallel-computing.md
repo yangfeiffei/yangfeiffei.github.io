@@ -3,6 +3,10 @@
 - https://blog.csdn.net/magicbean2/article/details/75174859
 - https://computing.llnl.gov/tutorials/parallel_comp/
 
+> 劳伦斯·利弗摩尔(LawrenceLivermore)国家实验室  https://computing.llnl.gov
+
+
+
 ### **1 摘要**
 
 最近项目需要实现程序的并行化，刚好借着翻译这篇帖子的机会，了解和熟悉并行计算的基本概念和程序设计。帖子的原文见[这里](https://computing.llnl.gov/tutorials/parallel_comp/)。
@@ -1032,7 +1036,6 @@ endif 123456789101112131415161718192021222324252627282930313233343536373839
 
 - 推荐阅读：
 
-   
 
   ​
 
@@ -1044,7 +1047,6 @@ endif 123456789101112131415161718192021222324252627282930313233343536373839
 
 - 历史：该材料有下面的资源演化而来，而这些资源将不再被维护或者不再可用。
 
-   
 
   ​
 

@@ -122,4 +122,9 @@ pre code {
   max-width: 100%;
   display: table-cell;
   vertical-align: middle;
+  padding-top: 10px;
+}
+
+.post-list-content {
+  font-size: 14px;
 }

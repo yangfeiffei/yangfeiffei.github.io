@@ -119,7 +119,7 @@ pre code {
 }
 
 .post-list-img{
-  max-width: 100%;
+  width: 98%;
   display: table-cell;
   vertical-align: middle;
   padding-top: 10px;

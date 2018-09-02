@@ -32,4 +32,23 @@ $(function(){
             '<span class="">&nbsp;&nbsp;</span>'
         );
     });
+
+
+    // 鼠标放置到图片上放大
+    $('.post-list-img').mouseenter(function(){
+        var wValue= $(this).width() + 2;
+        $(this).stop().animate({
+            width: wValue
+            },30);
+    }).mouseleave(function(){
+        var owValue=  $(this).width() - 2;
+        $(this).stop().animate({
+            width: owValue
+            },30 );
+    });
+
+
+
+
 });
+

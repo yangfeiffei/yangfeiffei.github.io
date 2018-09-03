@@ -1,17 +1,15 @@
 
-<div class=" ">
-    <!--<h3>Tags:</h3>-->
-    <a class="list-group-item active"></a>
+<div class="tag-list-index-page">
+    <!--<a class="list-group-item active"></a>-->
+    <hr/>
+    <div style="border-left: red 5px solid;padding-left: 10px">
+        <h4>个人分类：</h4>
+    </div>
     {% for tag in site.tags %}
-
-    {% assign co =  tag[1]|size|plus:10 %}
-    <a class="btn btn-default" style="color:{{ '#3'|append:co}};" >
-    <!--<a class="btn btn-default" style="color:{{ '#'|append:co|append:co |append:'aa'}};" >-->
-        <!--href="/blog/tags/{{ tag[0] }}">-->
-        {{ tag[0] }}
-    </a>
-
-    <!--<a href="#" class="list-group-item small"><span class="badge">{{ tag[1]|size }}</span>{{ tag[0] }}</a>-->
+    <div>
+        <a href=""><span class="left" style="margin-left: 1px;font-size: 15px">{{ tag[0] }}</span></a>
+        <span class="pull-right" style="font-size: 15px; color: gray">{{ tag[1]|size }}篇</span>
+    </div>
     {% endfor %}
 </div>
 

@@ -17,7 +17,10 @@
 
 			</div>
 			<div class="col-sm-8">
-				<h4><a href="{{ post.url }}">{{ post.title }}</a></h4>
+				<h4><a href="{{ post.url }}">
+					<strong>{{ post.title }}</strong>
+					</a>
+				</h4>
 				<div class="post-list-content">
 					<p>Post at {{ post.date | date: "%Y.%-m.%-d" }}&nbsp;
 						{% for t in post.tags %}

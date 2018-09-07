@@ -98,7 +98,7 @@ wget http://mirrors.163.com/centos/7/os/x86_64/images/pxeboot/vmlinuz
 wget http://mirrors.163.com/centos/7/os/x86_64/images/pxeboot/initrd.img
 ```
 
-- 新建default
+- 新建default，可以使用`rw`或者`ro`
 
 ```bash
 [root@pxe tftpboot]# cat pxelinux.cfg/default
@@ -115,7 +115,7 @@ label centos7
 
 # 2.内存启动（`pxe+livecd`）
 
-这种方式的原理是将`livecd`的内存操作系统使用`pxe`远程网络加载到目标服务器直接启动，好处是不需要占用其他服务器的存储资源，但是数据不能保留，操作系统数据都是只读的。
+这种方式的原理是将`livecd`的内存操作系统使用`pxe`远程网络加载到目标服务器直接启动，好处是不需要占用其他服务器的存储资源，但是数据不能保留，操作系统数据都在内存中，重启后就将丢失。
 
 - 安装一些包
 

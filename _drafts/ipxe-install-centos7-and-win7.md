@@ -31,29 +31,100 @@ iPXE是一个开源的网络启动固件，它提供完整的PXE功能同时，�
 
 ## 0.2 操作步骤
 
-- 操作系统环境
+按照syslinux部署pxe的方式进行安装，这里不赘述。使用ipxe需要安装httpd服务，必要的时候进行安装。
 
 ```bash
-cat /etc/redhat-release
-uname -a
+yum install httpd  -y
 ```
 
-- 安装几个软件包 
+为了运行ipxe，需要修改dhcpd.conf，符合ipxe的运行
+
+- 增加一些ipxe的专用参数，
+```bash
+  option space ipxe;
+  option ipxe-encap-opts code 175 = encapsulate ipxe;
+  option ipxe.priority code 1 = signed integer 8;
+  option ipxe.keep-san code 8 = unsigned integer 8;
+  option ipxe.skip-san-boot code 9 = unsigned integer 8;
+  option ipxe.syslogs code 85 = string;
+  option ipxe.cert code 91 = string;
+  option ipxe.privkey code 92 = string;
+  option ipxe.crosscert code 93 = string;
+  option ipxe.no-pxedhcp code 176 = unsigned integer 8;
+  option ipxe.bus-id code 177 = string;
+  option ipxe.san-filename code 188 = string;
+  option ipxe.bios-drive code 189 = unsigned integer 8;
+  option ipxe.username code 190 = string;
+  option ipxe.password code 191 = string;
+  option ipxe.reverse-username code 192 = string;
+  option ipxe.reverse-password code 193 = string;
+  option ipxe.version code 235 = string;
+  option iscsi-initiator-iqn code 203 = string;
+  # Feature indicators
+  option ipxe.pxeext code 16 = unsigned integer 8;
+  option ipxe.iscsi code 17 = unsigned integer 8;
+  option ipxe.aoe code 18 = unsigned integer 8;
+  option ipxe.http code 19 = unsigned integer 8;
+  option ipxe.https code 20 = unsigned integer 8;
+  option ipxe.tftp code 21 = unsigned integer 8;
+  option ipxe.ftp code 22 = unsigned integer 8;
+  option ipxe.dns code 23 = unsigned integer 8;
+  option ipxe.bzimage code 24 = unsigned integer 8;
+  option ipxe.multiboot code 25 = unsigned integer 8;
+  option ipxe.slam code 26 = unsigned integer 8;
+  option ipxe.srp code 27 = unsigned integer 8;
+  option ipxe.nbi code 32 = unsigned integer 8;
+  option ipxe.pxe code 33 = unsigned integer 8;
+  option ipxe.elf code 34 = unsigned integer 8;
+  option ipxe.comboot code 35 = unsigned integer 8;
+  option ipxe.efi code 36 = unsigned integer 8;
+  option ipxe.fcoe code 37 = unsigned integer 8;
+  option ipxe.vlan code 38 = unsigned integer 8;
+  option ipxe.menu code 39 = unsigned integer 8;
+  option ipxe.sdi code 40 = unsigned integer 8;
+  option ipxe.nfs code 41 = unsigned integer 8;
+```
+
+修改在filename,
 
 ```bash
-yum install dhcp httpd xinet
+if exists user-class and option user-class = "iPXE" { 
+      filename "http://192.168.56.171/c7.cfg";
+  } 
+  else if option client-arch != 00:00 { 
+     filename "ipxe.efi";
+  }
+  else { 
+      filename "undionly.kpxe";
+  }
+
 ```
+其中，c7.cfg是ipxe的主要配置文件，类似于syslinux中的pxelinux.cfg/default配置文件；ipxe.efi支持UEFI
 
-- 修改dhcpd.conf
+完成后的dhcpd.conf如下所示：
 
-增加一
+```bash
+subnet 192.168.56.0 netmask 255.255.255.0 { 
+        range 192.168.56.100 192.168.56.200;
+        option subnet-mask 255.255.255.0;
+        next-server 192.168.56.171;
+        #filename "/pxelinux.0";
+        if exists user-class and option user-class = "iPXE" { 
+            filename "http://192.168.56.171/c7.cfg";
+            } 
+        else if option client-arch != 00:00 { 
+            filename "ipxe.efi";
+            }
+        else { 
+            filename "undionly.kpxe";
+            }
+        } 
+}
+```
+下载需要的几个文件
 ```bash
 
 ```
-
-
-
-
 
 
 

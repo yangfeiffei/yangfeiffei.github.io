@@ -47,8 +47,15 @@ $(function(){
             },30 );
     });
 
-
-
+    // 回到顶部 按钮
+    // http://www.jq22.com/jquery-info501
+    // $.goup({
+    //             trigger: 50,
+    //             bottomOffset: 100,
+    //             locationOffset: 100,
+    //             title: '',
+    //             titleAsText: true
+    //         });
 
 });
 

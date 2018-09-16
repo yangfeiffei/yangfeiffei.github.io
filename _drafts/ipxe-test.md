@@ -150,3 +150,4 @@ UEFI统一可扩展固件接口（英语：Unified Extensible Firmware Interface
 ```
  iPXE> chain http://boot.ipxe.org/demo/boot.php
 ```
+

@@ -120,10 +120,22 @@ Number  Start   End     Size    Type     File system  标志
 -bash-4.2# chroot /sysroot /bin/env -i HOME=/root/ PATH=/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin /bin/bash --login +h
 ```
 
+修改网卡配置，删除mac地址，或者根据实际MAC地址进行修改
+
+```bash
+vi /etc/sysconfig/network-scripts/ifcfg-eth0
+```
+
+重做`initrd.img`文件
+
+```bash
+mkinitrd /boot/intrd.img 2.6.18-308.el5
+```
+
 重建引导分区
 
 ```bash
-
+grub-install /dev/sda
 ```
 
 

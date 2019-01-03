@@ -2,21 +2,13 @@
 
 
 
-# 0.环境
-
-源端CentOS 6.5：
-
-- ssh-server
-- tar
+# 0. 源端配置
 
 
 
-目标端LiveCD：
 
-- ssh
-- tar
-- parted或者fdisk
-- chroot
+
+
 
 
 

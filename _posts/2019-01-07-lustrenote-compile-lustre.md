@@ -210,6 +210,7 @@ mkdir -p $HOME/releases/lustre-client
 mv $HOME/lustre-release/*.rpm $HOME/releases/lustre-client
 ```
 
+完成后的下载链接: https://pan.baidu.com/s/1EdOhgBtC-NLhjQ42ogvahQ 提取码: 4ujm 
 
 
 # 参考

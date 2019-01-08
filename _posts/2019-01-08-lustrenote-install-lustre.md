@@ -76,12 +76,13 @@ reboot
 tar -zxf lustre-rpms-2.12.0.tar.gz
 yum install createrepo httpd -y 
 for i in `ls`;do cd /root/releases/$i; createrepo .;done
-mv /root/releases /var/www/html/
+mv /releases /var/www/html/
 systemctl start httpd
 systenctl enable httpd
 # 创建一个新lustre.repo
 > /etc/yum.repos.d/lustre.repo 
 # 配置lustre.repo
+cd /var/www/html/releases
 for i in `ls`;do echo -e "[$i] \nname=$i \nbaseurl=http://io1/releases/$i \ngpgcheck=0 \n" >>/etc/yum.repos.d/lustre.repo ; done
 ```
 

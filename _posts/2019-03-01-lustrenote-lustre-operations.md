@@ -108,6 +108,7 @@ lustre支持多个文件系统，通过NID:fsname来区分，在使用同一个M
 lustre.* skip
 ```
 - 两个文件系统可以使用一个MGS的NID，但是MDS和OSS必须是不同的服务器；
+
 ```bash
 mgsnode# mkfs.lustre --mgs /dev/sda
 mdtfoonode# mkfs.lustre --fsname=foo --mgsnode=mgsnode@tcp0 --mdt --index=0 /dev/sdb
@@ -117,19 +118,20 @@ mdtbarnode# mkfs.lustre --fsname=bar --mgsnode=mgsnode@tcp0 --mdt --index=0 /dev
 ossbarnode# mkfs.lustre --fsname=bar --mgsnode=mgsnode@tcp0 --ost --index=0 /dev/sdc
 ossbarnode# mkfs.lustre --fsname=bar --mgsnode=mgsnode@tcp0 --ost --index=1 /dev/sdd
 client# mount -t lustre mgsnode@tcp0:/foo /mnt/foo
-
 client# mount -t lustre mgsnode@tcp0:/bar /mnt/bar
-
 ```
 
 ## 9.让子目录使用特定的MDT
 lustre2.4版本以后，可以为某个子目录指定一个单独的MDT，命令如下：
+
 ```bash
 client# lfs mkdir –i mdt_index /mount_point/remote_dir
 ```
+
 - -i后面跟mdt的index标签；
 - 这个子目录的父目录需要使用MDT0作为元数据存储目标，因为父目录所在MDT失败后会导致子目录的命名空间都出现问题，因此使用都使用MDT0；
 - 为了打破这个限制，让所有MDT都可以在创建这种远程子目录，需要调整参数：
+
 ```bash
 # 在mgs上调整：
 mgs# lctl conf_param fsname.mdt.enable_remote_dir=1
@@ -137,7 +139,9 @@ mgs# lctl conf_param fsname.mdt.enable_remote_dir=1
 # 在mds上查看
 mds# lctl get_param mdt.*.enable_remote_dir
 ```
+
 - 到2.8版本以后，可以指定特殊的组来创建、删除远程子目录，参数为：enable_remote_dir_gid
+
 ```
 # mgs上设置，设置为-1表示所有非root组都可以
 mgs# lctl conf_param fsname.mdt.enable_remote_dir_gid=-1
@@ -148,6 +152,7 @@ mds# lctl get_param mdt.*.enable_remote_dir_gid
 ## 10. 创建一个分布在多个mdt上的目录
 
 单个目录设置元数据分布在多个MDT上，可以提高性能，特别是针对5万个条目以上的目录。命令如下：
+
 ```bash
 client# lfs mkdir -c mdt_count /mount_point/new_directory
 ```
@@ -155,28 +160,37 @@ client# lfs mkdir -c mdt_count /mount_point/new_directory
 ## 11. 设置和查看lustre参数
 
 - 使用mkfs.lustre设置
+
 ```bash
 # 设置超时时间为50
 mds# mkfs.lustre --mdt --param="sys.timeout=50" /dev/sda
 ```
+
 - 使用tunefs.lustre设置
+
 ```bash
 # 在服务停止的情况下，可以使用tunefs.lustre来调整参数
 oss# tunefs.lustre --param=failover.node=192.168.0.13@tcp0 /dev/sda
 # 添加 --erase-params 指的是擦除所有参数重新指定
 # tunefs.lustre可以配置lctl conf_param 配置的所有参数；
 ```
+
 - 使用lctl配置
+
 ```bash
 # 使用 lctl set_param 设置临时参数
 # 使用  lctl set_param -P or lctl conf_param 设置永久参数，注意lctl conf_param命令需要在mgs上设置
 mgs# lctl conf_param testfs-MDT0000.sys.timeout=40
 ```
+
 - 使用 lctl list_param 查看参数
+
 ```bash
 oss# lctl list_param obdfilter.lustre-OST0000 
 ```
+
 - 使用lctl get_param 报告参数当前值
+
 ```bash
 oss# lctl get_param -n ost.*.ost_io.timeouts
 ```
@@ -188,10 +202,13 @@ oss# lctl get_param -n ost.*.ost_io.timeouts
 - 一对HA集群内的节点，两个nid之间用冒号分割，或者使用--mgsnode=/--servicenode=来指定；
 
 列举一个主机上的所有nid
+
 ```bash
 lctl list_nids
 ```
+
 下面一个简单的例子，mds0和mds1一对，oss0和oss1一对：
+
 ```bash
 mds0# mkfs.lustre --fsname=testfs --mdt --mgs \
         --servicenode=192.168.10.2@tcp0 \
@@ -216,6 +233,7 @@ mds1# lctl get_param mdt.testfs-MDT0000.recovery_status
 ## 13.擦除一个文件系统
 
 一般情况下使用 `--reformat`即可。
+
 ```bash
 $ "mkfs.lustre --reformat"
 # 如果mgs没有重新格式化，只对mdt进行格式化的话，需要使用--writeconf将配置更新到mgs上
@@ -225,10 +243,12 @@ $ mkfs.lustre --reformat --writeconf --fsname spfs --mgsnode=mgs_nid --mdt --ind
 ## 14. 回收保留空间
 
 使用ldiskfs格式化存储目标的时候，会默认保留5%的空间，要想利用这些空间的话：
+
 ```bash
 # 执行期间不需要重启文件系统
 tune2fs [-m reserved_blocks_percent] /dev/{ostdev}
 ```
+
 - 降低保留空间百分比，当空间使用超过95%时可能导致性能降低，即使再次降到低于95%性能也不会再次提升。因此，强烈不建议保留空间降低到5%以下。
 
 ## 15. 替换现有的ost和mdt

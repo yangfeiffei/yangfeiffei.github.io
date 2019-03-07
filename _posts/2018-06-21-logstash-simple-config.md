@@ -4,7 +4,7 @@ title: logstash简单配置
 date: 2018-06-21 12:00
 author: felo
 tags: logstash
-typora-root-url: ../../yangfeiffei.github.io
+typora-root-url: ..
 ---
 
 ![](/images/logstash/arch.jpeg)

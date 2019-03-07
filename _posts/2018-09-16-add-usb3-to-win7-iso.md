@@ -4,7 +4,7 @@ title: 为Win7镜像添加USB3.0驱动
 date: 2018-09-16 12:00
 author: felo
 tags: win7
-typora-root-url: ../../yangfeiffei.github.io
+typora-root-url: ..
 ---
 
 在安装`win7`的时候，由于`win7`镜像中没有`USB3.0`的驱动，但是因为没有`USB3.0`驱动，又不能通过U盘或者移动硬盘加载驱动。所以，如果在使用`USB`启动的安装镜像时，可以添加离线驱动。

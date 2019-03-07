@@ -8,7 +8,7 @@ date: 2019-01-28 12:00
 
 tags: iscsi lustre 
 
-typora-root-url: ../../yangfeiffei.github.io
+typora-root-url: ..
 
 
 

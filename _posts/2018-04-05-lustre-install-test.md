@@ -4,7 +4,7 @@ title: lustre文件系统安装测试
 date: 2018-04-05 12:00
 author: felo
 tags: lustre
-typora-root-url: ../../yangfeiffei.github.io
+typora-root-url: ..
 ---
 
 ![](/images/lustre/lustre-arch.png)

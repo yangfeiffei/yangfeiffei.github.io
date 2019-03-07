@@ -4,7 +4,7 @@ layout: post
 title: Lustre学习笔记（5）-操作Lustre
 date: 2019-03-01 12:00
 tags: lustre 
-typora-root-url: ../../yangfeiffei.github.io
+typora-root-url: ..
 ---
 
 

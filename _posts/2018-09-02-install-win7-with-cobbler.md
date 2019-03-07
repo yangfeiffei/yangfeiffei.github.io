@@ -4,7 +4,7 @@ title: Cobbler学习笔记：安装win7
 date: 2018-09-2 12:00
 author: felo
 tags: cobbler
-typora-root-url: ../../yangfeiffei.github.io
+typora-root-url: ..
 ---
 
 # 准备工作

@@ -3,7 +3,7 @@ layout: post
 title: Lustre学习笔记（2）-安装Lustre
 date: 2019-01-08 12:00
 tags: lustre
-typora-root-url: ../../yangfeiffei.github.io
+typora-root-url: ..
 
 ---
 

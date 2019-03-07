@@ -4,7 +4,7 @@ title: Vagrant使用的几个简单例子
 date: 2018-03-17 12:00
 author: felo
 tags: vagrant virtualbox
-typora-root-url: ../../yangfeiffei.github.io
+typora-root-url: ..
 ---
 
 ![](/images/vagrant/vagrant.jpeg)

@@ -4,7 +4,7 @@ title: 使用ntfsclone迁移一个WindowsServer
 date: 2018-05-16 12:00
 author: felo
 tags: migrate
-typora-root-url: ../../yangfeiffei.github.io
+typora-root-url: ..
 ---
 
 ## 1. 制作一个livecd

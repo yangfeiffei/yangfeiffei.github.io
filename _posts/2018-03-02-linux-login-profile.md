@@ -4,7 +4,7 @@ title: Linux Login Profile 配置方法
 date: 2018-3-2 12:00
 author: felo
 tags: linux
-typora-root-url: ../../yangfeiffei.github.io
+typora-root-url: ..
 ---
 
 

@@ -4,7 +4,7 @@ title: 使用VIM编辑16进制
 date: 2018-07-10 12:00
 author: felo
 tags: vim
-typora-root-url: ../../yangfeiffei.github.io
+typora-root-url: ..
 ---
 
 

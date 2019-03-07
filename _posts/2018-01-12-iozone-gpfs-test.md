@@ -4,7 +4,7 @@ title: iozone test for gpfs
 date: 2018-01-12 12:00
 author: felo
 tags: gpfs iozone
-typora-root-url: ../../yangfeiffei.github.io
+typora-root-url: ..
 ---
 
 

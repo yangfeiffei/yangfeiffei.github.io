@@ -4,7 +4,7 @@ title: 网络启动RHEL/CENTOS的两种方法
 date: 2018-09-8 12:00
 author: felo
 tags: centos pxe
-typora-root-url: ../../yangfeiffei.github.io
+typora-root-url: ..
 ---
 
 `Linux`可以有三种形式运行，在`硬盘`中、`网络`中或者`内存`中。`Linux`运行在硬盘中的方式是最常见的操作系统运行方式。在网络和内存中运行，都可以使用`PXE`服务器实现，下面来测试安装下这两种方式。

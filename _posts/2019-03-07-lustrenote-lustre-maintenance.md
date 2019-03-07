@@ -1,60 +1,58 @@
 ---
 layout: post
-title: LustreÑ§Ï°±Ê¼Ç£¨6.1£©- Î¬»¤Lustre
+title: Lustreå­¦ä¹ ç¬”è®°ï¼ˆ6.1ï¼‰- ç»´æŠ¤Lustre
 date: 2019-03-07 12:00
 tags: lustre 
 typora-root-url: ..
 ---
 
+## 1. å¤„ç†ä¸æ´»åŠ¨çš„OSTs
 
-
-## 1. ´¦Àí²»»î¶¯µÄOSTs
-
-¹ÒÔØÊ±ÅÅ³ı²»»î¶¯µÄOSTs£º
+æŒ‚è½½æ—¶æ’é™¤ä¸æ´»åŠ¨çš„OSTsï¼š
 
 ```bash
-# ÔÚ¿Í»§¶Ë¹ÒÔØ »òÕß¹ÒÔØMDTµÄÊ±ºòÖ´ĞĞ£¬¶à¸öOSTµÄÊ±ºòÊ¹ÓÃÃ°ºÅ·Ö¸î
+# åœ¨å®¢æˆ·ç«¯æŒ‚è½½ æˆ–è€…æŒ‚è½½MDTçš„æ—¶å€™æ‰§è¡Œï¼Œå¤šä¸ªOSTçš„æ—¶å€™ä½¿ç”¨å†’å·åˆ†å‰²
 client# mount -o exclude=testfs-OST0000 -t lustre uml1:/testfs /mnt/testfs
-# ¼¤»î²»»î¶¯µÄOST£¬ÔÚclientÉÏÖ´ĞĞ
-lctl --device 7 activate  # Ã²ËÆ²»ĞĞ£¬²»È·¶¨
+# æ¿€æ´»ä¸æ´»åŠ¨çš„OSTï¼Œåœ¨clientä¸Šæ‰§è¡Œ
+lctl --device 7 activate  # è²Œä¼¼ä¸è¡Œï¼Œä¸ç¡®å®š
 ```
 
-## 2. ÕÒµ½lustreÎÄ¼şÏµÍ³ÖĞµÄ½Úµã
+## 2. æ‰¾åˆ°lustreæ–‡ä»¶ç³»ç»Ÿä¸­çš„èŠ‚ç‚¹
 
-ÓĞÊ±ºòĞèÒªÕÒµ½ÏµÍ³ÖĞËùÓĞOSTµÄÃû×Ö£º
+æœ‰æ—¶å€™éœ€è¦æ‰¾åˆ°ç³»ç»Ÿä¸­æ‰€æœ‰OSTçš„åå­—ï¼š
 
 ```bash
-# ·½·¨1£¬ÔÚmgsÉÏÖ´ĞĞ£º
-MGS# lctl get_param mgs.MGS.live.*  # ¸ÃÃüÁî»áÏÔÊ¾ËùÓĞµÄmdtºÍost£¬²»¼¤»îµÄÒ²»áÏÔÊ¾
-# ·½·¨2£¬ÔÚclientÉÏÔËĞĞ£º
-client# lfs osts   # ÁĞ¾ÙËùÓĞosts
-client# lfs mdts   # ÁĞ¾ÙËùÓĞmdts
-# ·½·¨3£¬ÔÚmdsÉÏÖ´ĞĞ
-mds:/root# lctl get_param lov.*-mdtlov.target_obd # ÏÔÊ¾ËùÓĞÔÚÏßosts
+# æ–¹æ³•1ï¼Œåœ¨mgsä¸Šæ‰§è¡Œï¼š
+MGS# lctl get_param mgs.MGS.live.*  # è¯¥å‘½ä»¤ä¼šæ˜¾ç¤ºæ‰€æœ‰çš„mdtå’Œostï¼Œä¸æ¿€æ´»çš„ä¹Ÿä¼šæ˜¾ç¤º
+# æ–¹æ³•2ï¼Œåœ¨clientä¸Šè¿è¡Œï¼š
+client# lfs osts   # åˆ—ä¸¾æ‰€æœ‰osts
+client# lfs mdts   # åˆ—ä¸¾æ‰€æœ‰mdts
+# æ–¹æ³•3ï¼Œåœ¨mdsä¸Šæ‰§è¡Œ
+mds:/root# lctl get_param lov.*-mdtlov.target_obd # æ˜¾ç¤ºæ‰€æœ‰åœ¨çº¿osts
 ```
 
 
-## 3. ²»ÒÔlustre·şÎñµÄ·½Ê½¹ÒÔØ·şÎñÆ÷
+## 3. ä¸ä»¥lustreæœåŠ¡çš„æ–¹å¼æŒ‚è½½æœåŠ¡å™¨
 
-Èç¹ûÊ¹ÓÃMGT/MDT»ìºÏÊ¹ÓÃµÄÇé¿öÏÂ£¬µ±Ö»ĞèÒª¹ÒÔØMGS¶ø²»¹ÒÔØMDSÊ±ºò£º
+å¦‚æœä½¿ç”¨MGT/MDTæ··åˆä½¿ç”¨çš„æƒ…å†µä¸‹ï¼Œå½“åªéœ€è¦æŒ‚è½½MGSè€Œä¸æŒ‚è½½MDSæ—¶å€™ï¼š
 
 ```bash
 mount -t lustre /dev/mdt_partition -o nosvc /mount_point
-# ¾Ù¸öÀı×Ó£¬testfs-MDT0000Í¬Ê±°üº¬ÁËmgtºÍmdt
+# ä¸¾ä¸ªä¾‹å­ï¼Œtestfs-MDT0000åŒæ—¶åŒ…å«äº†mgtå’Œmdt
 $ mount -t lustre -L testfs-MDT0000 -o nosvc /mnt/test/mdt
 ```
 
 
-## 4. ÖØ½¨lustreÅäÖÃÈÕÖ¾
+## 4. é‡å»ºlustreé…ç½®æ—¥å¿—
 
-Èç¹ûlustreÏµÍ³ÅäÖÃÈÕÖ¾´¦ÔÚÎÄ¼şÏµÍ³²»ÄÜ¹ÒÔØµÄ×´Ì¬£¬ĞèÒªÊ¹ÓÃtunefs.lustre --writeconfÀ´ÖØ½¨ËûÃÇ¡£Ö´ĞĞÁËwriteconfÖ®ºóÅäÖÃÈÕÖ¾»á±»ÖØ½¨£¨ÎÄ¼şÏµÍ³Ïàµ±ÓÚÒ»¸öÈ«ĞÂµÄÎÄ¼şÏµÍ³£©£¬²¢±£´æÔÚMGSÉÏ¡£
-Ö»ÄÜÔÚÏÂÃæÁ½ÖÖÇé¿öÏÂÖ´ĞĞwriteconf£º
+å¦‚æœlustreç³»ç»Ÿé…ç½®æ—¥å¿—å¤„åœ¨æ–‡ä»¶ç³»ç»Ÿä¸èƒ½æŒ‚è½½çš„çŠ¶æ€ï¼Œéœ€è¦ä½¿ç”¨tunefs.lustre --writeconfæ¥é‡å»ºä»–ä»¬ã€‚æ‰§è¡Œäº†writeconfä¹‹åé…ç½®æ—¥å¿—ä¼šè¢«é‡å»ºï¼ˆæ–‡ä»¶ç³»ç»Ÿç›¸å½“äºä¸€ä¸ªå…¨æ–°çš„æ–‡ä»¶ç³»ç»Ÿï¼‰ï¼Œå¹¶ä¿å­˜åœ¨MGSä¸Šã€‚
+åªèƒ½åœ¨ä¸‹é¢ä¸¤ç§æƒ…å†µä¸‹æ‰§è¡Œwriteconfï¼š
 - The configuration logs are in a state where the file system cannot start
 - A server NID is being changed
 
-**writeconfÅäÖÃ»áÆÆ»µ²¿·ÖÅäÖÃ£¬Èçost ³ØĞÅÏ¢ºÍconf_paramµÄµ÷ÓÅÅäÖÃ£¬ËùÒÔwriteconfÒª½÷É÷Ê¹ÓÃ¡£½¨Òé½«ost³ØÅäÖÃºÍconf_param×ö³ÉÖ´ĞĞ½Å±¾£¬ÔÚÃ¿´ÎwriteconfÅäÖÃºóÖ´ĞĞÅäÖÃ½Å±¾¼´¿É¡£ÁíÍâ£¬Ê¹ÓÃset_param -PÖ´ĞĞµÄÅäÖÃ»á±»±£Áô¡£**
+**writeconfé…ç½®ä¼šç ´åéƒ¨åˆ†é…ç½®ï¼Œå¦‚ost æ± ä¿¡æ¯å’Œconf_paramçš„è°ƒä¼˜é…ç½®ï¼Œæ‰€ä»¥writeconfè¦è°¨æ…ä½¿ç”¨ã€‚å»ºè®®å°†ostæ± é…ç½®å’Œconf_paramåšæˆæ‰§è¡Œè„šæœ¬ï¼Œåœ¨æ¯æ¬¡writeconfé…ç½®åæ‰§è¡Œé…ç½®è„šæœ¬å³å¯ã€‚å¦å¤–ï¼Œä½¿ç”¨set_param -Pæ‰§è¡Œçš„é…ç½®ä¼šè¢«ä¿ç•™ã€‚**
 
-ÅäÖÃÈÕÖ¾¿ÉÒÔÊ¹ÓÃÃüÁîµ¼³ö£º
+é…ç½®æ—¥å¿—å¯ä»¥ä½¿ç”¨å‘½ä»¤å¯¼å‡ºï¼š
 
 ```bash
 mgs# lctl --device MGS llog_print fsname-client
@@ -62,11 +60,11 @@ mgs# lctl --device MGS llog_print fsname-MDT0000
 mgs# lctl --device MGS llog_print fsname-OST0000
 ```
 
-ÖØ½¨lustreÎÄ¼şÏµÍ³ÅäÖÃÈÕÖ¾²½ÖèÈçÏÂ£º
-- Í£Ö¹ËùÓĞÎÄ¼şÏµÍ³·şÎñ£¬umount client--mdt--ost£¬×¢Òâ±£ÁômgsÆô¶¯×´Ì¬£»
-- ±£Ö¤ËùÓĞµÄmdtºÍost¿ÉÁ¬½Ó£¬µ«ÊÇ²»¹ÒÔØ£»
--  tunefs.lustre --writeconf Ö´ĞĞËùÓĞ½Úµã£»
-- ÖØĞÂmountËùÓĞ½Úµã£»
+é‡å»ºlustreæ–‡ä»¶ç³»ç»Ÿé…ç½®æ—¥å¿—æ­¥éª¤å¦‚ä¸‹ï¼š
+- åœæ­¢æ‰€æœ‰æ–‡ä»¶ç³»ç»ŸæœåŠ¡ï¼Œumount client--mdt--ostï¼Œæ³¨æ„ä¿ç•™mgså¯åŠ¨çŠ¶æ€ï¼›
+- ä¿è¯æ‰€æœ‰çš„mdtå’Œostå¯è¿æ¥ï¼Œä½†æ˜¯ä¸æŒ‚è½½ï¼›
+-  tunefs.lustre --writeconf æ‰§è¡Œæ‰€æœ‰èŠ‚ç‚¹ï¼›
+- é‡æ–°mountæ‰€æœ‰èŠ‚ç‚¹ï¼›
 
 ```bash
 psh cn1 umount /fs00
@@ -89,67 +87,74 @@ psh cn1 mount.lustre io1@tcp:/fs00 /fs00
 ```
 
 
-## 5. ĞŞ¸Ä·şÎñÆ÷µÄnid
+## 5. ä¿®æ”¹æœåŠ¡å™¨çš„nid
 
-ÔÚ2.4°æ±¾Ö®Ç°£¬Ö»ÄÜÊ¹ÓÃwriteconfµÄ·½Ê½À´¸ü¸Ä£¬µ«ÊÇ2.4°æ±¾Ö®ºó£¬ĞÂÔöÁËÒ»¸öreplace_nids µÄÃüÁî°ïÖú¿ìËÙµÄĞŞ¸Ä·şÎñÆ÷µÄnid¡£writeconfµÄ·½Ê½ÈÔÈ»¿ÉÓÃ¡£
+åœ¨2.4ç‰ˆæœ¬ä¹‹å‰ï¼Œåªèƒ½ä½¿ç”¨writeconfçš„æ–¹å¼æ¥æ›´æ”¹ï¼Œä½†æ˜¯2.4ç‰ˆæœ¬ä¹‹åï¼Œæ–°å¢äº†ä¸€ä¸ªreplace_nids çš„å‘½ä»¤å¸®åŠ©å¿«é€Ÿçš„ä¿®æ”¹æœåŠ¡å™¨çš„nidã€‚writeconfçš„æ–¹å¼ä»ç„¶å¯ç”¨ã€‚
 
 
-²½ÖèÈçÏÂ£º
+æ­¥éª¤å¦‚ä¸‹ï¼š
 
-- °´Ë³ĞòumoutËùÓĞ·şÎñ
+- æŒ‰é¡ºåºumoutæ‰€æœ‰æœåŠ¡
 
-- ĞŞ¸Ä/etc/modprobe.d/lustre.conf»òÕßÊ¹ÓÃlnetctlÃüÁîÀ´ĞŞ¸Änid£»¿ÉÒÔÊ¹ÓÃlctl list_nidsÀ´²é¿´nid£»
+- ä¿®æ”¹/etc/modprobe.d/lustre.confæˆ–è€…ä½¿ç”¨lnetctlå‘½ä»¤æ¥ä¿®æ”¹nidï¼›å¯ä»¥ä½¿ç”¨lctl list_nidsæ¥æŸ¥çœ‹nidï¼›
 
-- ±£Ö¤mgs·şÎñÆô¶¯×´Ì¬£»
+- ä¿è¯mgsæœåŠ¡å¯åŠ¨çŠ¶æ€ï¼›
 
-- Ê¹ÓÃÏÂÃæµÄÃüÁîĞŞ¸Ä£»
+- ä½¿ç”¨ä¸‹é¢çš„å‘½ä»¤ä¿®æ”¹ï¼›
+
+
 
 ```bash
 
 lctl replace_nids devicename nid1[,nid2,nid3 ...]
 ```
 
-- Èç¹ûmgtºÍmdtÊÇÍ¬Ò»¿éÅÌµÄ»°£¬ĞèÒªÖØĞÂĞ¶ÔØmgtºóÖØĞÂ¹ÒÔØ£»
+
+
+- å¦‚æœmgtå’Œmdtæ˜¯åŒä¸€å—ç›˜çš„è¯ï¼Œéœ€è¦é‡æ–°å¸è½½mgtåé‡æ–°æŒ‚è½½ï¼›
 
 
 
-## 7. ĞÂÔöÒ»¸ömdt
+## 7. æ–°å¢ä¸€ä¸ªmdt
 
-¶îÍâµÄmdt¿ÉÒÔÔö¼Óµ½ÎÄ¼şÏµÍ³ÖĞ£º
-- Ôö¼ÓÎÄ¼şÏµÍ³ÖĞ¿ÉÒÔ´´½¨ÎÄ¼şµÄÊıÁ¿£»
-- Ôö¼ÓÔªÊı¾İ¾ÛºÏĞÔÄÜ£»
-- ¸ôÀëÄ³Ğ©Ó¦ÓÃµÄÔªÊı¾İĞÅÏ¢£»
+é¢å¤–çš„mdtå¯ä»¥å¢åŠ åˆ°æ–‡ä»¶ç³»ç»Ÿä¸­ï¼š
+- å¢åŠ æ–‡ä»¶ç³»ç»Ÿä¸­å¯ä»¥åˆ›å»ºæ–‡ä»¶çš„æ•°é‡ï¼›
+- å¢åŠ å…ƒæ•°æ®èšåˆæ€§èƒ½ï¼›
+- éš”ç¦»æŸäº›åº”ç”¨çš„å…ƒæ•°æ®ä¿¡æ¯ï¼›
 
-Ôö¼ÓmdtµÄ·½·¨ÈçÏÂ£º
-- ÕÒµ½×î´óµÄmdt index
+å¢åŠ mdtçš„æ–¹æ³•å¦‚ä¸‹ï¼š
+- æ‰¾åˆ°æœ€å¤§çš„mdt index
 
 ```bash
 client$ lctl dl | grep mdc 
 ```
-- Ôö¼ÓÒ»¸ömdt
+
+- å¢åŠ ä¸€ä¸ªmdt
 
 ```bash
 mds# mkfs.lustre --reformat --fsname=testfs --mdt --mgsnode=mgsnode --index 4 /dev/sdd
 ```
-- ¹ÒÔØmdt
+
+- æŒ‚è½½mdt
 
 ```bash
 mds# mount.lustre /dev/sdd /mnt/mdt4
 ```
-- ¸ù¾İĞèÒª´´½¨×ÓÄ¿Â¼
+
+- æ ¹æ®éœ€è¦åˆ›å»ºå­ç›®å½•
 
 ```bash
-client# lfs mkdir -i 3 /mnt/testfs/new_dir_on_mdt3  # Ê¹ÓÃindex=3µÄmdt
-client# lfs mkdir -i 4 /mnt/testfs/new_dir_on_mdt4  # Ê¹ÓÃmdt4
-client# lfs mkdir -c 4 /mnt/testfs/new_directory_striped_across_4_mdts  # ´´½¨Ò»¸ö4 mdtµÄÌõ´ø»¯ÎÄ¼ş
+client# lfs mkdir -i 3 /mnt/testfs/new_dir_on_mdt3  # ä½¿ç”¨index=3çš„mdt
+client# lfs mkdir -i 4 /mnt/testfs/new_dir_on_mdt4  # ä½¿ç”¨mdt4
+client# lfs mkdir -c 4 /mnt/testfs/new_directory_striped_across_4_mdts  # åˆ›å»ºä¸€ä¸ª4 mdtçš„æ¡å¸¦åŒ–æ–‡ä»¶
 ```
 
-## 8. ĞÂÔöost
+## 8. æ–°å¢ost
 
-ÎªÁË±£Ö¤ĞÔÄÜµÄÆ½ºâ£¬²»½¨ÒéÔÚ²»Í¬µÄOSSÉÏÉèÖÃ²»Í¬µÄOSTÊıÁ¿¡£
+ä¸ºäº†ä¿è¯æ€§èƒ½çš„å¹³è¡¡ï¼Œä¸å»ºè®®åœ¨ä¸åŒçš„OSSä¸Šè®¾ç½®ä¸åŒçš„OSTæ•°é‡ã€‚
 
-²½Öè£º
-- ´´½¨ost²¢¹ÒÔØ
+æ­¥éª¤ï¼š
+- åˆ›å»ºostå¹¶æŒ‚è½½
 
 ```bash
 oss# mkfs.lustre --fsname=testfs --mgsnode=mds16@tcp0 --ost --index=12 /dev/sda
@@ -157,17 +162,12 @@ oss# mkdir -p /mnt/testfs/ost12
 oss# mount -t lustre /dev/sda /mnt/testfs/ost12 
 ```
 
-- Æ½ºâostµÄ¿ÕÏĞ¿Õ¼ä
+- å¹³è¡¡ostçš„ç©ºé—²ç©ºé—´
 
 ```bash
-# ÎÄ¼şÏµÍ³ÖĞĞÂÔöostºó£¬ĞÂ½¨µÄÎÄ¼ş»á×Ô¶¯Ğ´µ½ĞÂµÄostÉÏ£¬
-# Èç¹ûĞèÒªÊÖ¶¯ÒÆ¶¯ÕâĞ©ÎÄ¼şµ½Ö¸¶¨µÄostÉÏ¿ÉÒÔÊ¹ÓÃlfs_migrateÃüÁî
-client# lfs_migrate /mnt/lustre/dir # ÒÆ¶¯/mnt/lustre/dir Õâ¸öÄ¿Â¼µÄÎÄ¼ş
-# ÕÒµ½/testÄ¿Â¼ÏÂÇÒtest-OST0004ÉÏ£¬²¢ÇÒ´óÓÚ4GµÄÎÄ¼ş£¬ÒÆ¶¯µ½±ğµÄostÉÏ
+# æ–‡ä»¶ç³»ç»Ÿä¸­æ–°å¢oståï¼Œæ–°å»ºçš„æ–‡ä»¶ä¼šè‡ªåŠ¨å†™åˆ°æ–°çš„ostä¸Šï¼Œ
+# å¦‚æœéœ€è¦æ‰‹åŠ¨ç§»åŠ¨è¿™äº›æ–‡ä»¶åˆ°æŒ‡å®šçš„ostä¸Šå¯ä»¥ä½¿ç”¨lfs_migrateå‘½ä»¤
+client# lfs_migrate /mnt/lustre/dir # ç§»åŠ¨/mnt/lustre/dir è¿™ä¸ªç›®å½•çš„æ–‡ä»¶
+# æ‰¾åˆ°/testç›®å½•ä¸‹ä¸”test-OST0004ä¸Šï¼Œå¹¶ä¸”å¤§äº4Gçš„æ–‡ä»¶ï¼Œç§»åŠ¨åˆ°åˆ«çš„ostä¸Š
 client# lfs find /test --ost test-OST0004 -size +4G | lfs_migrate -y 
 ```
-
-
-
-
-

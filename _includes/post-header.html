@@ -1,0 +1,21 @@
+
+<div class="post-header">
+	<div class="text-center">
+		<h1>{{ page.title }}</h1>
+	</div>
+	<div class="text-center">
+		<span class="label label-default"> <span class="glyphicon glyphicon-time"></span> &nbsp;
+			{{ page.date | date: "%B %-d, %Y" }}
+		</span>
+		&nbsp;
+		{% for t in page.tags %}
+		<span class="label label-default"> <span class="glyphicon glyphicon-tag"></span> &nbsp;{{ t }} </span>
+		&nbsp;
+		{% endfor %}
+	</div>
+
+	<br>
+</div>
+
+
+

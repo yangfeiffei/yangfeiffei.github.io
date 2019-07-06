@@ -7,6 +7,7 @@ title: Lustre学习笔记（4.1）-ISCSI配置示例
 date: 2019-01-28 12:00
 
 tags: iscsi lustre 
+categories: public
 
 typora-root-url: ..
 

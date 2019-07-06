@@ -4,6 +4,7 @@ title: iozone test for gpfs
 date: 2018-01-12 12:00
 author: felo
 tags: gpfs iozone
+categories: public
 typora-root-url: ..
 ---
 

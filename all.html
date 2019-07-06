@@ -5,11 +5,11 @@ title: "Blog"
 
 ---
 
-{% for categorie in site.categories %}
+<!--{% for categorie in site.categories %}-->
 
-    {% if categorie[0] == "public"%}
+    <!--{% if categorie[0] == "public"%}-->
 
-        {% for post in categorie[1] limit:32 %}
+        {% for post in site.posts %}
         <article class="post">
             <div class="date">
                 <span class="day">{{ post.date | date:"%d" }}</span>
@@ -27,6 +27,6 @@ title: "Blog"
              </div>
         </article>
         {% endfor %}
-    {% endif %}
+    <!--{% endif %}-->
 
-{% endfor%}
+<!--{% endfor%}-->

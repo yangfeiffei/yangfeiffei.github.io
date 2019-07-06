@@ -4,6 +4,7 @@ title: 为Win7镜像添加USB3.0驱动
 date: 2018-09-16 12:00
 author: felo
 tags: win7
+categories: public
 typora-root-url: ..
 ---
 

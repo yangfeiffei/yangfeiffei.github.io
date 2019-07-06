@@ -3,6 +3,7 @@ layout: post
 title: Lustre学习笔记（1）-编译Lustre
 date: 2019-01-07 12:00
 tags: lustre
+categories: public
 typora-root-url: ..
 ---
 

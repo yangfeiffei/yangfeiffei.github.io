@@ -4,6 +4,7 @@ title: Linux Login Profile 配置方法
 date: 2018-3-2 12:00
 author: felo
 tags: linux
+categories: public
 typora-root-url: ..
 ---
 

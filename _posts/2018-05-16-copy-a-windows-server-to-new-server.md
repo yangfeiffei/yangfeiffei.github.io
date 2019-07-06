@@ -4,6 +4,7 @@ title: 使用ntfsclone迁移一个WindowsServer
 date: 2018-05-16 12:00
 author: felo
 tags: migrate
+categories: public
 typora-root-url: ..
 ---
 

@@ -4,6 +4,7 @@ layout: post
 title: Lustre学习笔记（5）-操作Lustre
 date: 2019-03-01 12:00
 tags: lustre 
+categories: public
 typora-root-url: ..
 ---
 

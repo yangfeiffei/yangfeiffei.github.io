@@ -3,6 +3,7 @@ layout: post
 title: Lustre学习笔记（4）-配置lustre
 date: 2019-01-16 12:00
 tags: lustre
+categories: public
 typora-root-url: ..
 
 ---

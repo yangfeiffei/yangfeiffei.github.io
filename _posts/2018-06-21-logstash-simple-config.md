@@ -4,6 +4,7 @@ title: logstash简单配置
 date: 2018-06-21 12:00
 author: felo
 tags: logstash
+categories: public
 typora-root-url: ..
 ---
 

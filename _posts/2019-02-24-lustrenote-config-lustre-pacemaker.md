@@ -4,6 +4,7 @@ layout: post
 title: Lustre学习笔记（4.2）-配置lustre & pacemaker
 date: 2019-02-24 12:00
 tags: pacemaker lustre 
+categories: public
 typora-root-url: ..
 
 ---

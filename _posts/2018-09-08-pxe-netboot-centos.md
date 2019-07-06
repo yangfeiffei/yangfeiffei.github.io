@@ -4,6 +4,7 @@ title: 网络启动RHEL/CENTOS的两种方法
 date: 2018-09-8 12:00
 author: felo
 tags: centos pxe
+categories: public
 typora-root-url: ..
 ---
 

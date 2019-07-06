@@ -3,6 +3,7 @@ layout: post
 title: Lustre学习笔记（6.1）- 维护Lustre
 date: 2019-03-07 12:00
 tags: lustre 
+categories: public
 typora-root-url: ..
 ---
 

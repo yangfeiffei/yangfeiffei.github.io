@@ -4,6 +4,7 @@ title: lustre文件系统安装测试
 date: 2018-04-05 12:00
 author: felo
 tags: lustre
+categories: public
 typora-root-url: ..
 ---
 

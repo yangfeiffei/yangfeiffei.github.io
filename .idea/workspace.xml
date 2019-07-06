@@ -2,52 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0456c631-2885-4de2-9622-20d9928a1b8e" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/_config.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_includes/about.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/_includes/list-new.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/_includes/list.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/_includes/post_data.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/_includes/post_footer.html" beforeDir="false" afterPath="$PROJECT_DIR$/_includes/post-footer.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_includes/post_head.html" beforeDir="false" afterPath="$PROJECT_DIR$/_includes/post-header.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_includes/post_menu.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/_includes/tags.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/_layouts/default.html" beforeDir="false" afterPath="$PROJECT_DIR$/_layouts/default.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_layouts/post.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/_posts/2018-01-09-dp1000-oracle-11gr2-backup-2.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/2018-01-09-dp1000-oracle-11gr2-backup-2.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_posts/2018-01-09-oracle-11gr2-rac-oel6u4-install.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/2018-01-09-oracle-11gr2-rac-oel6u4-install.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_posts/2018-01-12-iozone-gpfs-test.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/2018-01-12-iozone-gpfs-test.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_posts/2018-03-02-linux-login-profile.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/2018-03-02-linux-login-profile.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_posts/2018-03-17-vagrant-simple-examples.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/2018-03-17-vagrant-simple-examples.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_posts/2018-03-30-lsf-mpich-mpi4py-test.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/2018-03-30-lsf-mpich-mpi4py-test.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_posts/2018-04-05-lustre-install-test.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/2018-04-05-lustre-install-test.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_posts/2018-05-16-copy-a-windows-server-to-new-server.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/2018-05-16-copy-a-windows-server-to-new-server.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_posts/2018-06-21-logstash-simple-config.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/2018-06-21-logstash-simple-config.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_posts/2018-07-10-vim-edit-hex-file.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/2018-07-10-vim-edit-hex-file.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_posts/2018-08-02-alfs-test-1.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/2018-08-02-alfs-test-1.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_posts/2018-08-04-alfs-test-2.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/2018-08-04-alfs-test-2.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_posts/2018-09-02-install-win7-with-cobbler.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/2018-09-02-install-win7-with-cobbler.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_posts/2018-09-08-pxe-netboot-centos.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/2018-09-08-pxe-netboot-centos.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_posts/2018-09-16-add-usb3-to-win7-iso.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/2018-09-16-add-usb3-to-win7-iso.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_posts/2019-01-07-lustrenote-compile-lustre.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/2019-01-07-lustrenote-compile-lustre.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_posts/2019-01-08-lustrenote-install-lustre.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/2019-01-08-lustrenote-install-lustre.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_posts/2019-01-11-lustrenote-config-lnet.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/2019-01-11-lustrenote-config-lnet.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_posts/2019-01-16-lustrenote-config-lustre.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/2019-01-16-lustrenote-config-lustre.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_posts/2019-01-28-iscsi-config-example.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/2019-01-28-iscsi-config-example.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_posts/2019-02-24-lustrenote-config-lustre-pacemaker.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/2019-02-24-lustrenote-config-lustre-pacemaker.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_posts/2019-03-01-lustrenote-lustre-operations.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/2019-03-01-lustrenote-lustre-operations.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_posts/2019-03-07-lustrenote-lustre-maintenance.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/2019-03-07-lustrenote-lustre-maintenance.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_posts/2019-03-10-lustrenote-lustre-maintenance-2.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/2019-03-10-lustrenote-lustre-maintenance-2.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/about.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/archive.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/blog/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom/css/colorful-python.css" beforeDir="false" afterPath="$PROJECT_DIR$/custom/css/colorful-python.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom/css/colorful2.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom/css/colorful3.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom/css/ie10-viewport-bug-workaround.css" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/custom/css/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/custom/css/main.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/custom/css/starter-template.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -63,8 +18,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/custom/css/main.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="403">
-              <caret line="146" column="21" lean-forward="true" selection-start-line="146" selection-start-column="21" selection-end-line="146" selection-end-column="21" />
+            <state relative-caret-position="146">
+              <caret line="142" column="27" lean-forward="true" selection-start-line="142" selection-start-column="27" selection-end-line="142" selection-end-column="27" />
             </state>
           </provider>
         </entry>
@@ -376,12 +331,12 @@
       <updated>1507559096418</updated>
       <workItem from="1562338223497" duration="993000" />
       <workItem from="1562396709548" duration="5092000" />
-      <workItem from="1562402887709" duration="12035000" />
+      <workItem from="1562402887709" duration="12210000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="18120000" />
+    <option name="totallyTimeSpent" value="18295000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1280" height="800" extended-state="0" />
@@ -858,8 +813,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/custom/css/main.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="403">
-          <caret line="146" column="21" lean-forward="true" selection-start-line="146" selection-start-column="21" selection-end-line="146" selection-end-column="21" />
+        <state relative-caret-position="146">
+          <caret line="142" column="27" lean-forward="true" selection-start-line="142" selection-start-column="27" selection-end-line="142" selection-end-column="27" />
         </state>
       </provider>
     </entry>

@@ -161,6 +161,20 @@ font-weight:normal;
 }
 
 
+.post-content table {
+  border: green solid 2px;
+}
+
+.post-content table th {
+  text-align: center;
+  border: green solid 1px;
+}
+
+.post-content table td {
+  border: green solid 1px;
+}
+
+
 .post-footer {
   font-size: 14px;
 }

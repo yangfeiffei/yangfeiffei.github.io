@@ -9,7 +9,7 @@ typora-root-url: ..
 
 
 
-# tar  -- linux中最常用的归档/压缩工具
+## tar  -- linux中最常用的归档/压缩工具
 
 配合gzip, bzip2, 和xz 可以实现压缩的功能。
 基本语法：
@@ -31,8 +31,8 @@ X  --exclude-file   排除某个文件中列举的文件名
 -u, --update  更新归档文件中的某个文件
 --delete  删除归档文件中的某个文件
 -r, --append  为归档文件添加新文件
- -t, --list  列举归档文件中的文件列表
- -C, --directory=DIR  解压到目录
+-t, --list  列举归档文件中的文件列表
+-C, --directory=DIR  解压到目录
 
 ```
 
@@ -88,13 +88,12 @@ tar -xvf tecmint-14-09-12.tar "file 1" "file 2"
 
 # 解压归档中的一组文件
 tar -xvf Phpfiles-org.tar --wildcards '*.php'
-
 ```
 
 更多的例子查看[18个tar例子](https://www.tecmint.com/18-tar-command-examples-in-linux/)。
 
 
-# find  -- linux中常用的文件查找工具
+## find  -- linux中常用的文件查找工具
 
 常用命令选项
 

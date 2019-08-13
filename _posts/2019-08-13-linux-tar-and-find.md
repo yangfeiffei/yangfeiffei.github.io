@@ -3,13 +3,13 @@ layout: post
 title:  tar 和 find 工具的使用
 date: 2019-08-13 12:00
 tags: linux
-categories: linux-basics
+categories: public linux-basics 
 typora-root-url: ..
 ---
 
 
 
-## tar  -- linux中最常用的归档/压缩工具
+# 1. tar  -- linux中最常用的归档/压缩工具
 
 配合gzip, bzip2, 和xz 可以实现压缩的功能。
 基本语法：
@@ -93,7 +93,7 @@ tar -xvf Phpfiles-org.tar --wildcards '*.php'
 更多的例子查看[18个tar例子](https://www.tecmint.com/18-tar-command-examples-in-linux/)。
 
 
-## find  -- linux中常用的文件查找工具
+# 2.find  -- linux中常用的文件查找工具
 
 常用命令选项
 

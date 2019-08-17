@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  使用ipxe安装centos7
+title:  使用ipxe安装windows 7
 date: 2019-08-17 12:00
 tags: ipxe
 categories: public
@@ -9,22 +9,21 @@ typora-root-url: ..
 
 
 
-# 准备工作
+# 0 准备工作
 
 
 
 - `centos 7.6` 虚拟机
 - `centos7 1810 iso`文件
 - `win7 iso`文件
-- `wimtools`工具   # 可能不需要
-
+- `wimtools`工具   # 可选
 - `wimboot`文件，用于引导`winpe`的`WIM`文件
 
 
 
-# 安装一个`ipxe`服务器
+# 1 安装一个`ipxe`服务器
 
-根据[使用ipxe安装centos7]()上面描述的方法首先部署一个`ipxe`服务器。
+根据[使用ipxe安装centos7](/public/2019/08/12/net-install-centos7-with-ipxe.html)上面描述的方法首先部署一个`ipxe`服务器。
 
 安装需要的包：
 
@@ -86,11 +85,12 @@ dhcp-boot=tag:ipxe,menu/boot.ipxe
 
 
 
-# 网络安装`windows7`
+# 2 网络安装`windows7`
 
-[可能不需要]安装`wimtools`工具，使用该工具可以在`Linux`环境下创建`windows PE`
+[可选]安装`wimtools`工具，使用该工具可以在`Linux`环境下创建`windows PE`
 
 ```bash
+# 这部分可选，直接使用win7 iso中的boot.wim。也可以使用mkwinpeimg工具自己创建boot.wim，但是似乎没有什么区别；
 [root@localhost ~]# wget http://li.nux.ro/download/nux/dextop/el7/x86_64//wimtools-1.9.2-2.el7.nux.x86_64.rpm
 [root@localhost ~]# wget http://li.nux.ro/download/nux/dextop/el7/x86_64/libwim15-1.9.2-2.el7.nux.x86_64.rpm
 [root@localhost ~]# yum localinstall wimtools-1.9.2-2.el7.nux.x86_64.rpm libwim15-1.9.2-2.el7.nux.x86_64.rpm
@@ -121,15 +121,15 @@ dhcp-boot=tag:ipxe,menu/boot.ipxe
         log file = /var/log/samba/log.%m
         max log size = 5000
         security = user
-        guest account = nobody
-        map to guest = Bad User
+        guest account = nobody    # 访客
+        map to guest = Bad User   # 访客
         load printers = yes
         cups options = raw
 [share]
         comment = share
         path = /var/www/html
         directory mask  = 0755
-        guest ok        = yes
+        guest ok        = yes     # 访客
 [root@localhost html]# systemctl enable smb
 Created symlink from /etc/systemd/system/multi-user.target.wants/smb.service to /usr/lib/systemd/system/smb.service.
 [root@localhost html]# systemctl start smb
@@ -195,7 +195,13 @@ net use \\10.10.2.100\share
 
 ![install win7 options](/images/install-win7-with-ipxe/install-win7-item.png)
 
-# 参考
+# 4 其他
+
+- 有时候进入winpe的时候会halt在wpeinit状态下，很奇怪...
+- 未考虑增加响应文件，进行全自动化安装的情况。
+
+
+# x 参考
 
 - [Network-booting Windows PE](<http://ipxe.org/howto/winpe>)
 - [Cobbler学习笔记：安装win7](/public/2018/09/02/install-win7-with-cobbler.html)

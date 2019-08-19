@@ -104,7 +104,6 @@ dhcp-boot=tag:ipxe,menu/boot.ipxe
 [root@localhost ~]# mkdir -p /var/www/html/win7/iso
 [root@localhost ~]# mount /dev/sr0 /var/www/html/win7/iso
 ```
-
 由于`winpe`只能使用`samba`协议，因此使用创建一个共享
 
 ```bash
@@ -112,11 +111,8 @@ dhcp-boot=tag:ipxe,menu/boot.ipxe
 # 修改配置文件，新增一个模块[share]
 [root@localhost html]# vim /etc/samba/smb.conf
 [root@localhost html]# cat /etc/samba/smb.conf
-# See smb.conf.example for a more detailed config file or
-# read the smb.conf manpage.
-# Run 'testparm' to verify the config is correct after
-# you modified it.
 
+# 注释加在行尾会报错
 [global]
         log file = /var/log/samba/log.%m
         max log size = 5000
@@ -205,4 +201,4 @@ net use \\10.10.2.100\share
 
 - [Network-booting Windows PE](<http://ipxe.org/howto/winpe>)
 - [Cobbler学习笔记：安装win7](/public/2018/09/02/install-win7-with-cobbler.html)
-- [使用pxe安装win7](lib/staticfile/net-install-win7-with-pxe.txt)
+- [使用pxe安装win7](/lib/staticfile/net-install-win7-with-pxe.txt)

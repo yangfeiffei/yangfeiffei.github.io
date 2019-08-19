@@ -205,3 +205,4 @@ net use \\10.10.2.100\share
 
 - [Network-booting Windows PE](<http://ipxe.org/howto/winpe>)
 - [Cobbler学习笔记：安装win7](/public/2018/09/02/install-win7-with-cobbler.html)
+- [使用pxe安装win7](lib/staticfile/net-install-win7-with-pxe.txt)

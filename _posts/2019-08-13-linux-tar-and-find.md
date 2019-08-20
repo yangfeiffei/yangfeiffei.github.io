@@ -102,15 +102,53 @@ tar -xvf Phpfiles-org.tar --wildcards '*.php'
 -type 类型，后面跟 d，f等
 -iname  忽略大小写
 -maxdepth  最大深度
+-size  文件大小
+-user  属主
+-perm  权限
+-mtime 修改时间，以天为单位，如果要以分钟为单位使用-mmin
 -print  打印到标准输出
--exec 执行命令，常用的是后面跟 rm '{}' +
+-exec 执行命令，常用的是后面跟 rm '{}' \   或者   -exec rm -f {} \
 ```
 
-来看下[35个find的例子](https://www.tecmint.com/35-practical-examples-of-linux-find-command/)
+来看下几个不错的例子：
+- [35个find的例子](https://www.tecmint.com/35-practical-examples-of-linux-find-command/)
+- [骏马金龙-Linux find常用用法示例](https://www.cnblogs.com/f-ck-need-u/p/10704754.html)
 
-常见例子：
+
+摘几个常用的例子：
 
 ```bash
+# 最常见的查看文件名和类型
+find /tmp -type f -name "a*.sh"
+
+# 根据文件大小
+find /tmp -type f -size +100k -name '*.sh'
+find / -size +50M -size -100M
+
+# 空目录
+find /tmp -type d -empty
+
+# 根据权限来查询
+find . -type f -perm 0777 -print
+
+# 将查找到的777权限的文件修改为644
+find / -type f -perm 0777 -print -exec chmod 644 {} \;
+find / -type d -perm 777 -print -exec chmod 755 {} \;
+
+# 查找并删除一个文件
+find . -type f -name "tecmint.txt" -exec rm -f {} \;
+
+# 查看owner是root的文件
+find / -user root -name tecmint.txt
+
+# 查找50天以内修改的文件
+find / -mtime 50
+
+# 查找50-100天修改的文件
+find / -mtime +50 –mtime -100
+
+# 一个小时内修改的文件
+find / -mmin -60
 
 ```
 

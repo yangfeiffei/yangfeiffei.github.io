@@ -3,7 +3,7 @@ layout: post
 title:  tar 和 find 工具的使用
 date: 2019-08-13 12:00
 tags: linux
-categories: public linux-basics 
+categories: linux-basics 
 typora-root-url: ..
 ---
 

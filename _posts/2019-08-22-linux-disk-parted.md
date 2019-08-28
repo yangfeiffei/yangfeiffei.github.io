@@ -31,7 +31,7 @@ GPT分区
 
 - cfdisk	字符交互式分区工具，比较简单好用但是不常用
 - cgdisk	与cfdisk类似，支持GPT分区
-- fdisk 	命令行分区工具，最常用工具，现在也支持gpt分区
+- fdisk 	命令行分区工具，最常用工具（Centos6中的fdisk不支持gpt分区，Centos7的fdisk是支持的）
 - gdisk 	与fdisk类似，支持GPT分区
 - parted	支持非交互式划分区，支持GPT，常用工具
 - sfdisk	不常用

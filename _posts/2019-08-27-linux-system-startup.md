@@ -11,14 +11,25 @@ typora-root-url: ..
 
 这里记录一下主要过程吧，将来水平提升了再来补充。
 
-# 0. 分类和组合
+# 0. 概述
 
-- BIOS legacy & MBR & grub legacy & sysinit & initrd.img   --> Centos5
-- BIOS legacy & MBR & grub legacy & upstart & initramfs    --> Centos6
-- UEFI        & GPT & grub legacy & upstart & initramfs    --> Centos6
-- BIOS legacy & MBR & grub2       & systemd & initramfs    --> Centos7
-- BIOS legacy & GPT & grub2       & systemd & initramfs    --> Centos7   # 可选
-- UEFI        & GPT & grub2       & systemd & initramfs    --> Centos7
+总的来说分成下面几步吧：
+
+- 按下电源，启动自检
+- 进入BIOS，选择从硬盘启动
+- 硬盘引导起来后，由grub接管
+- 加载内核，进入系统
+
+有几种常见的组合：
+
+```
+- BIOS legacy & MBR & grub legacy & sysvinit  & initrd.img   --> Centos5
+- BIOS legacy & MBR & grub legacy & upstart   & initramfs    --> Centos6
+- UEFI        & GPT & grub legacy & upstart   & initramfs    --> Centos6
+- BIOS legacy & MBR & grub2       & systemd   & initramfs    --> Centos7
+- BIOS legacy & GPT & grub2       & systemd   & initramfs    --> Centos7   # 可选
+- UEFI        & GPT & grub2       & systemd   & initramfs    --> Centos7
+```
 
 # 1. 按下电源
 
@@ -28,6 +39,12 @@ typora-root-url: ..
 
 # 2. `BIOS`
 
+
+BIOS有两种模式：
+
+- legacy模式，也就是传统的BIOS模式；
+- UEFI模式；
+
 通常启动到一定时候就会出现 Press F1 xxxx, F12 xxxxx的字样，选择怎样的启动方式：
 
 - 硬盘
@@ -35,12 +52,6 @@ typora-root-url: ..
 - dvd
 - network
 - ...
-
-
-BIOS有两种模式：
-
-- legacy模式，也就是传统的BIOS模式；
-- UEFI模式；
 
 # 3. `BootLoader`
 
@@ -115,11 +126,40 @@ MBR --> stage1_5( mbr gap ) --> /boot/grub/menu.lst --> vmlinuz --> ...
 
 ## 3.2 `GPT BootLoader`
 
-对于`GPT`硬盘，一般会使用`UEFI`进行启动，或者`BIOS legacy`方式。这里只说明`BIOS`的方式，`UEFI`下次研究下再说。
+对于`GPT`硬盘，一般会使用`UEFI`进行启动，有时候也会使用`BIOS legacy`方式。
 
 ### 3.2.1` grub`
 
-不确定，应该是支持的吧...
+- BIOS+GPT 模式：貌似不可行。
+- UEFI + GPT模式
+
+Centos6系统下的分区如下：
+
+```bash
+[root@cn4 ~]# df -hT
+Filesystem           Type   Size  Used Avail Use% Mounted on
+/dev/mapper/vg_cn4-lv_root
+                     ext4    17G  675M   16G   5% /
+tmpfs                tmpfs  490M     0  490M   0% /dev/shm
+/dev/sda2            ext4   477M   27M  425M   6% /boot
+/dev/sda1            vfat   200M  264K  200M   1% /boot/efi
+```
+
+启动过程中UEFI直接指向了/boot/efi这个文件系统中的grub.efi文件。
+
+```bash
+[root@cn4 ~]# cd /boot/efi/EFI/redhat/
+[root@cn4 redhat]# ls -l
+total 256
+-rwx------ 1 root root    880 Aug 28 23:17 grub.conf    # 配置文件
+-rwx------ 1 root root 254317 Mar 23  2017 grub.efi     # 加载grub，指向grub.cfg
+```
+
+启动顺序：
+
+```bash
+UEFI --> grub.efi --> grub.cfg --> vmlinuz --> ...
+```
 
 ### 3.2.2 `grub2`
 
@@ -131,13 +171,6 @@ MBR --> stage1_5( mbr gap ) --> /boot/grub/menu.lst --> vmlinuz --> ...
 # parted   -->  bios_grub
 # gdisk    -->  ef02
 # anconda图形界面  --> 需要指定为 BIOS Boot 的Filesystem
-# 分区可能如下：
-
-[root@vm-centos7 ~]# df -hT |grep -v tmpfs
-Filesystem              Type      Size  Used Avail Use% Mounted on
-/dev/mapper/centos-root xfs        17G  7.9G  9.2G  47% /
-/dev/sda1               xfs      1014M  146M  869M  15% /boot
-
 ```
 
 启动顺序为：
@@ -172,17 +205,122 @@ Filesystem              Type      Size  Used Avail Use% Mounted on
 
 # 4. `kernel & initrd`
 
+现在grub或者grub2的工作就完成了，把内核vmlinuz加载到了内存，并传递了执行的参数以及initrd的位置，就是grub.cfg参数中所写的那些。
+
+vmlinuz&initrd  --->  0#  ---> 1# ---> 2# ---> ...
+
 ## 4.1 vmlinuz 
 
+vmlinuz文件是一个bzImage压缩文件，
 
+```bash
+# 这是centos7.6的vmlinuz文件属性和文件大小
+[root@cn2 boot]# file vmlinuz-3.10.0-957.el7.x86_64
+vmlinuz-3.10.0-957.el7.x86_64: Linux kernel x86 boot executable bzImage, version 3.10.0-957.el7.x86_64 (mockbuild@kbuilder.bsys.centos.org) #1 S, RO-rootFS, swap_dev 0x6, Normal VGA
+[root@cn2 boot]# du -h vmlinuz-3.10.0-957.el7.x86_64
+6.4M    vmlinuz-3.10.0-957.el7.x86_64
+```
+
+运行后创建0号进程，然后创建1号和2号进程。
+
+```bash
+# 这是CentOS7.6 的1号和2号进程
+[root@cn2 boot]# ps -ef |head -n 3
+UID         PID   PPID  C STIME TTY          TIME CMD
+root          1      0  0 22:03 ?        00:00:01 /usr/lib/systemd/systemd --switched-root --system --deserialize 22
+root          2      0  0 22:03 ?        00:00:00 [kthreadd]
+```
+
+但是呢，有一个前提，1号进程执行的程序放在了/usr目录下面（或者说是根目录下面），那么就要求vmlinuz内核必须要先加载根文件系统，为了应对不同类型的根文件系统内核就会越来越大，因此采用了另外一种折中方案，附带一个initrd来放驱动之类的系统专有文件。vmlinuz中只包含一些必要的共性文件。
 
 ## 4.2 initrd.img & initramfs
 
+initrd.img适用于centos5，initramfs适用于centos6和centos7。目的是一样的，但是实际上有很大的区别。
 
+### 4.2.1 initrd.img
 
-## 4.3 `sysinit` & `upstart` & `systemd`
+initrd是一个镜像文件系统，被加载到内存中，实现找到真正的根文件系统、加载必要的驱动、收集内核运行状态、设备信息等。其中/sys,/proc,/dev等目录中的信息就是它收集的。另外，完成这些工作后，它将会切换到真正的根文件系统中，将权限正式交给用户空间。
 
+```bash
+# centos 5.8 中的initrd 文件
+[root@localhost ~]# cp /boot/initrd-2.6.18-308.el5.img /tmp/initrd.gz
+[root@localhost tmp]# gunzip initrd.gz
+[root@localhost tmp]# cpio -id < initrd 
 
+[root@localhost tmp]# ls
+bin  dev  etc  init  initrd  lib  proc  sbin  sys  sysroot
+```
+
+### 4.2.2 initramfs
+
+initramfs是initrd的改进版本，它将进程为1的init文件直接放在了initramfs中，先运行init，再挂载根目录。解压后就可以直接看到init执行文件。如果是centos7版本，可以发现init是一个软连接，目标就是systemd命令。
+
+## 4.3 `sysvinit` & `upstart` & `systemd`
+
+```bash
+sysvinit ---> centos5
+upstart ---> centos6
+systemd ---> centos7 ...
+```
+
+### 4.3.1 sysvinit
+
+sysvinit启动风格，特点是：单线程的，顺序执行，后面的进程启动必须等待前面进程；同时，不是基于事件的启动方式，在centos5中使用。
+
+它的管理方式就是运行级别体系，运行级别1至6共6个级别，不同的级别使用不同的rc目录中的脚本来启动或者停止相关服务。
+
+### 4.3.2 upstart
+
+sysvinit的替代品，更优。并行的，只要事件发生，就能够启动服务。比如，光驱或USB设备的的自动识别。其操作和配置方法与sysvinit风格一致。
+
+```bash
+# 启停服务
+service sshd start|stop|restart|status
+# 开机自启动
+chkconfig --list sshd
+chkconfig sshd on|off
+# 通过运行级别可以关机
+init 0 
+# 重启
+init 6
+```
+
+### 4.3.3 systemd
+
+更好更加完善的启动风格，但是及其庞大和复杂，也经常被人诟病。
+
+详细内容可以参看[systemd 中文手册](http://www.jinbuguo.com/systemd/systemd.html)。
+
+```bash
+# 启停服务
+systemctl start|stop|status|restart sshd.service
+# 开机自启动
+systemctl disable|enable sshd
+# 关机和重启
+systemctl poweroff   
+systemctl reboot
+# 照顾大家习惯沿用了 init 0 和init 6
+
+# 日志的管理
+journalctl -f -u sshd
+journalctl -u sshd
+```
+
+关于网络服务，centos7里也保留了network服务，并且是sysvinit风格的。未来版本将会取消（RHEL8中已经取消了），使用NetworkManager.service来管理。
+
+```bash
+# 可以使用原有的风格来管理网络服务
+[root@cn2 ~]# chkconfig --list |grep network   # 不确定是否失效
+network         0:off   1:off   2:on    3:on    4:on    5:on    6:off
+[root@cn2 ~]# service network restart
+Restarting network (via systemctl):                        [  OK  ]
+
+# 用systemctl管理的network服务也是调用了rc脚本
+[root@cn2 ~]# systemctl cat network
+...
+ExecStart=/etc/rc.d/init.d/network start
+ExecStop=/etc/rc.d/init.d/network stop
+```
 
 
 # x 参考资料
@@ -191,7 +329,4 @@ Filesystem              Type      Size  Used Avail Use% Mounted on
 - [GPT 分区详解](http://www.jinbuguo.com/storage/gpt.html)
 - [第14章 Linux开机详细流程](https://www.cnblogs.com/f-ck-need-u/p/7100336.html)
 - [grub2详解(翻译和整理官方手册)](https://www.cnblogs.com/f-ck-need-u/p/7094693.html)
-
-
-
-
+- [systemd 中文手册](http://www.jinbuguo.com/systemd/systemd.html)

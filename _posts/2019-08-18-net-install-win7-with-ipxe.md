@@ -191,7 +191,7 @@ net use \\10.10.2.100\share
 
 ![install win7 options](/images/install-win7-with-ipxe/install-win7-item.png)
 
-# 4 其他
+# 3 其他
 
 - 有时候进入winpe的时候会halt在wpeinit状态下，很奇怪...
 - 未考虑增加响应文件，进行全自动化安装的情况。

@@ -99,17 +99,167 @@ rwxr-x---
      再转换为10进制就是：750
 ```
 
+还有一点特殊权限，下一节说。
+- 4 为 SUID ＝ u+s
+- 2 为 SGID ＝ g+s
+- 1 为 SBIT ＝ o+t
+
+
 ## 2.2 特殊权限
 
+- SUID:(set UID)
+	
+    - 只是对二进制可执行文件有效；
+    - 让g或者o的用户执行该文件的时候暂时具备这个文件owner的权限；
+    - 只在执行过程中有效；
+    - ** 对脚本是无效的**；
+
+```bash
+# /bin/passwd 可以为用户修改密码
+# root用户可以为所有用户修改密码
+# 其他用户只能为自己修改密码
+# 可以看到这个文件有一个s的特殊权限，就是SUID权限。
+[root@vm-centos7 ~]# ls -l /bin/passwd
+-rwsr-xr-x. 1 root root 27832 Jun 10  2014 /bin/passwd
+
+# passwd命令会修改该文件，但是只有root可以修改
+[root@vm-centos7 ~]# ls -l /etc/shadow
+---------- 1 root root 1061 Aug 31 23:51 /etc/shadow
+```
+
+- SGID:(set GID)
+
+    - 跟SUID类似，只是s作用在g的x位置上；
+    - 作用是让o的用户暂时具备g用户的权限
+    - 对二进制有用，但是一般用于目录；
+
+
+```bash
+# 在一个具有SGID的目录中创建一个文件
+# 这个文件的g权限将会是具有SGID的用户组
+
+# 在g的x位置上改成了s
+[root@vm-centos7 tmp]# mkdir d1;chmod -R 2777 d1
+[root@vm-centos7 tmp]# ls -l |grep d1
+drwxrwsrwx 2 root root  6 Sep  2 13:34 d1
+[root@vm-centos7 tmp]# su test
+[test@vm-centos7 tmp]$ touch d1/t1
+# 创建的这个t1文件组权限是root
+[test@vm-centos7 tmp]$ ls -l d1/t1
+-rw-rw-r-- 1 test root 0 Sep  2 13:35 d1/t1
+# 然而test用户居然不属于root组
+[test@vm-centos7 tmp]$ id test
+uid=1001(test) gid=1001(test) groups=1001(test)
+```
+
+- SBIT:(Sticky Bit)
+
+    - 针对other权限的，只对目录有效
+    - **不能对二进制文件作用**
+    - o权限位置会变成t
+
+```bash
+# 最常见的就是tmp目录，所有人都可以在tmp下创建目录
+# 但是只有root和自己才能删除该目录
+[root@vm-centos7 ~]# ls -l / |grep tmp
+drwxrwxrwt.  15 root root 4096 Sep  2 13:34 tmp
+```
 
 ## 2.3 修改权限
 
+- chmod  修改文件或目录的权限
+
+```bash
+[root@vm-centos7 tmp]# chmod 4755 file1
+[root@vm-centos7 tmp]# ls -l file1
+-rwsr-xr-x 1 root root 0 Sep  2 13:50 file1
+[root@vm-centos7 tmp]# chmod 0755 file1
+[root@vm-centos7 tmp]# ls -l file1
+-rwxr-xr-x 1 root root 0 Sep  2 13:50 file1
+[root@vm-centos7 tmp]# chmod -R 755 dir1
+[root@vm-centos7 tmp]# ls -ld dir1
+drwxr-xr-x 2 root root 6 Sep  2 13:50 dir1
+```
+
+- chown  修改文件或目录的属主
+
+```bash
+[root@vm-centos7 tmp]# chown test.test file1
+[root@vm-centos7 tmp]# ls -l file1
+-rwxr-xr-x 1 test test 0 Sep  2 13:50 file1
+[root@vm-centos7 tmp]# chown -R test.test dir1
+[root@vm-centos7 tmp]# ls -ld dir1
+drwxr-xr-x 2 test test 6 Sep  2 13:50 dir1
+```
 
 # 3. 用户密码
 
 ## 3.1 `/etc/passwd`
 
-## 3.2 其他
+```bash
+[root@vm-centos7 tmp]# cat /etc/passwd
+root:x:0:0:root:/root:/bin/bash
+bin:x:1:1:bin:/bin:/sbin/nologin
+daemon:x:2:2:daemon:/sbin:/sbin/nologin
+...
+# 登录名：口令：用户标识号：组标识号：用户名：用户主目录：shell
+
+# 第一列：登录用的用户名，大小写敏感
+# 第二列：用户口令，用x代替，保存口令已经使用/etc/shadow文件
+# 第三列：用户UID，系统中的用户id标识，0-499系统用，500-普通用户，一般自动从1000开始
+# 第四列：组ID，
+# 第五列：用户名，用户说明，可以空，可以跟登录名一样
+# 第六列：家目录，一般用户都在/home下
+# 第七列：shell，如果不能登录就使用nologin
+
+```
+
+## 3.2 `/etc/shadow`
+
+```bash
+[root@vm-centos7 tmp]# cat /etc/shadow |head
+root:$6$ZG/SVZBlg7fGdgjx$hcHX.aoHPxMGbu968ZezzwEYzd6lIieOaU8VBZnojQ0jQG/PNgBsVmbyoM/FaRMDB0T8rHOLHk3DscaXetgOA/::0:99999:7:::
+bin:*:17834:0:99999:7:::
+daemon:*:17834:0:99999:7:::
+adm:*:17834:0:99999:7:::
+lp:*:17834:0:99999:7:::
+sync:*:17834:0:99999:7:::
+shutdown:*:17834:0:99999:7:::
+halt:*:17834:0:99999:7:::
+mail:*:17834:0:99999:7:::
+operator:*:17834:0:99999:7:::
+
+1、账户名称 
+2、加密后的密码，如果这一栏的第一个字符为!或者*的话，说明这是一个不能登录的账户，看来root用户可以登录；
+3、最近改动密码的日期（这个是从1970年1月1日算起的总的天数）
+4、密码不可被变更的天数：如果是0的话，则没有限制 
+5、密码需要重新变更的天数：如果为99999则没有限制 
+6、密码过期预警天数 
+7、密码过期的宽恕时间：如果在5中设置的日期过后，用户仍然没有修改密码，则该用户还可以继续使用的天数 
+8、账号失效日期，过了这个日期账号就无法使用 
+9、保留的
+
+```
+
+## 3.3 密码策略
+
+
+
+### 3.3.x 手动生成shadow中的密码
+
+shadow文件中第二个字段是加密后的密码，如果格式为"$id$salt$hashed"，则表示该用户密码正常。其中$id$的id表示密码的加密算法，$1$表示使用MD5算法，$2a$表示使用Blowfish算法，"$2y$"是另一算法长度的Blowfish,"$5$"表示SHA-256算法，而"$6$"表示SHA-512算法，
+
+```bash
+# 生成一个加密的密码，这个办法也可以用于kickstart脚本
+[root@vm-centos7 tmp]# openssl passwd -1 123456
+$1$4VQqQlQp$ZFucFpLz9N8ym8gvCVlNT/
+
+# 直接替换到/etc/shadow第二个字段中即可
+[root@vm-centos7 tmp]# vim /etc/shadow
+[root@vm-centos7 tmp]# cat /etc/shadow|grep test:
+test:$1$4VQqQlQp$ZFucFpLz9N8ym8gvCVlNT/:18139:0:99999:7:::
+```
+
 
 # 4. `sudo`
 
@@ -118,7 +268,7 @@ rwxr-x---
 
 # x. 参考
 
-
-
+- [手动生成/etc/shadow文件中的密码](https://www.cnblogs.com/f-ck-need-u/p/7545187.html)
+- [使用 PAM 集成 OpenLDAP 实现 Linux 统一管理系统用户](https://www.ibm.com/developerworks/cn/linux/1406_liulz_pamopenldap/#1.Linux-PAM%20%E5%92%8C%20OpenLDAP%20%E7%AE%80%E4%BB%8B%20%7Coutline)
 
 

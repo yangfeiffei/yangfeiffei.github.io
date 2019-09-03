@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="0456c631-2885-4de2-9622-20d9928a1b8e" name="Default" comment="" />
+    <list default="true" id="0456c631-2885-4de2-9622-20d9928a1b8e" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/scripts/git-add-and-push-jpg-in-write-homework.sh" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/git-add-and-push-jpg-in-write-homework.sh" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -292,7 +294,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1280" height="800" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.16882068" />
       <window_info id="Structure" order="1" weight="0.25" />

@@ -7,7 +7,9 @@ then
 	git add . &&
 	COMMIT_DATE=$(date "+%Y-%m-%d-%H-%M-%S") &&
 	git commit -m "add write homework at $COMMIT_DATE"  &&
-	git push origin master ;
+	git push origin master &&
+	echo "========= push seccussed. ========" ||
+	echo "Push failed... Please check it..." ;
 else
 	echo "something wrong about change images.\nPlese check it..." ;
 fi

@@ -243,9 +243,100 @@ operator:*:17834:0:99999:7:::
 
 ## 3.3 密码策略
 
+可以使用authconfig命令来配合很多密码策略，这是RHEL7/Centos7的一个工具。
 
+```bash
+authconfig, authconfig-tui - an interface for configuring system authentication resources
 
-### 3.3.x 手动生成shadow中的密码
+```
+### 3.3.1 设置密码长度
+
+```bash
+# 密码长度最小为8
+[root@vm-centos7 ~]# authconfig --passminlen=8 --update
+[root@vm-centos7 ~]# cat /etc/security/pwquality.conf |grep ^minlen
+minlen = 8
+```
+### 3.3.2 设置密码复杂度
+
+```bash
+# 至少包含一个大写字母
+[root@vm-centos7 ~]# authconfig --enablerequpper --update
+# 至少包含一个小写字母
+[root@vm-centos7 ~]# authconfig --enablereqlower --update
+# 至少包含一个数字
+[root@vm-centos7 ~]# authconfig --enablereqdigit --update
+# 至少包含一个特殊字符
+[root@vm-centos7 ~]# authconfig --enablereqother --update
+
+# 查看更改情况，默认1，修改为-1生效
+[root@vm-centos7 ~]# cat /etc/security/pwquality.conf |grep credit
+# credits are not disabled which is the default). (See pam_cracklib manual.)
+# The maximum credit for having digits in the new password. If less than 0
+# dcredit = 1
+# The maximum credit for having uppercase characters in the new password.
+# ucredit = 1
+# The maximum credit for having lowercase characters in the new password.
+# lcredit = 1
+# The maximum credit for having other characters in the new password.
+# ocredit = 1
+lcredit     = -1
+ucredit     = -1
+dcredit     = -1
+ocredit     = -1
+```
+### 3.3.3 设置密码有效期
+
+```bash
+# 修改新建用户的默认策略
+[root@vm-centos7 ~]# cat /etc/login.defs
+...
+# Password aging controls:
+#
+#       PASS_MAX_DAYS   Maximum number of days a password may be used.
+#       PASS_MIN_DAYS   Minimum number of days allowed between password changes.
+#       PASS_MIN_LEN    Minimum acceptable password length.
+#       PASS_WARN_AGE   Number of days warning given before a password expires.
+#
+PASS_MAX_DAYS   99999
+PASS_MIN_DAYS   0
+PASS_MIN_LEN    5
+PASS_WARN_AGE   7
+...
+```
+
+```bash
+# 修改已经创建的用户
+# 使用chage命令修改
+[root@vm-centos7 ~]# chage -l test
+Last password change                                    : Aug 31, 2019
+Password expires                                        : never
+Password inactive                                       : never
+Account expires                                         : never
+Minimum number of days between password change          : 0
+Maximum number of days between password change          : 99999
+Number of days of warning before password expires       : 7
+[root@vm-centos7 ~]#
+[root@vm-centos7 ~]#
+[root@vm-centos7 ~]#
+[root@vm-centos7 ~]# chage --help
+Usage: chage [options] LOGIN
+
+Options:
+  -d, --lastday LAST_DAY        set date of last password change to LAST_DAY
+  -E, --expiredate EXPIRE_DATE  set account expiration date to EXPIRE_DATE
+  -h, --help                    display this help message and exit
+  -I, --inactive INACTIVE       set password inactive after expiration
+                                to INACTIVE
+  -l, --list                    show account aging information
+  -m, --mindays MIN_DAYS        set minimum number of days before password
+                                change to MIN_DAYS
+  -M, --maxdays MAX_DAYS        set maximim number of days before password
+                                change to MAX_DAYS
+  -R, --root CHROOT_DIR         directory to chroot into
+  -W, --warndays WARN_DAYS      set expiration warning days to WARN_DAYS
+```
+### 3.3.4 手动生成shadow中的密码
 
 shadow文件中第二个字段是加密后的密码，如果格式为"$id$salt$hashed"，则表示该用户密码正常。其中$id$的id表示密码的加密算法，$1$表示使用MD5算法，$2a$表示使用Blowfish算法，"$2y$"是另一算法长度的Blowfish,"$5$"表示SHA-256算法，而"$6$"表示SHA-512算法，
 
@@ -259,16 +350,28 @@ $1$4VQqQlQp$ZFucFpLz9N8ym8gvCVlNT/
 [root@vm-centos7 tmp]# cat /etc/shadow|grep test:
 test:$1$4VQqQlQp$ZFucFpLz9N8ym8gvCVlNT/:18139:0:99999:7:::
 ```
-
-
 # 4. `sudo`
 
-# 5. `PAM`
+Linux sudo命令以系统管理者的身份执行指令，也就是说，经由 sudo 所执行的指令就好像是 root 亲自执行。
 
+直接上例子吧。
+
+## 4.1 增加用户或组
+
+`vi /etc/sudoers` 或者`visudo`修改98行。
+
+```bash
+Syntax:    user    MACHINE=COMMANDS      # sudo 语法
+root    ALL=(ALL)       ALL              #  (All)表示允许用户以哪个用户的权限做事情
+omd     ALL=(ALL)       ALL              #  omd用户在任何机器上，可以只需任何用户的任何命令 == root用户
+omd     ALL=(ALL)     NOPASSWD: ALL      #  免密而且omd用户在任何机器上，可以只需任何用户的任何命令
+ftl     ALL=(ALL)   /bin/cp,/bin/touch   # 只允许ftl用户只需root用户的cp,touch命令
+```
 
 # x. 参考
 
 - [手动生成/etc/shadow文件中的密码](https://www.cnblogs.com/f-ck-need-u/p/7545187.html)
 - [使用 PAM 集成 OpenLDAP 实现 Linux 统一管理系统用户](https://www.ibm.com/developerworks/cn/linux/1406_liulz_pamopenldap/#1.Linux-PAM%20%E5%92%8C%20OpenLDAP%20%E7%AE%80%E4%BB%8B%20%7Coutline)
-
+- [如何设置 Linux 系统的密码策略](https://linux.cn/article-10698-1.html?pr)
+- [Linux sudo详解](https://www.cnblogs.com/ftl1012/p/sudo.html)
 

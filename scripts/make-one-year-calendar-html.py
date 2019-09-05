@@ -81,8 +81,7 @@ if __name__ == '__main__':
         html_txt += "</g>\n"
 
 
-    html_txt = '''
----
+    html_txt = '''---
 
 layout: default
 title: "Calendar"

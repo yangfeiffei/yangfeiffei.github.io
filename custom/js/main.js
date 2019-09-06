@@ -57,5 +57,13 @@ $(function(){
     //             titleAsText: true
     //         });
 
+    // 还没弄好，好难
+    $("rect").each(function () {
+        $(this).click(function () {
+            var post_id= "post" +
+            console.log($(this).id)
+        });
+    });
+
 });
 

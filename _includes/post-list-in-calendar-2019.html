@@ -1,0 +1,17 @@
+
+<div style="font-size: 14px;" class="post-list-in-calendar-2019">
+
+    {% for post in site.posts %}
+
+    {% assign year = post.date | date: '%Y' %}
+    {% if year == "2019" %}
+
+    <div style="width: 40%;display: inline-block;padding-left: 10%"
+         class="hidden"
+         id="post-{{ post.date|date:'%Y-%m-%d'}}">
+        <a href="{{post.url}}" title="{{ post.title }}">{{ post.title | truncate:18}}</a>
+    </div>
+
+    {% endif %}
+    {% endfor %}
+</div>

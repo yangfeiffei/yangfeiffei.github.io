@@ -56,35 +56,6 @@ def getAllDayPerYear(years):
 if __name__ == '__main__':
     # 获取一年的所有日期
     all_date_list = getAllDayPerYear("2019")
-
-    # create a svg like github contribute 
-    # 
-    #  sun mon tue th tur fri sat
-    #  0    1   2  3   4  5   6
-    first_day = 2
-    week_counts = 53
-    day_counts = 365
-    html_txt = ""
-
-    step_of_rect = 13
-    day_of_year = 0
-    for week in range(week_counts):
-        html_txt = html_txt +  '<g transform="translate('+ str((week+1)*step_of_rect) + ', 0)">' + "\n"
-        for day in range(7):
-            if first_day > 0:
-                first_day = first_day -1
-                continue
-            if day_of_year < 365:
-                html_txt = html_txt + '\t<rect class="day" width="11" height="11" y="'+ str(day * step_of_rect) + \
-                           '" id="' + all_date_list[day_of_year] + '"></rect>\n'
-                day_of_year += 1
-        html_txt += "</g>\n"
-
-    html_txt = '''
-    <g transform="translate(20, 20)">
-    %s
-    </g>
-    ''' % html_txt
-    print(html_txt)
-
-
+    
+    for d in all_date_list:
+        print("rect#%s{ fill: green;  }" % d)

@@ -1,0 +1,51 @@
+---
+
+layout: default
+title: "Calendar"
+
+---
+
+<div class="box-body">
+    <!-- CALENDAR -->
+    <div id="contributions-calendar">
+		<h1 id="year-2019" style="font-family: 'Arial Black';font-size: 20px; color: darkgreen;">&nbsp;2019</h1>
+        <div style="border: solid 1px gray;padding: 10px;"
+			 class="js-graph js-calendar-graph graph-canvas calendar-graph">
+
+			<!-- ==  2019 年=== -->
+            <svg width="741" height="120" id="calendar-graph">
+				<!-- 横坐标：月份    -->
+				<text x="20" y="10" style="fill:gray;font-size: 10px;">
+					<tspan x="33">Jan</tspan>
+					<tspan x="85">Feb</tspan>
+					<tspan x="137">Mar</tspan>
+					<tspan x="202">Api</tspan>
+					<tspan x="254">May</tspan>
+					<tspan x="306">Jun</tspan>
+					<tspan x="371">Jul</tspan>
+					<tspan x="423">Aug</tspan>
+					<tspan x="488">Sep</tspan>
+					<tspan x="540">Oct</tspan>
+					<tspan x="592">Nov</tspan>
+					<tspan x="657">Dec</tspan>
+				</text>
+				<!-- 纵坐标： 星期   -->
+				<text x="10" y="30" style="fill:gray;font-size: 10px;">
+					日
+					<tspan x="10" y="68">三</tspan>
+					<tspan x="10" y="108">六</tspan>
+				  </text>
+
+				{% include calendar-2019.html %}
+
+            </svg>
+        </div>
+
+		<br>
+
+		{% include jpg-list-in-calendar-2019.html  %}
+		{% include post-list-in-calendar-2019.html  %}
+
+
+	</div>
+</div>

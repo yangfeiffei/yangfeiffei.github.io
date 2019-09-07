@@ -95,11 +95,11 @@ if __name__ == '__main__':
                 days_list_of_jpg.append(day_reformat)
 
     for d in all_date_list:
-        if d in days_list_of_jpg and d in days_list_of_jpg:
+        if d in days_list_of_post and d in days_list_of_jpg:
             print("rect#id-%s{ fill: %s; opacity: 5%%; }" % (d, BOTH_DAY_COLOR))
         elif d in days_list_of_post:
             print("rect#id-%s{ fill: %s; opacity: 5%%; }" % (d, POST_DAY_COLOR))
         elif d in days_list_of_jpg:
-            print('----->',d)
+            print("rect#id-%s{ fill: %s; opacity: 5%%; }" % (d, WRITE_DAY_COLOR))
         else:
             print("rect#id-%s{ fill: %s; opacity: 5%%;}" % (d, OTHER_DAY_COLIR))

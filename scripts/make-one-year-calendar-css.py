@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 #
 #  Python3 Scripts
@@ -10,7 +10,10 @@
 #  every <rect> object  have a "d" attribute for date in the year, the format like this
 #
 #      d="2019-09-05"
-#  
+#
+#  the location of this cripts   BASE_DIR/scripts/xxxx.py
+#  DO NOT MOVE IT ！！！
+#
 
 import arrow
  
@@ -54,8 +57,49 @@ def getAllDayPerYear(years):
  
  
 if __name__ == '__main__':
-    # 获取一年的所有日期
-    all_date_list = getAllDayPerYear("2019")
-    
+
+    The_YEAR = '2019'
+    BOTH_DAY_COLOR = '#009a48'       # 深绿
+    # POST_DAY_COLOR = '#F6A6A1'     # 浅红
+    POST_DAY_COLOR = '#c3e395'     # 浅绿
+    WRITE_DAY_COLOR = '#c3e395'     # 浅绿
+    OTHER_DAY_COLIR = '#ebedf0'  # 浅灰色
+
+
+    import os
+    import sys
+    import re
+
+    all_date_list = getAllDayPerYear(The_YEAR)
+    dir_name = os.path.dirname(os.path.dirname(sys.argv[0]))
+    days_list_of_post = []
+    days_list_of_jpg = []
+
+    # 列举post文件名的2019年份的所有文件名前缀，如 2019-09-03
+    for post_root, post_dirs, post_filename in os.walk(
+            os.path.join(dir_name, '_posts')):
+        for f in post_filename:
+            obj_seach = re.search("%s-\d{2}-\d{2}" % The_YEAR,f)
+            if obj_seach:
+                days_list_of_post.append(obj_seach.group())
+
+    # 列举 images/write-homework 下的图片前缀，
+    for post_root, post_dirs, post_filename in os.walk(
+        os.path.join(dir_name, 'images/write-homework')):
+        for f in post_filename:
+            obj_seach = re.search("%s\d{2}\d{2}" % The_YEAR,f)
+            if obj_seach:
+                day_search = obj_seach.group()
+                day_reformat = '%s-%s-%s' % (
+                    day_search[0:4], day_search[4:6],day_search[6:8])
+                days_list_of_jpg.append(day_reformat)
+
     for d in all_date_list:
-        print("rect#%s{ fill: green;  }" % d)
+        if d in days_list_of_jpg and d in days_list_of_jpg:
+            print("rect#id-%s{ fill: %s; opacity: 5%%; }" % (d, BOTH_DAY_COLOR))
+        elif d in days_list_of_post:
+            print("rect#id-%s{ fill: %s; opacity: 5%%; }" % (d, POST_DAY_COLOR))
+        elif d in days_list_of_jpg:
+            print('----->',d)
+        else:
+            print("rect#id-%s{ fill: %s; opacity: 5%%;}" % (d, OTHER_DAY_COLIR))

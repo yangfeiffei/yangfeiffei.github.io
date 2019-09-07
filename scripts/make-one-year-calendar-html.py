@@ -76,7 +76,7 @@ if __name__ == '__main__':
                 continue
             if day_of_year < 365:
                 html_txt = html_txt + '\t<rect class="day" width="11" height="11" y="'+ str(day * step_of_rect) + \
-                           '" id="' + all_date_list[day_of_year] + '"></rect>\n'
+                           '" id="id-' + all_date_list[day_of_year] + '"></rect>\n'
                 day_of_year += 1
         html_txt += "</g>\n"
 

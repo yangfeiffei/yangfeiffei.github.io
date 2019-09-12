@@ -12,10 +12,18 @@ GNU GRUB（GRand Unified Bootloader简称“GRUB”）是一个来自GNU项目�
 
 在Centos7或者RHEL7中使用的是GRUB 2.02 版本（通常说GRUB2）。
 
-# 1. 
+# 1. GRUB2的基本原理
 
 
-# 4. reference
+# 2. GRUB2常见管理
+
+## 2.1 在cfg中增加一个条目
+
+
+## 2.2 重建grub2.cfg
+
+
+# 3. reference
 
 - [1] [GNU GRUB](https://www.gnu.org/software/grub/)
 - [2] [LFS BOOK 8.4 systemd #6.60 GRUB-2.02]

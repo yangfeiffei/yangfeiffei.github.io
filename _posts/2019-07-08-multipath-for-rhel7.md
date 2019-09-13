@@ -3,7 +3,7 @@ layout: post
 title:  RHEL7 DM Multipath
 date: 2019-07-08 12:00
 tags: multipath 
-categories: public
+categories: linux-basics
 typora-root-url: ..
 
 ---

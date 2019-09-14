@@ -18,7 +18,7 @@ typora-root-url: ..
 - [包管理工具:yum&rpm](/linux-basics/2019/09/03/linux-pkg-manager.html)
 - [本地和网络repo](/linux-basics/)(to be continued)
 - [LVM管理](/linux-basics/2019/09/04/linux-lvm.html) 
-- [GRUB](/linux-basics/2019/09/11/linux-grub.html) [to be continued]
+- [GRUB](/linux-basics/2019/09/11/linux-grub.html)
 - [多路径管理](/linux-basics/2019/07/08/multipath-for-rhel7.html)
 - [linux资源监控](/linux-basics/)(to be continued)
 - [ACL和DISK配额](/linux-basics/)(to be continued)

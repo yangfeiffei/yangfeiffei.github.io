@@ -184,11 +184,23 @@ UEFI --> grub.efi --> grub.cfg --> vmlinuz --> ...
 # anconda图形界面  --> 需要指定为 BIOS Boot 的Filesystem
 ```
 
+使用下面的命令可以修改一个分区为bios_grub模式
+
+```bash
+parted /dev/sda set 1 bios_grub on
+```
+
 启动顺序为：
 
 ```bash
 BIOS --> MBR --> core.img (EF02 partition) --> grub.cfg --> vmlinuz --> ...
 ```
+
+下图显示了GRUB2在MBR和GPT两种格式下的不同之处，来之wikipedia
+
+![](/images/linux-system-startup/GNU_GRUB_components.svg.png)
+
+
 
 - UEFI + GPT 模式
 
@@ -333,6 +345,9 @@ ExecStart=/etc/rc.d/init.d/network start
 ExecStop=/etc/rc.d/init.d/network stop
 ```
 
+systemd 启动过程，还是相当比较复杂的。
+
+![](/images/linux-system-startup/systemd-startup.png)
 
 # x 参考资料
 
@@ -341,3 +356,5 @@ ExecStop=/etc/rc.d/init.d/network stop
 - [第14章 Linux开机详细流程](https://www.cnblogs.com/f-ck-need-u/p/7100336.html)
 - [grub2详解(翻译和整理官方手册)](https://www.cnblogs.com/f-ck-need-u/p/7094693.html)
 - [systemd 中文手册](http://www.jinbuguo.com/systemd/systemd.html)
+- [An introduction to the Linux boot and startup processes](https://opensource.com/article/17/2/linux-boot-and-startup)
+- [OS boot partition](https://en.wikipedia.org/wiki/BIOS_boot_partition)

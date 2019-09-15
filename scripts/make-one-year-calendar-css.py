@@ -61,8 +61,9 @@ if __name__ == '__main__':
     The_YEAR = '2019'
     BOTH_DAY_COLOR = '#009a48'       # 深绿
     # POST_DAY_COLOR = '#F6A6A1'     # 浅红
+    POST_DAY_COLOR = '#F6A6A1'     # 浅红
     POST_DAY_COLOR = '#c3e395'     # 浅绿
-    WRITE_DAY_COLOR = '#c3e395'     # 浅绿
+    # WRITE_DAY_COLOR = '#c3e395'     # 浅绿
     OTHER_DAY_COLIR = '#ebedf0'  # 浅灰色
 
 

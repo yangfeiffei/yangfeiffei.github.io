@@ -119,6 +119,66 @@ yum-config-manager --disable epel --enable extra
 yum history
 ```
 
+## 2.1 repo 管理
+
+
+将iso文件作为本地base repo使用
+
+```bash
+# 挂载光驱
+mount /dev/sr0 /mnt
+##  mount -o loop /path/of/iso/centos7.iso /mnt
+
+# 禁用其他repo
+rm -f /etc/yum.repos.d/*
+
+# 编写新的repo
+cat > /etc/yum.repos.d/cdrom.repo <<EOF
+[cdrom]
+name=BASE
+baseurl=file:///mnt
+enabled=1
+gpgcheck=0
+EOF
+
+# 启用repo
+yum clean all && yum makecache
+```
+
+使用网络repo的时候就将baseurl修改成为http地址即可。
+
+另外，使用yum-config-manager会更加简单明了
+
+```bash
+[root@vm-centos7 ~]# yum repolist all |grep enabled
+!base/7/x86_64                            CentOS-7 - Base - mirrors.aliyun.com                                         enabled: 10,019
+!epel/x86_64                              Extra Packages for Enterprise Linux 7 - x86_64                               enabled: 13,382
+[root@vm-centos7 ~]# yum-config-manager --disable base --disable epel
+[root@vm-centos7 ~]# mount /dev/sr0 /mnt/
+# 命令增加一个repo
+[root@vm-centos7 ~]# yum-config-manager --add-repo file:///mnt
+Loaded plugins: fastestmirror
+adding repo from: file:///mnt
+
+[mnt]
+name=added from: file:///mnt
+baseurl=file:///mnt
+enabled=1
+
+[root@vm-centos7 ~]# yum clean all && yum makecache
+[root@vm-centos7 ~]# yum repolist
+Loaded plugins: fastestmirror
+Loading mirror speeds from cached hostfile
+repo id                                                 repo name                                                               status
+mnt                                                     added from: file:///mnt                                                 4,021
+repolist: 4,021
+
+
+```
+
+
+
+
 # x. reference
 
 - [1][20 rpm Command Examples](https://www.tecmint.com/20-practical-examples-of-rpm-commands-in-linux/)

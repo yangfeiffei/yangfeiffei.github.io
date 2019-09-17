@@ -19,7 +19,7 @@ typora-root-url: ..
 - [LVM管理](/linux-basics/2019/09/04/linux-lvm.html) 
 - [GRUB](/linux-basics/2019/09/11/linux-grub.html)
 - [多路径管理](/linux-basics/2019/07/08/multipath-for-rhel7.html)
-- [linux资源监控](/linux-basics/)(to be continued)
+- [linux资源监控](/linux-basics/2019/09/17/linux-monitor.html)(to be continued)
 - [ACL和DISK配额](/linux-basics/)(to be continued)
 - [Linux网络服务](/linux-basics/)(to be continued)
 - [SSH服务](/linux-basics/)(to be continued)

@@ -70,6 +70,7 @@ if __name__ == '__main__':
     import os
     import sys
     import re
+    import datetime
 
     all_date_list = getAllDayPerYear(The_YEAR)
     dir_name = os.path.dirname(os.path.dirname(sys.argv[0]))
@@ -80,7 +81,7 @@ if __name__ == '__main__':
     for post_root, post_dirs, post_filename in os.walk(
             os.path.join(dir_name, '_posts')):
         for f in post_filename:
-            obj_seach = re.search("%s-\d{2}-\d{2}" % The_YEAR,f)
+            obj_seach = re.search("%s-[0-9]{2}-[0-9]{2}" % The_YEAR,f)
             if obj_seach:
                 days_list_of_post.append(obj_seach.group())
 
@@ -88,7 +89,7 @@ if __name__ == '__main__':
     for post_root, post_dirs, post_filename in os.walk(
         os.path.join(dir_name, 'images/write-homework')):
         for f in post_filename:
-            obj_seach = re.search("%s\d{2}\d{2}" % The_YEAR,f)
+            obj_seach = re.search("%s[0-9]{2}[0-9]{2}" % The_YEAR,f)
             if obj_seach:
                 day_search = obj_seach.group()
                 day_reformat = '%s-%s-%s' % (
@@ -96,7 +97,9 @@ if __name__ == '__main__':
                 days_list_of_jpg.append(day_reformat)
 
     for d in all_date_list:
-        if d in days_list_of_post and d in days_list_of_jpg:
+        if d == str(datetime.date.today()+ datetime.timedelta(days=1)):
+            break
+        elif d in days_list_of_post and d in days_list_of_jpg:
             print("rect#id-%s{ fill: %s; opacity: 5%%; }" % (d, BOTH_DAY_COLOR))
         elif d in days_list_of_post:
             print("rect#id-%s{ fill: %s; opacity: 5%%; }" % (d, POST_DAY_COLOR))

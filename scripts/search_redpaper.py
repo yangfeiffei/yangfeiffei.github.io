@@ -42,11 +42,11 @@ if len(sys.argv) == 4 :
             paper_id_real = re.findall('redp[0-9]+|sg[0-9]+', paper_id_href)[0]
             if 'redp' in paper_id_real:
                 print("Downloading the %s.pdf ..." % paper_id_real)
-                os.system('wget "https://www.redbooks.ibm.com/redpapers/pdfs/%s.pdf" -O %s-%s.pdf'
+                os.system('wget "https://www.redbooks.ibm.com/redpapers/pdfs/%s.pdf" -O "%s-%s".pdf'
                           % (paper_id_real, paper_id_real, title_rename))
             elif 'sg' in paper_id_real:
                 print("Downloading the %s.pdf" % paper_id_real)
-                os.system('wget "https://www.redbooks.ibm.com/redbooks/pdfs/%s.pdf" -O %s-%s.pdf'
+                os.system('wget "https://www.redbooks.ibm.com/redbooks/pdfs/%s.pdf" -O "%s-%s".pdf'
                           % (paper_id_real, paper_id_real, title_rename))
             else:
                 print("Not Download.... ")

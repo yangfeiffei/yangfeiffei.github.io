@@ -6,3 +6,4 @@ Gemfile
 Gemfile.lock
 *.un~
 .idea
+scripts/baidu_config_file.py

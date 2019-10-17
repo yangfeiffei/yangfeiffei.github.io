@@ -7,15 +7,41 @@ import hashlib
 import urllib
 import random
 import json
-# import config file
-import baidu_config_file
+import ctypes
 
-appid = baidu_config_file.appid
-secretKey = baidu_config_file.secretKey
+##  appid 的配置，需要在百度注册
+appid = '' #你的appid
+secretKey = '' #你的密钥
 
 # 公共参数：
 LAST_SOURCE_TXT=''
 SAME_SOURCE_FLAG=False
+
+# for clipboard
+CF_TEXT = 1
+kernel32 = ctypes.windll.kernel32
+kernel32.GlobalLock.argtypes = [ctypes.c_void_p]
+kernel32.GlobalLock.restype = ctypes.c_void_p
+kernel32.GlobalUnlock.argtypes = [ctypes.c_void_p]
+user32 = ctypes.windll.user32
+user32.GetClipboardData.restype = ctypes.c_void_p
+
+def get_clipboard_text():
+    user32.OpenClipboard(0)
+    try:
+        if user32.IsClipboardFormatAvailable(CF_TEXT):
+            data = user32.GetClipboardData(CF_TEXT)
+            data_locked = kernel32.GlobalLock(data)
+            text = ctypes.c_char_p(data_locked)
+            value = text.value
+            kernel32.GlobalUnlock(data_locked)
+            # return str(value,encoding='utf-8')
+            value = value.decode('gbk')
+            return value
+        else:
+            return "Please Use Crtl+C."
+    finally:
+        user32.CloseClipboard()
 
 # 2.判断是否与上一次的一样，如果一样就返回一个SAME_SOURCE_FLAG=True
 # 3.如果不一样，更新LAST_SOURCE_TXT
@@ -71,13 +97,15 @@ def trans(source_txt):
             httpClient.close()
 
 def update_text():
-    source_txt = parse_source_txt(root.clipboard_get())
+    source_txt = parse_source_txt(get_clipboard_text())
     if SAME_SOURCE_FLAG == False:
         target_text = trans(source_txt)
         t.delete('0.0','end')
         t.insert('end', target_text)
+        root.attributes("-alpha",0.95)
         root.update()
     else:
+        root.attributes("-alpha",0.95)
         pass
     t.after(1000, update_text)
 
@@ -85,9 +113,9 @@ if __name__ == '__main__':
     root = tk.Tk()
     root.wm_attributes('-topmost', 1)
     root.title("mytrans")
-    t = tk.Text(root, height=10, width=80, font=('', 12))
+    t = tk.Text(root, height=10, width=80, font=('Microsoft YaHei UI', 10))
     t.pack()
-    source_txt = parse_source_txt(root.clipboard_get())
+    source_txt = parse_source_txt(get_clipboard_text())
     # if source_txt:
     #     target_text = trans(source_txt)
     # t.after(1000, update_text)

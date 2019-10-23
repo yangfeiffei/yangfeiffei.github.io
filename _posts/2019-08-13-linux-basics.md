@@ -20,7 +20,7 @@ typora-root-url: ..
 - [GRUB](/linux-basics/2019/09/11/linux-grub.html)
 - [多路径管理](/linux-basics/2019/07/08/multipath-for-rhel7.html)
 - [linux资源监控](/linux-basics/2019/09/17/linux-monitor.html)(to be continued)
-- [ACL和DISK配额](/linux-basics/)(to be continued)
+- [ACL权限](/linux-basics/2019/10/23/linux-acl.html)
 - [Linux网络服务](/linux-basics/)(to be continued)
 - [SSH服务](/linux-basics/)(to be continued)
 - 

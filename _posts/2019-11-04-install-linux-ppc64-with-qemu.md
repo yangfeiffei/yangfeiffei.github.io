@@ -80,7 +80,8 @@ make
 这里有个已经安装好的虚拟机镜像c7u5le.img.gz，解压后可以直接使用。这个虚拟机是centos7 for PPC64le。
 
 ```bash
-[root@vm-centos7 cn4]# qemu-system-ppc64 -cpu POWER9 -machine pseries -m  1024 -drive file=cn4.img -serial stdio[root@vm-centos7 cn4]# qemu-system-ppc64 -cpu POWER9 -machine pseries -m  1024 -drive file=cn4.img -serial stdio -vnc :1
+[root@vm-centos7 cn4]# qemu-system-ppc64 -cpu POWER9 -machine pseries -m  1024 -drive file=cn4.img -serial stdio
+[root@vm-centos7 cn4]# qemu-system-ppc64 -cpu POWER9 -machine pseries -m  1024 -drive file=cn4.img -serial stdio -vnc :1
 ```
 
 其中有几个参数需要注意的：

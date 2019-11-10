@@ -1,4 +1,4 @@
-#!/bin/env python3
+#!/usr/bin/python
 #
 #  file name :  search_readpaper.py
 #  useage    :  python3 search_redpaper.py  SEARCH_STRING

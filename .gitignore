@@ -5,5 +5,5 @@ _site
 Gemfile
 Gemfile.lock
 *.un~
-.idea
+.idea/workspace.xml
 scripts/baidu_config_file.py

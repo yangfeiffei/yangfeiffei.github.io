@@ -191,10 +191,10 @@ font-weight:normal;
 
 /*calendar css */
 
-#contributions-calendar rect {
-  fill: rgba(231, 233, 248, 0.41);
-  opacity: 5%;
-}
+/*#contributions-calendar rect {*/
+/*  fill: rgba(231, 233, 248, 0.41);*/
+/*  opacity: 5%;*/
+/*}*/
 
 
 /*calendar css end */

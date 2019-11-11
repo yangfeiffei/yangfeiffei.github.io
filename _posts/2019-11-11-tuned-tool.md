@@ -3,7 +3,7 @@ layout: post
 title: RHEL tuned
 date: 2019-11-11 12:00
 tags: linux 
-categories: public
+categories: linux-basics
 typora-root-url: ..
 ---
 

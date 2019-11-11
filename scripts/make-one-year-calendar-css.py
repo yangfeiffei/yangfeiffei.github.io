@@ -65,7 +65,7 @@ if __name__ == '__main__':
     POST_DAY_COLOR = '#c3e395'     # 浅绿
     # WRITE_DAY_COLOR = '#c3e395'     # 浅绿
     OTHER_DAY_COLIR = '#ebedf0'  # 浅灰色
-
+    OPACITY=0  # 透明度，百分比
 
     import os
     import sys
@@ -95,15 +95,17 @@ if __name__ == '__main__':
                 day_reformat = '%s-%s-%s' % (
                     day_search[0:4], day_search[4:6],day_search[6:8])
                 days_list_of_jpg.append(day_reformat)
+    
 
+    
     for d in all_date_list:
         if d == str(datetime.date.today()+ datetime.timedelta(days=1)):
             break
         elif d in days_list_of_post and d in days_list_of_jpg:
-            print("rect#id-%s{ fill: %s; opacity: 5%%; }" % (d, BOTH_DAY_COLOR))
+            print("rect#id-%s{ fill: %s; opacity: %s%%; }" % (d, BOTH_DAY_COLOR, OPACITY))
         elif d in days_list_of_post:
-            print("rect#id-%s{ fill: %s; opacity: 5%%; }" % (d, POST_DAY_COLOR))
+            print("rect#id-%s{ fill: %s; opacity: %s%%; }" % (d, POST_DAY_COLOR, OPACITY))
         elif d in days_list_of_jpg:
-            print("rect#id-%s{ fill: %s; opacity: 5%%; }" % (d, WRITE_DAY_COLOR))
+            print("rect#id-%s{ fill: %s; opacity: %s%%; }" % (d, WRITE_DAY_COLOR, OPACITY))
         else:
-            print("rect#id-%s{ fill: %s; opacity: 5%%;}" % (d, OTHER_DAY_COLIR))
+            print("rect#id-%s{ fill: %s; opacity: %s%%;}" % (d, OTHER_DAY_COLIR, OPACITY))

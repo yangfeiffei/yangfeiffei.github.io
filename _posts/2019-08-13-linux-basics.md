@@ -38,4 +38,7 @@ typora-root-url: ..
 - [SSH服务](/linux-basics/)(to be continued)
 - [expect](/linux-basics/)(to be continued)
 
+### 其他
+- [tuned自动调优](/linux-basics/2019-11-11-tuned-tool.html)
+
  

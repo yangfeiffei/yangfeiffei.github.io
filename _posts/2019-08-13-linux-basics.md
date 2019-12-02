@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  Linux 基础知识汇总
+title:  Linux 知识汇总
 date: 2019-08-13 12:00
 tags: linux
 categories:
@@ -25,20 +25,21 @@ typora-root-url: ..
 
 ## Linux 高级主题
 
-### 文件系统
+文件系统
 
 - [文件系统ACL权限](/linux-basics/2019/10/23/linux-acl.html)
-- [文件系统配额](/linux-basics/)(to be continued)
+- [文件系统配额](/linux-basics/2019/11/23/disk-quota.html)
 - [文件系统备份与恢复](/linux-basics/)(to be continued)
 - [文件误删恢复工具](/linux-basics/)(to be continued)
 
-### Linux 服务
+Linux 服务
 
 - [Linux网络服务](/linux-basics/)(to be continued)
 - [SSH服务](/linux-basics/)(to be continued)
 - [expect](/linux-basics/)(to be continued)
 
-### 其他
+其他
+
 - [tuned自动调优](/linux-basics/2019/11/11/tuned-tool.html)
 
  

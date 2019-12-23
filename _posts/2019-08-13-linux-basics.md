@@ -29,7 +29,7 @@ typora-root-url: ..
 
 - [文件系统ACL权限](/linux-basics/2019/10/23/linux-acl.html)
 - [文件系统配额](/linux-basics/2019/11/23/disk-quota.html)
-- [文件系统备份与恢复](/linux-basics/)(to be continued)
+- [文件系统备份与恢复](/linux-basics/2019/12/23/filesystem-backup-restore)
 - [文件误删恢复工具](/linux-basics/)(to be continued)
 
 Linux 服务
@@ -37,6 +37,7 @@ Linux 服务
 - [Linux网络服务](/linux-basics/)(to be continued)
 - [SSH服务](/linux-basics/)(to be continued)
 - [expect](/linux-basics/)(to be continued)
+- [DHCP服务](/linux-basics/)(to be continued)
 
 其他
 

@@ -7,7 +7,6 @@ categories: linux-basics
 typora-root-url: ..
 ---
 
-```
 
 # 1. about disk quota
 

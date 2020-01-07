@@ -1,6 +1,6 @@
 ---
 layout: post
-title: PyPXE: a PXE server with Python
+title: PyPXE - a PXE server with Python
 date: 2019-12-31 12:00
 tags: linux 
 categories: public

@@ -10,6 +10,10 @@ typora-root-url: ..
 
 # 1. about pypxe
 
+项目地址：https://github.com/pypxe 
+
+
+
 这是比较牛逼的项目，居然自己实现了用于PXE的dhcp、tftp和http相应的功能，而且支持iPXE。
 
 可惜只能支持Python2.7+,下面来试一下。
@@ -66,7 +70,7 @@ pypxe-netboot $ more example_cfg.json
     "USE_TFTP": true
 }
 
-pypxe-netboot $ pypxe  --config example_cfg.json  --dhcp
+pypxe-netboot $ pypxe  --config example_cfg.json
 (<open file '<stderr>', mode 'w' at 0x6fffffe21e0>, '\nWARNING: Not root. Servers will probably fail to bind.\n')
 2019-12-31 21:36:17,374 [INFO] PyPXE Starting TFTP server...
 2019-12-31 21:36:17,382 [INFO] PyPXE Starting DHCP server...
@@ -78,8 +82,7 @@ pypxe-netboot $ pypxe  --config example_cfg.json  --dhcp
 ## 2.3 安装测试
 
 启动虚拟机，使用网络启动即可。
-
-![](/images/pypxe/pypxe-test-1.png)
+![](/images/pypxe/install-core-iso.gif)
 
 
 # 3. 网络安装一个Linux
@@ -88,42 +91,6 @@ pypxe-netboot $ pypxe  --config example_cfg.json  --dhcp
 # copy the config file
 pypxe-netboot $ cp example_cfg.json /cygdrive/d/pypxe-netboot/
 pypxe-netboot $ cp -r netboot /cygdrive/d/pypxe-netboot/
-
-pypxe-netboot $ cat example_cfg.json
-{
-    "DHCP_BROADCAST": "",
-    "DHCP_DNS": "8.8.8.8",
-    "DHCP_FILESERVER": "192.168.72.1",
-    "DHCP_MODE_PROXY": false,
-    "DHCP_OFFER_BEGIN": "192.168.72.100",
-    "DHCP_OFFER_END": "192.168.72.150",
-    "DHCP_ROUTER": "192.168.72.1",
-    "DHCP_SERVER_IP": "192.168.72.1",
-    "DHCP_SERVER_PORT": 67,
-    "DHCP_SUBNET": "255.255.255.0",
-    "DHCP_WHITELIST": false,
-    "HTTP_PORT": 80,
-    "LEASES_FILE": "",
-    "MODE_DEBUG": "",
-    "MODE_VERBOSE": "",
-    "NBD_BLOCK_DEVICE": "",
-    "NBD_COPY_TO_RAM": false,
-    "NBD_COW": true,
-    "NBD_COW_IN_MEM": false,
-    "NBD_PORT": 10809,
-    "NBD_SERVER_IP": "0.0.0.0",
-    "NBD_WRITE": false,
-    "NETBOOT_DIR": "netboot",
-    "NETBOOT_FILE": "",
-    "STATIC_CONFIG": "",
-    "SYSLOG_PORT": 514,
-    "SYSLOG_SERVER": null,
-    "TFTP_SERVER_IP": "192.168.72.1",
-    "USE_DHCP": true,
-    "USE_HTTP": false,
-    "USE_IPXE": false,
-    "USE_TFTP": true
-}
 pypxe-netboot $ cat example_cfg.json
 {
     "DHCP_BROADCAST": "",
@@ -258,8 +225,16 @@ pypxe-netboot $pypxe --config example_cfg.json
 
 ```
 
-而当Linux加载了vmlinuz和initrd之后会进入anconda进行系统安装，过程中会再次向DHCP服务器申请IP地址，
-这个时候他向DHCP发出的discover申请是得不到回复的，因此安装过程将被打断。
+而当`CentOS7`加载了`vmlinuz`和`initrd`之后会进入`anaconda-linux`进行系统安装，过程中会再次向DHCP服务器申请IP地址，
+这个时候他向`DHCP  Server`发出的`discover`申请是得不到回复的，因此安装过程将被打断。
+
+
+
+另外，在使用ipxe的时候，如果没有重启pypxe服务，同一个客户端再次重启的时候，会出现TFTP服务器不能获得文件的情况，这应该是防止重复部署操作系统的问题。
+
+![](/images/pypxe/tftp-error.png)
+
+
 
 # x. 参考资料
 

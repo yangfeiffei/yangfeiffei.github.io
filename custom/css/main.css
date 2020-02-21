@@ -106,9 +106,8 @@ font-weight:normal;
 .post .con {
 
   /*font-family: "";*/
-  font-size: 15px;
+  font-size: 14px;
   padding: 20px 5px;
-  font-family: "Microsoft YaHei", sans-serif;
 }
 
 
@@ -121,22 +120,22 @@ font-weight:normal;
 }
 
 .post-header h1 {
-  font-size: 22px;
+  font-size: 18px;
   color: #0090c0;
+  font-weight: bold;
 }
 
 
 
 .post-content {
-  font-size: 16px;
-  font-family: "Songti TC";
+  font-size: 14px;
 }
 
 .post-content h1{
-  font-size: 22px;
+  font-size: 18px;
   border-bottom: rgba(1, 1, 1, 0.23) solid 1px;
   padding-bottom: 5px;
-  font-family: "Kaiti SC";
+  font-weight: bold;
 }
 
 
@@ -148,9 +147,9 @@ font-weight:normal;
 }
 
 .post-content h2,h3,h4 {
-  font-size: 20px;
+  font-size: 16px;
   padding: 10px 0 8px 0;
-  font-family: "Kaiti SC";
+  font-weight: bold;
 }
 
 
@@ -183,7 +182,6 @@ font-weight:normal;
 /*footer css*/
 
 #footer .foot {
-  font-family: "Kaiti SC";
   font-size: 14px;
 }
 

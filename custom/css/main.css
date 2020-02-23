@@ -9,7 +9,7 @@ body {
 #page-body{
   font-size: 14px;
   /*font-family: "Microsoft YaHei",sans-serif;*/
-  max-width: 800px;
+  max-width: 1024px;
   margin: 0 auto;
   background-color: white;
   padding: 0 20px;
@@ -94,6 +94,7 @@ color: rgba(5, 5, 28, 0.57);
 .post h2 {
   padding:10px 0 0 0;
   text-shadow: 1px 1px 0 #ddd;
+  font-size: 16px;
 }
 .post h2,#comments h4 {
 font-size:14px;
@@ -155,7 +156,7 @@ font-weight:normal;
 
 .post-content img {
   margin: 0 auto;
-  max-width: 100%;
+  max-width: 800px;
   min-width: 80%;
 }
 

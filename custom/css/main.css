@@ -85,19 +85,18 @@ width:35px;
 float:right;
 }
 
+.post h2 {
+  padding:10px 0 0 0;
+  text-shadow: 1px 1px 0 #ddd;
+}
 .post h2 a {
   color: #0090c0;
 }
 .post h2 a:hover {
 color: rgba(5, 5, 28, 0.57);
 }
-.post h2 {
-  padding:10px 0 0 0;
-  text-shadow: 1px 1px 0 #ddd;
-  font-size: 16px;
-}
 .post h2,#comments h4 {
-font-size:14px;
+font-size:16px;
 color:#0090c0;
 text-decoration:none;
 font-weight:normal;

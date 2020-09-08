@@ -145,4 +145,5 @@ exit
 
 - [Centos7.6](/lib/staticfile/centos7.ks)
 - [RHEL8.0](/lib/staticfile/rhel8.ks)
+- [ipxe install centos7](/lib/staticfile/dnsmasq-ipxe-server-config-instal-centos7.txt)
  

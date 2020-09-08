@@ -10,15 +10,17 @@ typora-root-url: ..
 
 # 1. Docker
 
-- [Linux namespace](/container/)
-- [Linux cgroups](/container/)
-- [docker版本](/container/)
-- [docker安装示例](/container/)
+- [Linux namespace](/container/)--todo
+- [Linux cgroups](/container/)--todo
+- [docker版本](/container/)--todo
+- [docker安装示例](/container/)--todo
+- [docker基本框架](/container/)--todo
+- [docker命令](/container/)--todo
 
 # 2. kubernetes 
 
-- [k8s安装示例](/container/)
-- [k8s核心组件](/container/)
+- [k8s安装示例](/container/)--todo
+- [k8s核心组件](/container/)--todo
 
 # 3. openshift
 

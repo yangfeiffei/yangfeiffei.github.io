@@ -67,6 +67,7 @@ make
 
 ```bash
 ./configure --target-list=ppc64-softmmu && make
+./configure --target-list=ppc64-softmmu --enable-spice && make   # 要用virt-manager的话需要使用spice
 ```
 
 比如要编译x86的，并启用KVM

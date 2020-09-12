@@ -146,4 +146,5 @@ exit
 - [Centos7.6](/lib/staticfile/centos7.ks)
 - [RHEL8.0](/lib/staticfile/rhel8.ks)
 - [ipxe install centos7](/lib/staticfile/dnsmasq-ipxe-server-config-instal-centos7.txt)
+- [一个比较完善的dnsmasq.conf配置文件](/lib/staticfile/2020-09-12-dnsmasq.conf)
  

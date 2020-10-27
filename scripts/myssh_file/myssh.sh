@@ -6,7 +6,8 @@ EXPFILE=$WORKDIR/myssh.exp
 
 function echo_help {
 echo ""
-echo "Usage: myssh -l           List the host in datafile."
+echo "Usage: $0"
+echo "             -l           List the host in datafile."
 echo "             -h hostname  Connect the host with hostname."
 echo "             -n lineID    Connect the host list with line id."
 echo "             -e           Edit the datafile with vi."
@@ -59,7 +60,8 @@ fi
 
 if [ $1 == '-s' ]
 then
-	ssh $2
+	# delete $1 
+	shift 1; ssh $@
 	exit
 fi
 

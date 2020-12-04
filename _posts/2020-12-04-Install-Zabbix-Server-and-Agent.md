@@ -117,11 +117,11 @@ Enter password:
 
 - 打开浏览器`http://zabbix-server/zabbix`
 
-![1603846284536](C:\Users\yangfeilong\yangfeiffei.github.io\_drafts\1603846284536.png)
+![1603846284536](/images/install-zabbix-server-and-agent/1603846284536.png)
 
 修改中文界面
 
-![1603846260884](C:\Users\yangfeilong\yangfeiffei.github.io\_drafts\1603846260884.png)
+![1603846260884](/images/install-zabbix-server-and-agent/1603846260884.png)
 
 # 2. Install Agent
 
@@ -249,6 +249,6 @@ zabbix_agentd.exe  -s   # 启动服务
 ```
 
 
-#附录
+# 附录
 
 - [aix agent install scripts](/lib/staticfile/2020-11-19-auto-install-zabbix-agent-for-aix.txt)

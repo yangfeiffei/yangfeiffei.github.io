@@ -6,7 +6,7 @@
 
 - 标准IO通过系统调用IO实现，标准IO可以扩平台，一般优先使用标准IO
 
-![1614129489800](C:\Users\yangfeilong\yangfeiffei.github.io\lib\staticfile\linux-sys\1614129489800.png)
+![1614129489800](..\..\..\lib\staticfile\linux-sys\1614129489800.png)
 
 标准IO和系统调用IO的区别如下表：
 
@@ -22,13 +22,39 @@
 
 有些问题：
 
-1. 从流中取任意数据，如何实现？标准函数貌似没办法实现？
-
-
+1. 从流中取任意数据，如何实现？标准函数貌似没办法实现？ getline函数，自己实现以下试试；
 
 
 
 常规知识：
+
+```
+fopen的返回的FILE结构体，在哪里？A栈  B静态区 C堆
+
+	栈：fopen内的一个内部局部变量；fopen出来的返回之后，栈就消失了，所以不会；
+
+	静态区，返回的FILE用的是static修饰的；但是这个不能被重复定义，是个问题。
+
+	所以，最后应该放在堆上。
+
+fopen上肯定malloc了一个FILE结构体的一块内存空间，因此在fclose是free的。
+
+* 一般来说，有对应的逆操作的函数，会放在堆上 *
+
+*有宏的就用宏，没有再用-1 
+
+
+
+- 读写
+
+fget/fput/fgetc/fputc/fgets/fputs/fread/fwrite
+
+-	比如某个SIZE里面有个错误，那么所有的对象都有问题；
+-	fread(buf, 10,1,fd)，不能保证最后一次是读到了10个对象啊
+-	fread(buf,1,10,fd)，这个是可以的。
+```
+
+
 
 - 输入输出
 
@@ -89,11 +115,38 @@
 
   
 
+- 缓冲区刷新
+
+  ```
+  缓冲区可以合并系统调用
+  * 行缓冲：换行或缓冲区满，强制刷新 (stdout)
+  * 全缓冲：缓冲区满，刷新（默认模式，但不是终端）
+  * 无缓冲：立即输出（stderr）
+  ```
+
+  强制刷新缓冲区函数，[fflush.c](/lib/staticfile/linux-sys/fflush.c)
+
+  设置缓冲区函数setvbuf，绝大多数不需要修改缓冲区，知道就好了，setvbuf.c
+
   
 
+- 直接获取一行内容的函数 getline
 
+  ```
+  #define _GNU_SOURCE    //需要，但是这么写不好看，也很麻烦
+  #include <stdio.h>
+  
+  ssize_t getline(char **lineptr, size_t *n, FILE *stream);
+  ssize_t getdelim(char **lineptr, size_t *n, int delim, FILE *stream);
+  ```
 
+  需要单独define _GNU_SOURCE，也可以在makefile中来写，这样就比较规整。
 
+  ```
+  CFLAGS+=-D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE -Wall
+  ```
+
+  getline函数的例子，[getline.c](/lib/staticfile/linux-sys/getline.c)
 
 
 

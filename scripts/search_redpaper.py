@@ -44,6 +44,8 @@ if len(sys.argv) == 4 :
                 print("Downloading the %s.pdf ..." % paper_id_real)
                 os.system('wget "https://www.redbooks.ibm.com/redpapers/pdfs/%s.pdf" -O "%s-%s".pdf'
                           % (paper_id_real, paper_id_real, title_rename))
+                os.system('wget "https://www.redbooks.ibm.com/redpieces/pdfs/%s.pdf" -O "%s-%s".pdf'
+                          % (paper_id_real, paper_id_real, title_rename))
             elif 'sg' in paper_id_real:
                 print("Downloading the %s.pdf" % paper_id_real)
                 os.system('wget "https://www.redbooks.ibm.com/redbooks/pdfs/%s.pdf" -O "%s-%s".pdf'
